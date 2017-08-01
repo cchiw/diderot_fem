@@ -1,0 +1,31 @@
+input int imgRes = 10;
+
+input fem#1(2)[] f;
+input fem#1(2)[] g;
+
+
+fnspace V1 = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
+fnspace V2 = FunctionSpace(UnitSquareMesh(2,2), P(), 2);
+
+//path to fnspacedata
+string path = "../../fnspace_data/";
+
+//different element, same mesh
+ofield#1(2)[] F = convert(f, V1, path); //field and function space
+ofield#1(2)[] G = convert(f, V2, path);
+
+
+strand sample (int ui, int vi) {
+    real uu = lerp(0.0, 1.0, -0.5, real(ui), real(imgRes)-0.5);
+    real vv = lerp(0.0, 1.0, -0.5, real(vi), real(imgRes)-0.5);
+    vec2 pos = [uu,vv];
+
+
+    output tensor[] out=  inst(F,pos)+inst(G,pos);
+
+    update {
+             stabilize;
+    }
+}
+
+initially [ sample(ui, vi) | vi in 0..(imgRes-1), ui in 0..(imgRes-1) ];

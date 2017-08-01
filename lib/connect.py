@@ -10,7 +10,7 @@ from init import *
 
 
 #path to data output
-imgpath='diderot/data/'
+imgpath='data/'
 
 
 #old way, use with fem branch
@@ -37,6 +37,31 @@ def cut_json(name, f, V, res, stepSize):
     os.system('sh compileDiderot.sh') # compiles diderot program
     # name data needs to be name of nameing in diderot program
     data_d2s(namenrrd, f, res, res, stepSize)
+    #visualize result
+    quantize(namenrrd,namepng)
+    os.system('open ' + namepng)
+
+
+#relies on previously created json file
+def cut_new(name, f, res):
+    datafile = imgpath+name
+    namepng = datafile +'.png'
+    namenrrd = datafile +'.nrrd'
+    # mesh data
+    mesh_d2s_single(name, f, res)
+    #visualize result
+    quantize(namenrrd,namepng)
+    os.system('open ' + namepng)
+
+
+
+#relies on previously created json file
+def cut_newTwo(name, f, g, res):
+    datafile = imgpath+name
+    namepng = datafile +'.png'
+    namenrrd = datafile +'.nrrd'
+    # mesh data
+    mesh_d2s_twofields(name, f, g, res)
     #visualize result
     quantize(namenrrd,namepng)
     os.system('open ' + namepng)

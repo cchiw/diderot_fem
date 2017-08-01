@@ -23,7 +23,27 @@ def basic_d2s_sample(name,f, resU, resV, stepSize, type):
     init_file = path.join(path.dirname(__file__), '../programs/basic_d2s_sample/basic_d2s_sample_init.o')
     diderot_file = path.join(path.dirname(__file__),'../programs/basic_d2s_sample/basic_d2s_sample.o')
     call = make_c_evaluate(f, "callDiderot", ldargs=[init_file, diderot_file, "-lteem"])
+    type = 0
     return call(ctypes.c_char_p(name),type,p_cf, resU, resV, ctypes.c_float(stepSize))
+
+
+def mesh_d2s_single(name, f, res):
+    p_cf = f._ctypes
+    init_file = path.join(path.dirname(__file__), '../programs/mesh_d2s_single/mesh_d2s_single_init.o')
+    diderot_file = path.join(path.dirname(__file__),'../programs/mesh_d2s_single/mesh_d2s_single.o')
+    call = make_c_evaluate(f, "callDiderot", ldargs=[init_file, diderot_file, "-lteem"])
+    type = 1
+    return call(ctypes.c_char_p(name),type,p_cf, res)
+
+def mesh_d2s_twofields(name, f, g, res):
+    p_cf = f._ctypes
+    p_cg = g._ctypes
+    
+    init_file = path.join(path.dirname(__file__), '../programs/mesh_d2s_twofields/mesh_d2s_twofields_init.o')
+    diderot_file = path.join(path.dirname(__file__),'../programs/mesh_d2s_twofields/mesh_d2s_twofields.o')
+    call = make_c_evaluate(f, "callDiderot", ldargs=[init_file, diderot_file, "-lteem"])
+    type = 1
+    return call(ctypes.c_char_p(name), type, p_cf, p_cg, res)
 
 
 
