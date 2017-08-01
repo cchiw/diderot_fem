@@ -1,0 +1,18 @@
+input real stepSize;
+input int imgResU;
+input int imgResV;
+input fem#0(2)[] m;
+field#0(2)[] F =toField(m);
+
+strand RayCast (int ui, int vi) {
+    vec2 pos=[ui,vi]*stepSize;    
+    output real out=0.0;
+   
+    update {
+        if(inside(pos,F)){
+            out= F(pos);
+        }
+        stabilize;
+    }
+}
+initially [ RayCast(ui, vi) | vi in 0..imgResV-1, ui in 0..imgResU-1];
