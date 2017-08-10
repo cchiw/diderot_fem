@@ -1,0 +1,22 @@
+input int imgRes = 10;
+input fem#1(2)[] f;
+input fem#1(2)[] m;
+input fem#1(2)[] s;
+
+fnspace V = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
+//path to space data
+string path = "../../fnspace_data/";
+ofield#1(2)[] F = convert(f, m, s, V, path); //field and function space
+// will use data file in Diderot compiler
+
+strand sample (int ui, int vi) {
+
+    vec2 pos = [ui,vi];
+    output tensor[] out=  inst(F,pos);
+
+    update {
+             stabilize;
+    }
+}
+
+initially [ sample(ui, vi) | vi in 0..(imgRes-1), ui in 0..(imgRes-1) ];
