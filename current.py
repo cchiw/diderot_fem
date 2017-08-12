@@ -28,12 +28,13 @@ def test_ex2():
     
     ######################### choose one ###################
     # old way (depends on fem branch)
-    cut_old(name, f, V,res, stepSize)
+    #cut_old(name, f, V,res, stepSize)
     # uses femprime branch and creates json file
-    cut_json(name, f, V,res, stepSize)
+    #cut_json(name, f, V,res, stepSize)
     #does not create json file
     cut_new(name, f, res)
     # two fields
-    V2= FunctionSpace(mesh,"P",degree=2)
-    g = Function(V2).interpolate(Expression(exp))
-    cut_newTwo(name, f, g, res)
+    #V2= FunctionSpace(mesh,"P",degree=2)
+    #g = Function(V2).interpolate(Expression(exp))
+    #cut_newTwo(name, f, g, res)
+test_ex2()
