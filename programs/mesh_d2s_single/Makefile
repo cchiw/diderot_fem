@@ -10,12 +10,12 @@ SHELL =		/bin/sh
 
 CC =		clang
 CPPFLAGS =	-I../util -I/opt/local -I/usr/local/  -I/home/teodoro/gitcode/again/femprime/src/lib/include -I.
-CFLAGS =	-O3 -fPIC
+CFLAGS =	-O3 -fPIC -g
 FRAMEWORKS =	-framework Cocoa -framework OpenGL -framework IOKit -framework CoreFoundation -framework CoreVideo
 LDFLAGS =	-L/opt/local/lib -L/usr/local/lib -L/usr/local/ -lteem  -lpng $(FRAMEWORKS) -dynamiclib
 
 DIDEROTC =		/home/teodoro/gitcode/again/femprime/bin/diderotc 
-DIDEROTC_FLAGS =	--namespace=mesh_d2s_single --target=pthread
+DIDEROTC_FLAGS =	--namespace=mesh_d2s_single --target=pthread --debug
 
 UTIL_SRCS =		../../util/util.c
 

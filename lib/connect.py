@@ -1,5 +1,4 @@
 import sys
-from firedrake import *
 from os.path import abspath, dirname
 import pytest
 import os
@@ -48,8 +47,9 @@ def cut_new(name, f, res):
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
     # mesh data
-    print("happens")
+    print("Before Single")
     mesh_d2s_single(name, f, res)
+    print("Single finished")
     #visualize result
     quantize(namenrrd,namepng)
     os.system('open ' + namepng)
