@@ -1,0 +1,12 @@
+int imgRes = 10;
+strand sample (int ui, int vi) {
+
+    vec2 pos = [ui,vi];
+    output tensor[] out=  2;
+
+    update {
+             stabilize;
+    }
+}
+
+initially [ sample(ui, vi) | vi in 0..(imgRes-1), ui in 0..(imgRes-1) ];
