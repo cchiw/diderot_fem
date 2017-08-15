@@ -1,2 +1,2 @@
-~/gitcode/again/femprime/bin/diderotc --namespace=simple --target=pthread --debug simple.diderot
-g++ main.c -I/home/teodoro/gitcode/again/femprime/src/lib/include -lteem simple.o -pthread -g
+/Users/chariseechiw/diderot/femprime/bin/diderotc --namespace=simple --target=pthread --debug simple.diderot
+g++ main.c -I//Users/chariseechiw/diderot/femprime/src/lib/include -lteem simple.o -pthread -g

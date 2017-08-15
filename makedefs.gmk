@@ -1,0 +1,24 @@
+
+SHELL =		/bin/sh
+
+DIDEROTC =	/Users/chariseechiw/diderot/femprime/bin/diderotc
+
+CC =		clang
+CXX =		clang++ -std=gnu++11
+CXXFLAGS =	-g -O2 
+INCLUDES =	-I/Users/chariseechiw/diderot/femprime/include -I/usr/local/include
+LDFLAGS =	-L/usr/local/lib -L/opt/local/lib
+LIBS =		-lteem 
+CPPFLAGS =	 $(INCLUDES)
+
+ifeq (no,yes)
+LIBS +=		-Wl,-rpath=/usr/local/lib
+endif
+
+ifeq ($(PARALLEL),yes)
+PTHREAD_FLAGS =	-D_THREAD_SAFE 
+PTHREAD_LIBS =	
+else
+PTHREAD_FLAGS =
+PTHREAD_LIBS =
+endif

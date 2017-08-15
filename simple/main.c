@@ -1,102 +1,73 @@
-/*! \file init.c
- *
- * \author Charisee
- */
 
-/*
- * This code is part of the Diderot Project (http://diderot-language.cs.uchicago.edu)
- *
- * COPYRIGHT (c) 2015 The University of Chicago
- * All rights reserved.
- */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "simple.h"
-#include <unistd.h>
-#include "teem/air.h"
 
-void WriteFile(Nrrd *nData, int type, char *Outfile){
-  printf("Hello!\n");
-    if(type == 0){
-        if(nrrdSave(Outfile, nData, NULL)) {
-            exit(1);
-        }
+void fail (const char *msg, simple_world_t *wrld)
+{
+    if ((wrld == 0) || !simple_any_errors(wrld)) {
+        fprintf(stderr, "Error: %s\n", msg);
     }
-    else{
-        Nrrd *ntmp = nrrdNew();
-        nrrdQuantize(ntmp, nData, NULL, 8);
-        nrrdSave(Outfile, ntmp, NULL);
+    else {
+        fprintf(stderr, "Error: %s\n%s\n", msg, simple_get_errors(wrld));
     }
-    nrrdNuke(nData);
-    return;
+    exit (1);
 }
 
 //struct Function;
 struct Function {
-  int Gdmin;
-  int Sdmin;
-  int NumCells;
-  int ** CellToNode;
-  int ** NodeToCoords;
-  float ** NodeToPoint;
-  float * Coords;
+    int Gdmin;
+    int Sdmin;
+    int NumCells;
+    int ** CellToNode;
+    int ** NodeToCoords;
+    float ** NodeToPoint;
+    float * Coords;
 };
 
-int main(){
-  
-  int type = 0;
-  void *valM = 0;
-  int  imgRes = 10;
+int main ()
+{
     simple_world_t *wrld = simple_new_world ();
-    /* struct Function *g = (struct Function *) valM; */
-    /* printf("cell pt agg: %d\n",g->NumCells); */
-    printf("callDiderot 1!");
-
-    
     if (wrld == 0) {
-	//fprintf (stderr, "Unable to create Diderot world\n");
-	exit (1);
+        fail ("unable to create world", 0);
     }
-    simple_init_world (wrld);//initialize it.
-    simple_set_verbose(wrld,true);
-    //initialize input vars
-    printf("callDiderot 2!");
-    // simpleinput_set_f (wrld, valM);
-    //simpleinput_set_imgRes(wrld, imgRes);
-
-    // need to add datafile to input
     
-    // nrrd for getting computational state
+    if (simple_init_world (wrld)) {
+        fail ("unable to initialize world", wrld);
+    }
+    
+
+     
+    if (simple_input_set_imgRes (wrld, 4)) {
+        fail ("unable to initialize imgRed", wrld);
+    }
+
+    if (simple_create_strands (wrld)) {
+        fail ("unable to create initial strands", wrld);
+    }
+    
+    uint32_t nsteps = simple_run (wrld, 0);
+    if (nsteps == 0) {
+        fail ("no steps taken", wrld);
+    }
+    
     Nrrd *nData = nrrdNew();
-    printf("callDiderot 3!");
-    /* if (simpleinit_world (wrld)) {//intialize set of strands */
-    /*     // error */
-    /*     fprintf(stderr, "Error initializing world: %s", simpleget_errors(wrld)); */
-    /*     exit(1); */
-    /* } */
-    /* if (simplecreate_strands (wrld)) {//intialize set of strands */
-    /*     // error */
-    /*     fprintf(stderr, "Error initializing world: %s", simpleget_errors(wrld)); */
-    /*     exit(1); */
-    /* } */
-    printf("callDiderot 4!");
-    int nSteps = simple_run (wrld, 0);
-    printf("callDiderot 5!");
-
-    nrrdSave("kitten1", nData, NULL);
-    
-    //second paramter is the limit to # of steps.
-    //0-to termination
-    printf("callDiderot 5!");
-    // change here for output var
-    if (simple_output_get_out(wrld, nData)) {
-        // error
-        fprintf(stderr, "Error getting nrrd data: %s", simple_get_errors(wrld));
-        exit(1);
+    if (nData == 0) {
+        fail ("unable to allocate nrrd for output", 0);
     }
-    printf("callDiderot 6!");
-    WriteFile(nData, 0, "kitten2");
+    if (simple_output_get_out (wrld, nData)) {
+        fail ("problem getting output", wrld);
+    }
+    if (nrrdSave("out.nrrd", nData, 0)) {
+        char *err = biffGetDone(NRRD);
+        fprintf (stderr, "Error: trouble writing output:\n%s", err);
+        free (err);
+        exit (1);
+    }
+    
+    nrrdNuke (nData);
     simple_shutdown (wrld);
-    printf("callDiderot 7!");
-
+    
+    return 0;
 }
-//

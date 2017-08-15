@@ -1,4 +1,4 @@
-int imgRes = 10;
+input int imgRes = 7;
 strand sample (int ui, int vi) {
 
     vec2 pos = [ui,vi];
