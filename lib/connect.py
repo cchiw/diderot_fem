@@ -46,10 +46,7 @@ def cut_new(name, f, res):
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
-    # mesh data
-    print("Before Single")
     mesh_d2s_single(name, f, res)
-    print("Single finished")
     #visualize result
     quantize(namenrrd,namepng)
     os.system('open ' + namepng)

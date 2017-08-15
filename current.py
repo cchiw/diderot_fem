@@ -1,7 +1,7 @@
 # py.test -v current.py
 
 import sys
-#from firedrake import *
+from firedrake import *
 from os.path import abspath, dirname
 import pytest
 import os
@@ -16,13 +16,13 @@ from makejson import *
 
 
 def test_ex2():
-    # define a field
-    # exp="x[1]+x[0]"
-    # mesh = UnitSquareMesh(2,2)
-    # V= FunctionSpace(mesh,"Lagrange",degree=2)
-    # f = Function(V)
-    # f = interpolate(Expression(exp),V)
-    name = 'temp2.nrrd'
+    #define a field
+    exp="x[1]+x[0]"
+    mesh = UnitSquareMesh(2,2)
+    V= FunctionSpace(mesh,"Lagrange",degree=2)
+    f = Function(V)
+    f = interpolate(Expression(exp),V)
+    name = 'out.nrrd'
     res = 100
     stepSize = 0.01
     # path to connection
@@ -33,7 +33,7 @@ def test_ex2():
     # uses femprime branch and creates json file
     #cut_json(name, f, V,res, stepSize)
     #does not create json file
-    cut_new(name, 0, res)
+    cut_new(name, f, res)
     # two fields
     #V2= FunctionSpace(mesh,"P",degree=2)
     #g = Function(V2).interpolate(Expression(exp))

@@ -10,24 +10,19 @@
  * All rights reserved.
  */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "mesh_d2s_single.h"
-#include <unistd.h>
-#include "teem/air.h"
 
-void WriteFile(Nrrd *nData, int type, char *Outfile){
-  printf("Hello!\n");
-    if(type == 0){
-        if(nrrdSave(Outfile, nData, NULL)) {
-            exit(1);
-        }
+void fail (const char *msg, mesh_d2s_single_world_t *wrld)
+{
+    if ((wrld == 0) || !mesh_d2s_single_any_errors(wrld)) {
+        fprintf(stderr, "Error: %s\n", msg);
     }
-    else{
-        Nrrd *ntmp = nrrdNew();
-        nrrdQuantize(ntmp, nData, NULL, 8);
-        nrrdSave(Outfile, ntmp, NULL);
+    else {
+        fprintf(stderr, "Error: %s\n%s\n", msg, mesh_d2s_single_get_errors(wrld));
     }
-    nrrdNuke(nData);
-    return;
+    exit (1);
 }
 
 //struct Function;
@@ -44,56 +39,44 @@ struct Function {
 void callDiderot(char *Outfile, int type, void *valM, int imgRes){
   
     mesh_d2s_single_world_t *wrld = mesh_d2s_single_new_world ();
-    /* struct Function *g = (struct Function *) valM; */
-    /* printf("cell pt agg: %d\n",g->NumCells); */
-    printf("callDiderot 1!");
-
-    
     if (wrld == 0) {
-	//fprintf (stderr, "Unable to create Diderot world\n");
-	exit (1);
+      fail ("unable to create world",0);
     }
-    mesh_d2s_single_init_world (wrld);//initialize it.
-    mesh_d2s_single_set_verbose(wrld,true);
-    //initialize input vars
-    printf("callDiderot 2!");
-    // mesh_d2s_single_input_set_f (wrld, valM);
-    //mesh_d2s_single_input_set_imgRes(wrld, imgRes);
 
-    // need to add datafile to input
+    if (mesh_d2s_single_init_world(wrld)){
+      fail ("unable to init world",wrld);
+    }
+    if (mesh_d2s_single_input_set_imgRes (wrld, 4)) {
+        fail ("unable to initialize imgRed", wrld);
+    }
+    if (mesh_d2s_single_input_set_f (wrld, valM)) {
+        fail ("unable to initialize imgRed", wrld);
+    }
+
+    if (mesh_d2s_single_create_strands (wrld)) {
+        fail ("unable to create initial strands", wrld);
+    }
     
-    // nrrd for getting computational state
+    uint32_t nsteps = mesh_d2s_single_run (wrld, 0);
+    if (nsteps == 0) {
+        fail ("no steps taken", wrld);
+    }
+    
     Nrrd *nData = nrrdNew();
-    printf("callDiderot 3!");
-    /* if (mesh_d2s_single_init_world (wrld)) {//intialize set of strands */
-    /*     // error */
-    /*     fprintf(stderr, "Error initializing world: %s", mesh_d2s_single_get_errors(wrld)); */
-    /*     exit(1); */
-    /* } */
-    /* if (mesh_d2s_single_create_strands (wrld)) {//intialize set of strands */
-    /*     // error */
-    /*     fprintf(stderr, "Error initializing world: %s", mesh_d2s_single_get_errors(wrld)); */
-    /*     exit(1); */
-    /* } */
-    printf("callDiderot 4!");
-    int nSteps = mesh_d2s_single_run (wrld, 0);
-    printf("callDiderot 5!");
-
-    nrrdSave("kitten", nData, NULL);
-    
-    //second paramter is the limit to # of steps.
-    //0-to termination
-    printf("callDiderot 5!");
-    // change here for output var
-    if (mesh_d2s_single_output_get_out(wrld, nData)) {
-        // error
-        fprintf(stderr, "Error getting nrrd data: %s", mesh_d2s_single_get_errors(wrld));
-        exit(1);
+    if (nData == 0) {
+        fail ("unable to allocate nrrd for output", 0);
     }
-    printf("callDiderot 6!");
-    WriteFile(nData, type, Outfile);
+    if (mesh_d2s_single_output_get_out (wrld, nData)) {
+        fail ("problem getting output", wrld);
+    }
+    if (nrrdSave(Outfile, nData, 0)) {
+        char *err = biffGetDone(NRRD);
+        fprintf (stderr, "Error: trouble writing output:\n%s", err);
+        free (err);
+        exit (1);
+    }
+    
+    nrrdNuke (nData);
     mesh_d2s_single_shutdown (wrld);
-    printf("callDiderot 7!");
-
+    
 }
-//

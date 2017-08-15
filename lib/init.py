@@ -1,7 +1,5 @@
-
-#from firedrake import *
+from firedrake import *
 import ctypes
-#from firedrake.function import make_c_evaluate
 from os.path import abspath, dirname
 import os
 from os import path
@@ -38,28 +36,28 @@ class _CFunction(ctypes.Structure):
                 ("Coords", POINTER(c_float))] 
 
 
-# def organizeData(f):
-#     func = f
-#     space = f.function_space()
-#     mesh = space.mesh()
+def organizeData(f):
+    func = f
+    space = f.function_space()
+    mesh = space.mesh()
 
-#     cellToNode = mesh.coordinates.cell_node_map().values
-#     nodeToPoint = mesh.coordinates.dat.data
+    cellToNode = mesh.coordinates.cell_node_map().values
+    nodeToPoint = mesh.coordinates.dat.data
 
-#     nodeToCoords = space.cell_node_map().values
-#     coords = f.dat.data
-#     gdim = 2 #could be 3
-#     sdim = 3 #len(nodeToCoords[0])
-#     #might want to reoganize some data
-#     c_data = _CFunction()
-#     c_data.Gdim = gdim
-#     c_data.Sdim  = sdim
-#     c_data.NumCells = len(coords)
-#     c_data.CellToNode = cellToNode.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-#     c_data.NodeToCoords = nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-#     c_data.NodeToPoint = nodeToCoords.ctypes.data_as(POINTER(POINTER(as_ctypes(c_float))))
-#     c_data.Coords =  coords.ctypes.data_as(POINTER(as_ctypes(c_float)))
-#     return(c_data) #pass this back
+    nodeToCoords = space.cell_node_map().values
+    coords = f.dat.data
+    gdim = 2 #could be 3
+    sdim = 3 #len(nodeToCoords[0])
+    #might want to reoganize some data
+    c_data = _CFunction()
+    c_data.Gdim = gdim
+    c_data.Sdim  = sdim
+    c_data.NumCells = len(coords)
+    c_data.CellToNode = cellToNode.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
+    c_data.NodeToCoords = nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
+    c_data.NodeToPoint = nodeToCoords.ctypes.data_as(POINTER(POINTER(as_ctypes(c_float))))
+    c_data.Coords =  coords.ctypes.data_as(POINTER(as_ctypes(c_float)))
+    return(c_data) #pass this back
     
     
 
@@ -88,9 +86,9 @@ def mesh_d2s_single(name, f, res):
     init_file = '/home/teodoro/gitcode/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
     _call = ctypes.CDLL(init_file)
     type = 1
-    #data = organizeData(f)
+    data = organizeData(f)
     _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_float)
-    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(10,ctypes.c_void_p), res)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
     return(result)
 
 def mesh_d2s_twofields(name, f, g, res):
