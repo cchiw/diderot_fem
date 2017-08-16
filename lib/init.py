@@ -6,6 +6,12 @@ from os import path
 cwd = abspath(dirname(__file__))
 from ctypes import POINTER, c_int, c_double, c_void_p, c_float
 import numpy
+import numpy.ctypeslib as npct
+
+
+
+        
+
 
 #from pyop2
 def as_ctypes(dtype):
@@ -24,15 +30,26 @@ def as_ctypes(dtype):
             "float64": ctypes.c_double}[numpy.dtype(dtype).name]
 
 
+def mk_2d_array(x,t):
+    # y = numpy.empty(x.shape[0],dtype=object)
+    # for i in range(0,len(x)):
+    #     print(x[i])
+    #     y[i] = x[i].ctypes.data_as(POINTER(as_ctypes(x.dtype)))
+    # return(y.ctypes.data_as(POINTER(POINTER(as_ctypes(x.dtype)))))
+    #return((ctypes.cast(ctypes.c_void_p(x.ctypes.data),POINTER(POINTER(as_ctypes(c_int))))))
+    return(ctypes.c_void_p(x.ctypes.data))
+
+
 
 class _CFunction(ctypes.Structure):
     """C struct collecting data that we need"""
-    _fields_ = [("Gdim", c_int),
+    _fields_ = [ ("dim",c_int),
+        ("Gdim", c_int),
                 ("Sdim", c_int),
                 ("NumCells", c_int),
-                ("CellToNode", POINTER(POINTER(c_int))),
-                ("NodeToCoords", POINTER(POINTER(as_ctypes(c_int)))),
-                ("NodeToPoint", POINTER(POINTER(as_ctypes(c_float)))),
+                ("CellToNode",c_void_p),
+                ("NodeToCoords", c_void_p),
+                ("NodeToPoint", c_void_p),
                 ("Coords", POINTER(c_float))] 
 
 
@@ -43,19 +60,20 @@ def organizeData(f):
 
     cellToNode = mesh.coordinates.cell_node_map().values
     nodeToPoint = mesh.coordinates.dat.data
-
     nodeToCoords = space.cell_node_map().values
     coords = f.dat.data
-    gdim = 2 #could be 3
-    sdim = 3 #len(nodeToCoords[0])
-    #might want to reoganize some data
+    gdim = len(cellToNode[0]) 
+    sdim = len(nodeToCoords[0])
+    
+    #might want to reoganizesome data
     c_data = _CFunction()
+    c_data.dim = 2 #erm... get this somewhere?
     c_data.Gdim = gdim
     c_data.Sdim  = sdim
-    c_data.NumCells = len(coords)
-    c_data.CellToNode = cellToNode.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-    c_data.NodeToCoords = nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-    c_data.NodeToPoint = nodeToCoords.ctypes.data_as(POINTER(POINTER(as_ctypes(c_float))))
+    c_data.NumCells = len(cellToNode)
+    c_data.CellToNode = mk_2d_array(cellToNode,c_int)
+    c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
+    c_data.NodeToPoint = mk_2d_array(nodeToPoint,c_int) 
     c_data.Coords =  coords.ctypes.data_as(POINTER(as_ctypes(c_float)))
     return(c_data) #pass this back
     

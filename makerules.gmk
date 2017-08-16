@@ -1,10 +1,10 @@
 
 
 $(TARGET):	$(TARGET).o main.o
-	$(CXX) -o $(TARGET)  $(PTHREAD_FLAGS) $(LDFLAGS) main.o $(TARGET).o $(LIBS) $(PTHREAD_LIBS)
+	$(CXX) -o $(TARGET)  $(PTHREAD_FLAGS)  main.o $(TARGET).o $(LDFLAGS) $(INCLUDES) $(LIBS) $(PTHREAD_LIBS)
 
 main.o:		$(TARGET).o main.c
-	$(CC) -c $(CPPFLAGS) $(CFLAGS) $(PTHREAD_FLAGS) main.c
+	$(CC) -c $(CPPFLAGS) $(CFLAGS) $(PTHREAD_FLAGS) main.c $(INCLUDES) $(LIBS)
 
 $(TARGET).o:	$(TARGET).diderot
 	$(DIDEROTC) $(DIDEROTC_FLAGS) $(TARGET).diderot
