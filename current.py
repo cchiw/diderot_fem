@@ -17,7 +17,7 @@ from makejson import *
 
 def test_ex2():
     #define a field
-    exp="x[1]+x[0]"
+    exp="x[1]*x[0]"
     mesh = UnitSquareMesh(2,2)
     V= FunctionSpace(mesh,"Lagrange",degree=2)
     f = Function(V)

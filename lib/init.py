@@ -61,7 +61,7 @@ def organizeData(f):
     cellToNode = mesh.coordinates.cell_node_map().values
     nodeToPoint = mesh.coordinates.dat.data
     nodeToCoords = space.cell_node_map().values
-    coords = f.dat.data
+    coords = numpy.asfarray(f.dat.data,dtype="float32")
     gdim = len(cellToNode[0]) 
     sdim = len(nodeToCoords[0])
     
@@ -73,7 +73,7 @@ def organizeData(f):
     c_data.NumCells = len(cellToNode)
     c_data.CellToNode = mk_2d_array(cellToNode,c_int)
     c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-    c_data.NodeToPoint = mk_2d_array(nodeToPoint,c_int) 
+    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype="float32"),c_int) 
     c_data.Coords =  coords.ctypes.data_as(POINTER(as_ctypes(c_float)))
     return(c_data) #pass this back
     
