@@ -1,11 +1,12 @@
 input int imgRes = 10;
 input fem#1(2)[] f;
 fnspace V = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
-string path = "../../fnspace_data/";
+string path = "/home/teodoro/gitcode/femprime/jsonstuff/";
 ofield#1(2)[] F = convert(f, V, path); //field and function space
 strand sample (int ui, int vi) {
-
-    vec2 pos = [ui,vi];
+   real uu = lerp(0.0, 1.0, -0.5, real(ui), real(imgRes)-0.5);	
+    real vv = lerp(0.0, 1.0, -0.5, real(vi), real(imgRes)-0.5);	
+    vec2 pos = [0.5,0.5];
     output tensor[] out= inst(F,pos);
 
     update {
