@@ -16,9 +16,9 @@ ofield#1(2)[] G = convert(f, V2, path);
 
 
 strand sample (int ui, int vi) {
-    real uu = lerp(0.0, 1.0, -0.5, real(ui), real(imgRes)-0.5);
+    //real uu = lerp(0.0, 1.0, -0.5, real(ui), real(imgRes)-0.5);
     real vv = lerp(0.0, 1.0, -0.5, real(vi), real(imgRes)-0.5);
-    vec2 pos = [uu,vv];
+    vec2 pos = [ui,vi];
 
 
     output tensor[] out=  inst(F,pos)+inst(G,pos);
