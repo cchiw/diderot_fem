@@ -46,9 +46,9 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     f = Function(V)
     #randomly construct an f uniformly accorss all possible values
     numCords = len(f.dat.data)
-    lowBound = np.finfo(dtype="float32").min
-    upBound  = np.finfo(dtype="float32").max
-    norm = 10e25
+    lowBound = -10.0 #np.finfo(dtype="float32").min
+    upBound  = 10.0 #np.finfo(dtype="float32").max
+    norm = 1.0
     data = np.random.uniform(low=lowBound/norm,high=upBound/norm,size=numCords)
     f = Function(V,val=data)
 
