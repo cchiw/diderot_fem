@@ -1,0 +1,41 @@
+
+    input int imgRes = 10;
+    input fem#1(2)[] f;
+    fnspace V = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
+    string path = "../../fnspace_data/";
+    ofield#1(2)[] F = convert(f, V, path);
+    strand sample(int ui, int vi) {
+    output tensor[] out = 0;
+    	vec2 pos0 = [4.92816654241e-27,3.77736239929e-27];tensor[] out0 = inst(F,pos0);
+	vec2 pos1 = [2.69846679164e-27,9.61632319377e-27];tensor[] out1 = inst(F,pos1);
+	vec2 pos2 = [9.99293000401e-28,8.22737540679e-27];tensor[] out2 = inst(F,pos2);
+	vec2 pos3 = [4.56393857801e-27,4.82330060069e-27];tensor[] out3 = inst(F,pos3);
+	vec2 pos4 = [4.56340777363e-27,9.61998805434e-27];tensor[] out4 = inst(F,pos4);
+	vec2 pos5 = [9.64970822512e-27,6.65289942296e-27];tensor[] out5 = inst(F,pos5);
+	vec2 pos6 = [3.1970074123e-28,9.7605369117e-27];tensor[] out6 = inst(F,pos6);
+	vec2 pos7 = [8.15052259075e-28,8.60728753552e-27];tensor[] out7 = inst(F,pos7);
+	vec2 pos8 = [5.00199244741e-28,7.60908002669e-27];tensor[] out8 = inst(F,pos8);
+	vec2 pos9 = [7.90294439e-27,2.21821482667e-27];tensor[] out9 = inst(F,pos9);
+
+
+
+
+    update {
+    	print(out0,"\n");
+	print(out1,"\n");
+	print(out2,"\n");
+	print(out3,"\n");
+	print(out4,"\n");
+	print(out5,"\n");
+	print(out6,"\n");
+	print(out7,"\n");
+	print(out8,"\n");
+	print(out9,"\n");
+
+    
+    stabilize;
+    }
+    }
+
+    initially [ sample(ui, vi) | vi in 0..(0), ui in 0..(0) ];
+    

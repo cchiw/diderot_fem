@@ -109,6 +109,15 @@ def mesh_d2s_single(name, f, res):
     result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
     return(result)
 
+def single_mesh(name, f, res,init_file):
+    stepSize = 0.1
+    _call = ctypes.CDLL(init_file)
+    type = 1
+    data = organizeData(f)
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_float)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+
 def mesh_d2s_twofields(name, f, g, res):
     p_cf = f._ctypes
     p_cg = g._ctypes

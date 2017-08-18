@@ -14,7 +14,6 @@ from connect import *
 from makejson import *
 
 
-
 def test_ex2():
     #define a field
     exp="x[1]*x[0]"
@@ -22,7 +21,7 @@ def test_ex2():
     V= FunctionSpace(mesh,"Lagrange",degree=2)
     f = Function(V)
     f = interpolate(Expression(exp),V)
-    name = 'out.nrrd'
+    name = 'out'
     res = 100
     stepSize = 0.01
     # path to connection
@@ -33,7 +32,7 @@ def test_ex2():
     # uses femprime branch and creates json file
     #cut_json(name, f, V,res, stepSize)
     #does not create json file
-    cut_new(name, f, res)
+    a = cut_new(name, f, res)
     # two fields
     #V2= FunctionSpace(mesh,"P",degree=2)
     #g = Function(V2).interpolate(Expression(exp))
