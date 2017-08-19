@@ -77,9 +77,10 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     }
 
     initially [ sample(ui, vi) | vi in 0..(0), ui in 0..(0) ];
-    """% {"mesh" : meshname, "elem" : element, "d" : str(dim), "ev" : "".join(evals), "ps" : "".join(printStms) }
-
-    with open("test/mesh_d2s_single.diderot",'w') as fi:
+    """% {"mesh" : meshname, "elem" : element, "d" : str(degree), "ev" : "".join(evals), "ps" : "".join(printStms) }
+    os.system("rm test/mesh_d2s_single.diderot; rm test/mesh_d2s_single_init.so; rm test/mesh_d2s_single.cxx; rm test/mesh_d2s_single.o; rm test/mesh_d2s_single_init.o")
+    os.system("ls test/")
+    with open("test/mesh_d2s_single.diderot",'w+') as fi:
         fi.write(didFile)
 
     #Compile this -> hope it works
@@ -128,19 +129,41 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     errors = []
     for x in range(0,npoints):
         e = abs(didResults[x]-fResults[x])
-        if e >= 10e-5: #this is because currently print in diderot only goes to 5sf so this is what we should expect
-            errors.append("At test {0}, using values {1}, the error was {2}",x,zipPoints[x],e)
+        if e >= 10e-4: #this is because currently print in diderot only goes to 5sf so this is what we should expect
+            errors.append("At test {0}, using values {1} on {3}, the error was {2}".format(x,zipPoints[x],e,(meshname,element,degree)))
             
     if errors==[]:
         print("No errors occured!") #later choose one
         return(errors)
     else:
-        print(errors)
+        print("Error occured")
+        return(errors)
 
     
 
-    
-    
-run_test(UnitSquareMesh(2,2),"UnitSquareMesh","Lagrange",2,[(0,1),(0,1)],2,10)
 
+# meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh",[(0,1),(0,1)],2),(UnitSquareMesh(4,2),"UnitSquareMesh",[(0,1),(0,1)],2)]
+# elements = ["Lagrange","P"]
+# degrees = [1,2,3]
+
+meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh",2,[(0,1),(0,1)])]
+elements = ["Lagrange"]
+degrees = [2,3]
+
+errors = []
+
+#e = run_test(UnitSquareMesh(2,2),"UnitSquareMesh","P",2,[(0,1),(0,1)],2,10)
+
+#print(e)
+
+for m in meshs:
+    for e in elements:
+        for d in degrees:
+            print(m,e,d)
+            t = run_test(m[0],m[1],e,m[2],m[3],d,10)
+                         #mesh,meshname,element,dim,bounds, degree,npoints
+            errors.append(t)
+
+
+print(sum(map(len,errors)))
 
