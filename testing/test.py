@@ -1,3 +1,4 @@
+import re
 import random
 import sys
 from firedrake import *
@@ -19,27 +20,6 @@ from connect import *
 #Step 5: check results
 
 
-pyfile = """
-
-
-
-#random data
-data = {0}
-
-#solve the pde: has a function f
-{1}
-
-
-ff = lambda x: f.at(x)
-
-name = "out"
-res = 100
-so = {2}
-single_mesh(name, f, res,so)
-
-for x in data:
-\tprint(ff(x))
-"""
 
 def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     V = FunctionSpace(mesh,element,degree=degree)
@@ -132,7 +112,32 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     single_mesh("../data/out.nrrd",f,10,"test/mesh_d2s_single_init.so")
     #os.dup2(stdout, myStdOut)
     os.dup2(stdout, 1)
-    print read_pipe()
+    didStringResults = read_pipe()
+    def g(x):
+        print(x)
+        u = re.findall(r"[-+]?\d*\.\d+|\d+",x)[0]
+        return(float(u))
+        # print(x,u)
+        # if x[0]=="-":
+        #     return(0-float(x[1:]))
+        # else:
+        #     return(float(x))
+        
+    didResults =  map(g ,didStringResults.split("\n")[0:-1])
+    fResults = map(lambda x: f.at(x),zipPoints)
+    errors = []
+    for x in range(0,npoints):
+        e = abs(didResults[x]-fResults[x])
+        if e >= 10e-5: #this is because currently print in diderot only goes to 5sf so this is what we should expect
+            errors.append("At test {0}, using values {1}, the error was {2}",x,zipPoints[x],e)
+            
+    if errors==[]:
+        print("No errors occured!") #later choose one
+        return(errors)
+    else:
+        print(errors)
+
+    
 
     
     
