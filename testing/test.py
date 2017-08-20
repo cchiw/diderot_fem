@@ -58,14 +58,14 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
             evals.append("\tvec2 pos{0} = [{1},{2}];tensor[] out{0} = inst(F,pos{0});\n".format(x,z[0],z[1]))
 
         elif dim ==3:
-            evals.append("\tvec3 pos{0} = [{1},{2},{3}];\n".format(x,z[0],z[1],z[2]))
+            evals.append("\tvec3 pos{0} = [{1},{2},{3}];tensor[] out{0} = inst(F,pos{0});\n".format(x,z[0],z[1],z[2]))
             
             
             
     didFile = """
     input int imgRes = 10;
     input fem#1(2)[] f;
-    fnspace V = FunctionSpace(%(mesh)s(2,2), %(elem)s(), %(d)s);
+    fnspace V = FunctionSpace(%(mesh)s, %(elem)s(), %(d)s);
     string path = "../../fnspace_data/";
     ofield#1(2)[] F = convert(f, V, path);
     strand sample(int ui, int vi) {
@@ -155,7 +155,7 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 # elements = ["Lagrange","P"]
 # degrees = [1,2,3]
 
-meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh",2,[(0,1),(0,1)])]
+meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh(2,2)",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh(3,2)",2,[(0,1),(0,1)]),(UnitCubeMesh(2,2,2),"UnitCubeMesh(2,2,2)",3,[(0,1),(0,1),(0,1)])]
 elements = ["Lagrange","P"]
 degrees = [2,3]
 

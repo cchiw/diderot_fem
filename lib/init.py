@@ -67,7 +67,7 @@ def organizeData(f):
     
     #might want to reoganizesome data
     c_data = _CFunction()
-    c_data.dim = 2 #erm... get this somewhere?
+    c_data.dim = len(space.mesh().coordinates.dat.data[0])#erm... get this somewhere?
     c_data.Gdim = gdim
     c_data.Sdim  = sdim
     c_data.NumCells = len(cellToNode)
