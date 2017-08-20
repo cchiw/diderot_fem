@@ -1,4 +1,5 @@
 import re
+import time
 import random
 import sys
 from firedrake import *
@@ -22,6 +23,10 @@ from connect import *
 
 
 def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
+    r = random.uniform(0,1)
+    dirname = "test"+str(r)
+    os.system("cp -R test "+dirname)
+    time.sleep(1)
     V = FunctionSpace(mesh,element,degree=degree)
     f = Function(V)
     #randomly construct an f uniformly accorss all possible values
@@ -79,12 +84,14 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     initially [ sample(ui, vi) | vi in 0..(0), ui in 0..(0) ];
     """% {"mesh" : meshname, "elem" : element, "d" : str(degree), "ev" : "".join(evals), "ps" : "".join(printStms) }
     os.system("rm test/mesh_d2s_single.diderot; rm test/mesh_d2s_single_init.so; rm test/mesh_d2s_single.cxx; rm test/mesh_d2s_single.o; rm test/mesh_d2s_single_init.o")
-    os.system("ls test/")
-    with open("test/mesh_d2s_single.diderot",'w+') as fi:
+    with open(dirname+"/mesh_d2s_single.diderot",'w+') as fi:
         fi.write(didFile)
 
+    
+
+
     #Compile this -> hope it works
-    os.system("cd test; ./run.sh")
+    os.system("cd "+ dirname +"; ./run.sh")
 
     #run this and collect the output
     #steal from https://stackoverflow.com/questions/9488560/capturing-print-output-from-shared-library-called-from-python-with-ctypes-module
@@ -110,7 +117,7 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 
         return out
     #run
-    single_mesh("../data/out.nrrd",f,10,"test/mesh_d2s_single_init.so")
+    single_mesh("../data/out.nrrd",f,10,dirname+"/mesh_d2s_single_init.so")
     #os.dup2(stdout, myStdOut)
     os.dup2(stdout, 1)
     didStringResults = read_pipe()
@@ -131,13 +138,15 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
         e = abs(didResults[x]-fResults[x])
         if e >= 10e-4: #this is because currently print in diderot only goes to 5sf so this is what we should expect
             errors.append("At test {0}, using values {1} on {3}, the error was {2}".format(x,zipPoints[x],e,(meshname,element,degree)))
-            
+
+    os.system("rm -rf " + dirname)
     if errors==[]:
         print("No errors occured!") #later choose one
         return(errors)
     else:
         print("Error occured")
         return(errors)
+    
 
     
 
@@ -146,8 +155,8 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 # elements = ["Lagrange","P"]
 # degrees = [1,2,3]
 
-meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh",2,[(0,1),(0,1)])]
-elements = ["Lagrange"]
+meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh",2,[(0,1),(0,1)])]
+elements = ["Lagrange","P"]
 degrees = [2,3]
 
 errors = []
@@ -166,4 +175,5 @@ for m in meshs:
 
 
 print(sum(map(len,errors)))
+print(errors)
 
