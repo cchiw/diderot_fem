@@ -56,7 +56,9 @@ def makejson(V,filename):
     gdim = len(V.mesh().coordinates.cell_node_map().values[0])
     #dimension of the function space -> number of basis functions
     sdim = len(V.cell_node_map().values[0])
-    print("The dimension is {0} with gdim {1} and sdim {2}".format(dim,gdim,sdim))
+    #the polynomial degree because of our file naming convention
+
+
 
     
     #geometric basis functions:
@@ -112,8 +114,8 @@ def makejson(V,filename):
     elif dim == 3:
         spaceJacobian = applyStringFunc(np.hstack((basis3[(1,0,0)],basis3[(0,1,0)],basis3[(0,0,1)]))).tolist() #nnodes x dim
 
-
-    result =json.dumps({"dim": dim, "gdim" : gdim, "sdim" : sdim, "test": test, "isAffine": isAffine, "k": centerOfRefCell, "g_basis_functions" : gemBasis, "g_basis_dervs" : {"1": geometricJacobian}, "s_basis_functions": spaceBasis, "s_basis_dervs": {"1": spaceJacobian}},sort_keys=False,indent=4)
+    degree = V.ufl_element().degree()
+    result =json.dumps({"dim": dim, "gdim" : gdim, "sdim" : sdim, "degree":degree, "test": test, "isAffine": isAffine, "k": centerOfRefCell, "g_basis_functions" : gemBasis, "g_basis_dervs" : {"1": geometricJacobian}, "s_basis_functions": spaceBasis, "s_basis_dervs": {"1": spaceJacobian}},sort_keys=False,indent=4)
 
     with open(filename,'w+') as f:
         f.write(result)
