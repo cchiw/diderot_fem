@@ -24,7 +24,7 @@ imgpath = '../data/'
 
 # init diderot program
 def ex1(name, f, res, stepSize):
-    init_file = 'ex1_init.so'
+    init_file = "/home/teodoro/gitcode/diderot_fem/examples/ex1/ex1_init.so" #We can calculate absolute path.
     _call = ctypes.CDLL(init_file)
     type = 1
     data = organizeData(f)
