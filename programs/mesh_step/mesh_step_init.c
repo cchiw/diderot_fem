@@ -36,7 +36,7 @@ struct Function {
   float * Coords;
 };
 
-void callDiderot_mesh_step(char *Outfile, int type, void *valM, int imgRes){
+void callDiderot_mesh_step(char *Outfile, int type, void *valM, int imgRes, float stepSize){
   
     mesh_step_world_t *wrld = mesh_step_new_world ();
     if (wrld == 0) {
@@ -46,14 +46,13 @@ void callDiderot_mesh_step(char *Outfile, int type, void *valM, int imgRes){
     if (mesh_step_init_world(wrld)){
       fail ("unable to init world",wrld);
     }
-    /*
+
     if (mesh_step_input_set_imgRes (wrld, imgRes)) {
-        fail ("unable to initialize imgRed", wrld);
+        fail ("unable to initialize imgRes", wrld);
     }
-    
-    if (mesh_step_input_set_stepSize (wrld, 0.01)) {
+    if (mesh_step_input_set_stepSize (wrld, stepSize)) {
         fail ("unable to initialize stepSize", wrld);
-    }    */
+    }    
     if (mesh_step_input_set_f (wrld, valM)) {
         fail ("unable to initialize imgRed", wrld);
     }

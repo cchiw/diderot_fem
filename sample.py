@@ -17,11 +17,13 @@ from makejson import *
 
 def test_ex0():
 
-    exp = "x[0]*x[0]*(1-x[0])"
+    exp= "x[0]*x[0]*(1-x[0])"
+    #exp = "x[1]"
+    
     mesh = UnitSquareMesh(2,2)
     V= FunctionSpace(mesh,"Lagrange",degree=2)
     f = Function(V).interpolate(Expression(exp))
-    name = "samplecat"
+    name = "samplecat100_cut2+"
     res = 100
     stepSize = 0.01
 

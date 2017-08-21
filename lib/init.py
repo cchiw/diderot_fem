@@ -134,8 +134,8 @@ def mesh_step(name, f, res, stepSize):
     _call = ctypes.CDLL(init_file)
     type = 1
     data = organizeData(f)
-    _call.callDiderot_mesh_step.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_float)
-    result = _call.callDiderot_mesh_step(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    _call.callDiderot_mesh_step.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int,ctypes.c_float)
+    result = _call.callDiderot_mesh_step(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res, stepSize)
     return(result)
 
 
