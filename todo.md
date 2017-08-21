@@ -9,17 +9,19 @@ High priority items are marked with a "&#x1F525;" symbol.
 	- create tuple? for description and pointer
 * EIN params should reflect mesh/element/space
 * Tighten type checker for different input
-	- Do we still need three pointers?
-* code generation optimization  
+	- Do we still need three pointers? Teo: No.
+* code generation optimization
 	- (need benchmarks)
 	- some clean up should help
-* investigate locality issues with regard to mesh1
+* investigate locality issues with regard to mesh
+* Push to mid (discuss as it might make differentiation easier)
 
 ##Applications
 ### demonstrative examples
 * probe field at a position 
 * visualize a sample of a pde solution
 * volume render a pde solution
+* Demonstrate need by showing improvement on examples that paraview cannot visualize well.
 
 ### comparative examples
 * crest lines or some vis feature with high level of tensor math (needs differentiation)
@@ -29,10 +31,10 @@ High priority items are marked with a "&#x1F525;" symbol.
 * timing between fem and femprime branch
 
 ###testing 
-* regression tests for point-eval
+* regression tests for point-eval: Teo: There are a lot of tests being run via testing/test.py as of this moment.
 * visualization correctness 
 	- symmetry
-* list of pdes with known solutions 
+* list of pdes with known solutions that FEM can solve: Evans and Andrei D. Polyanin, Vladimir E. Nazaikinskii Handbook of Linear Partial Differential Equations for Engineers and Scientists (I have PDFs)
 * talk about metamorphic testing
 
 ##Reading and Writing
