@@ -1,12 +1,17 @@
-input int imgRes = 10;
+input int imgRes=10;
+input real stepSize=0.1;
+
+
+
+
 input fem#1(2)[] f;
 fnspace V = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
 string path = "../../fnspace_data/";
 ofield#1(2)[] F = convert(f, V, path); //field and function space
+
+
 strand sample (int ui, int vi) {
-   real uu = lerp(0.0, 1.0, -0.5, real(ui), real(imgRes)-0.5);	
-    real vv = lerp(0.0, 1.0, -0.5, real(vi), real(imgRes)-0.5);	
-    vec2 pos = [uu,vv];
+    vec2 pos=[ui,vi]*stepSize;
     output tensor[] out= inst(F,pos);
 
     update {

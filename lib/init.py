@@ -100,8 +100,8 @@ def basic_d2s_sample(name,f, resU, resV, stepSize, type):
 
 
 def mesh_d2s_single(name, f, res):
-    stepSize = 0.1
-    init_file = '/home/teodoro/gitcode/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
+    #init_file = '/home/teodoro/gitcode/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
+    init_file = '/Users/chariseechiw/fire/firedrake/src/firedrake/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
     _call = ctypes.CDLL(init_file)
     type = 1
     data = organizeData(f)
@@ -110,7 +110,6 @@ def mesh_d2s_single(name, f, res):
     return(result)
 
 def single_mesh(name, f, res,init_file):
-    stepSize = 0.1
     _call = ctypes.CDLL(init_file)
     type = 1
     data = organizeData(f)
@@ -127,6 +126,17 @@ def mesh_d2s_twofields(name, f, g, res):
     #call = make_c_evaluate(f, "callDiderot", ldargs=[init_file, diderot_file, "-lteem"])
     type = 1
     return call(ctypes.c_char_p(name), type, p_cf, p_cg, res)
+
+
+
+def mesh_step(name, f, res, stepSize):
+    init_file = '/Users/chariseechiw/fire/firedrake/src/firedrake/diderot_fem/programs/mesh_step/mesh_step_init.so'
+    _call = ctypes.CDLL(init_file)
+    type = 1
+    data = organizeData(f)
+    _call.callDiderot_mesh_step.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_float)
+    result = _call.callDiderot_mesh_step(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
 
 
 

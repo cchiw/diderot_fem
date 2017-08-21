@@ -17,12 +17,15 @@ def cut_old(name, f, V,res, stepSize):
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
-    vis_diderot.basic_d2s_sample(namenrrd, f, res, res, stepSize, 1)
+    basic_d2s_sample(namenrrd, f, res, res, stepSize, 1)
     #visualize result
     quantize(namenrrd,namepng)
     os.system('open ' + namepng)
     #namepvd=datafile +'.pvd'
     #File(namepvd) << f
+
+
+
 
 #make json file now
 def cut_json(name, f, V, res, stepSize):
@@ -46,7 +49,7 @@ def cut_new(name, f, res):
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
-    mesh_d2s_single(name, f, res)
+    mesh_d2s_single(namenrrd, f, res)
     #visualize result
     quantize(namenrrd,namepng)
     os.system('open ' + namepng)
@@ -62,4 +65,15 @@ def cut_newTwo(name, f, g, res):
     mesh_d2s_twofields(name, f, g, res)
     #visualize result
     quantize(namenrrd,namepng)
+    os.system('open ' + namepng)
+
+
+#progrm creates step size
+def cut_step(name, f, res, stepSize):
+    datafile = imgpath+name
+    namepng = datafile +'.png'
+    namenrrd = datafile +'.nrrd'
+    mesh_step(namenrrd, f, res, stepSize)
+    #visualize result
+    quantize(namenrrd, namepng)
     os.system('open ' + namepng)
