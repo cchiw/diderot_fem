@@ -3,6 +3,7 @@ High priority items are marked with a "&#x1F525;" symbol.
 
 ##Compiler Development
 * differentiation &#x1F525;
+* inside test  &#x1F525;
 * create a richer support for elements
 * surface syntax clean up 
 	- create tuple? for description and pointer

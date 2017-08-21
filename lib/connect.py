@@ -69,7 +69,8 @@ def cut_newTwo(name, f, g, res):
 
 
 #progrm creates step size
-def cut_step(name, f, res, stepSize):
+def cut_step(name, f, res):
+    stepSize = 1.0/res
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'

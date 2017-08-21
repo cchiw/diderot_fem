@@ -14,19 +14,20 @@ from connect import *
 from makejson import *
 
 
-
-def test_ex0():
-
-    exp= "x[0]*x[0]*(1-x[0])"
-    #exp = "x[1]"
-    
+def vis_exp(lbl, exp):
     mesh = UnitSquareMesh(2,2)
     V= FunctionSpace(mesh,"Lagrange",degree=2)
     f = Function(V).interpolate(Expression(exp))
-    name = "samplecat100_cut2+"
-    res = 100
-    stepSize = 0.01
+    name = "samplecat_"+lbl
+    res = 300
+    a = cut_step(name, f, res)
 
-    a = cut_step(name, f, res, stepSize)
-    
-test_ex0()
+
+
+def test_ex0():
+    vis_exp("ex","x[0]*x[0]*(1-x[0])")
+    vis_exp ("y", "x[1]")
+    vis_exp ("x", "x[0]")
+    vis_exp ("xsq", "x[0]*x[0]")
+    vis_exp ("sinex", "sin(x[0])")
+    vis_exp ("xsinex", "(x[0])*sin(x[0])")
