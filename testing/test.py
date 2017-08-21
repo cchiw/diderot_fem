@@ -176,4 +176,4 @@ for m in meshs:
 
 print(sum(map(len,errors)))
 print(errors)
-
+os.system("rm -rf test0*")
