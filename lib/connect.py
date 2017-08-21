@@ -66,15 +66,3 @@ def cut_newTwo(name, f, g, res):
     #visualize result
     quantize(namenrrd,namepng)
     os.system('open ' + namepng)
-
-
-#progrm creates step size
-def cut_step(name, f, res):
-    stepSize = 1.0/res
-    datafile = imgpath+name
-    namepng = datafile +'.png'
-    namenrrd = datafile +'.nrrd'
-    mesh_step(namenrrd, f, res, stepSize)
-    #visualize result
-    quantize(namenrrd, namepng)
-    os.system('open ' + namepng)
