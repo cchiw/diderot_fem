@@ -157,7 +157,7 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 
 meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh(2,2)",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh(3,2)",2,[(0,1),(0,1)]),(UnitCubeMesh(2,2,2),"UnitCubeMesh(2,2,2)",3,[(0,1),(0,1),(0,1)])]
 elements = ["Lagrange","P"]
-degrees = [2,3]
+degrees = [2,3,4,5]
 
 errors = []
 
