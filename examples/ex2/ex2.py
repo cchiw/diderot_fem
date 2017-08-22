@@ -1,4 +1,4 @@
-# py.test -v sample_helm.py
+# field is defined as FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
 
 import sys
 from firedrake import *
@@ -8,12 +8,29 @@ import os
 from os import path
 cwd = abspath(dirname(__file__))
 
-sys.path.insert(0, 'lib/')
+sys.path.insert(0, '../../lib/')
 from init import *
-from connect import *
-from makejson import *
+#from connect import *
+#from makejson import *
+
+import ctypes
+from ctypes import POINTER, c_int, c_double, c_void_p, c_float
+import numpy
+import numpy.ctypeslib as npct
 
 
+
+imgpath = '../data/'
+
+# init diderot program
+def ex2(name, f, res, stepSize):
+    init_file = 'ex2_init.so'
+    _call = ctypes.CDLL(init_file)
+    type = 1
+    data = organizeData(f)
+    _call.callDiderot_ex2.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int,ctypes.c_float)
+    result = _call.callDiderot_ex2(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res, stepSize)
+    return(result)
 
 #progrm creates step size
 def cut_step(name, f, res):
@@ -21,28 +38,28 @@ def cut_step(name, f, res):
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
-    mesh_step(namenrrd, f, res, stepSize)
+    ex2(namenrrd, f, res, stepSize)
     #visualize result
     quantize(namenrrd, namepng)
     os.system('open ' + namepng)
 
-
-def vis_helm():
-    mesh = UnitSquareMesh(10, 10)#original
-    #V = FunctionSpace(mesh, "CG", 3)
-    V = FunctionSpace(mesh, "Lagrange", 3)
-    u = TrialFunction(V)
-    v = TestFunction(V)
-    f = Function(V)
-    f.interpolate(Expression("(1+8*pi*pi)*cos(x[0]*pi*2)*cos(x[1]*pi*2)"))
-    a = (dot(grad(v), grad(u)) + v * u) * dx
-    L = f * v * dx
-    u = Function(V)
-    solve(a == L, u, solver_parameters={'ksp_type': 'cg'})
-    #solve(a == L, u, solver_parameters={'ksp_type': 'Lagrange'})
-    name = "helm"
-    res = 100
-    a = cut_step(name, u, res)
+# define field
+def vis_exp(lbl, exp):
+    mesh = UnitSquareMesh(2,2)
+    V= FunctionSpace(mesh,"Lagrange",degree=2)
+    f = Function(V).interpolate(Expression(exp))
+    name = "sampleexp_"+lbl
+    res = 300
+    a = cut_step(name, f, res)
 
 
-vis_helm()
+# init expression in field
+def test_ex0():
+    #vis_exp("ex","x[0]*x[0]*(1-x[0])")
+    #vis_exp ("y", "x[1]")
+    #vis_exp ("x", "x[0]")
+    vis_exp ("xsq", "x[0]*x[0]")
+    #vis_exp ("sinex", "sin(x[0])")
+    #vis_exp ("xsinex", "(x[0])*sin(x[0])")
+
+test_ex0()
