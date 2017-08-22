@@ -36,22 +36,24 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     norm = 1.0
     
     def p(data,i):
-        pExp = "{7}*({0} + {1}*x[{6}] + {2}*x[{6}]*x[{6}] + {3}*x[{6}]*x[{6}]*x[{6}]+{4}*x[{6}]*x[{6}]*x[{6}]*x[{6}] + {5}*x[{6}]*x[{6}]*x[{6}]*x[{6}]*x[{6}])".format(data[0],data[1],data[2],data[3],data[4],i,data[5])
+        pExp = "{7}*({0} + {1}*x[{6}] + {2}*x[{6}]*x[{6}] + {3}*x[{6}]*x[{6}]*x[{6}]+{4}*x[{6}]*x[{6}]*x[{6}]*x[{6}] + {5}*x[{6}]*x[{6}]*x[{6}]*x[{6}]*x[{6}])".format(data[0],data[1],data[2],data[3],data[4],data[5],i,data[6])
         return(pExp)
     def q(r):
         data = []
-        for x in range(0,5):
-            data.append(p(np.random.uniform(low=lowBound/norm,high=upBound/norm,size=6),0))
+        for x in range(0,6):
+            d= np.random.uniform(low=lowBound/norm,high=upBound/norm,size=10)
+            data.append(p(d,0))
 
         return(p(data+[r],1))
     def r():
         data = []
         data1 = np.random.uniform(low=lowBound/norm,high=upBound/norm,size=6)
-        for z in range(0,5):
+        for z in range(0,6):
             data.append(q(data1[z]))
         return(p(data+["1.0"],2))
     poly = r()
-    f = Interpolate(Expression(poly,V))
+    print(poly)
+    f = interpolate(Expression(poly),V)
 
 
     preZipPoints = []
@@ -185,7 +187,7 @@ for m in meshs:
     for e in elements:
         for d in degrees:
             print(m,e,d)
-            t = run_test(m[0],m[1],e,m[2],m[3],d,100)
+            t = run_test(m[0],m[1],e,m[2],m[3],d,10)
                          #mesh,meshname,element,dim,bounds, degree,npoints
             errors.append(t)
 
