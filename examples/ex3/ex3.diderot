@@ -1,0 +1,18 @@
+input int imgRes;
+input real stepSize;
+input fem#1(2)[] f;
+string path = "data.json";
+ofield#1(2)[] F = convert(f, path); //field and function space
+
+
+strand sample (int ui, int vi) {
+    vec2 pos=[ui,vi]*stepSize;
+
+    output tensor[] out= inst(F,pos);
+
+    update {
+             stabilize;
+    }
+}
+
+initially [ sample(ui, vi) | vi in 0..(imgRes-1), ui in 0..(imgRes-1) ];
