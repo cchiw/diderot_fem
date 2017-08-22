@@ -34,6 +34,7 @@ Charisee is working on items with a &#127801; symbol.
 * crest lines or some vis feature with high level of tensor math (needs differentiation)
 * higher order vs. lower order
 * Demonstrate need by showing improvement on examples that paraview cannot visualize well.
+** Teo has a question about plotting things and is putting this here for memory.
 
 ### benchmarks 
 * timing between fem and femprime branch
