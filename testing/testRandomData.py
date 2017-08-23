@@ -34,26 +34,8 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     lowBound = -10.0 #np.finfo(dtype="float32").min
     upBound  = 10.0 #np.finfo(dtype="float32").max
     norm = 1.0
-    
-    def p(data,i):
-        pExp = "{7}*({0} + {1}*x[{6}] + {2}*x[{6}]*x[{6}] + {3}*x[{6}]*x[{6}]*x[{6}]+{4}*x[{6}]*x[{6}]*x[{6}]*x[{6}] + {5}*x[{6}]*x[{6}]*x[{6}]*x[{6}]*x[{6}])".format(data[0],data[1],data[2],data[3],data[4],data[5],i,data[6])
-        return(pExp)
-    def q(r):
-        data = []
-        for x in range(0,6):
-            d= np.random.uniform(low=lowBound/norm,high=upBound/norm,size=10)
-            data.append(p(d,0))
-
-        return(p(data+[r],1))
-    def r():
-        data = []
-        data1 = np.random.uniform(low=lowBound/norm,high=upBound/norm,size=6)
-        for z in range(0,6):
-            data.append(q(data1[z]))
-        return(p(data+["1.0"],2))
-    poly = r()
-    print(poly)
-    f = interpolate(Expression(poly),V)
+    data = np.random.uniform(low=lowBound/norm,high=upBound/norm,size=numCords)
+    f = Function(V,val=data)
 
 
     preZipPoints = []
@@ -155,7 +137,7 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     for x in range(0,npoints):
         e = abs(didResults[x]-fResults[x])
         if e >= 10e-4: #this is because currently print in diderot only goes to 5sf so this is what we should expect
-            errors.append("At test {0}, using point {1} on {3}, the error was {2}. The poly was {4}".format(x,zipPoints[x],e,(meshname,element,degree),poly))
+            errors.append("At test {0}, using values {1} on {3}, the error was {2}".format(x,zipPoints[x],e,(meshname,element,degree)))
 
     os.system("rm -rf " + dirname)
     if errors==[]:
@@ -187,7 +169,7 @@ for m in meshs:
     for e in elements:
         for d in degrees:
             print(m,e,d)
-            t = run_test(m[0],m[1],e,m[2],m[3],d,10)
+            t = run_test(m[0],m[1],e,m[2],m[3],d,100)
                          #mesh,meshname,element,dim,bounds, degree,npoints
             errors.append(t)
 
