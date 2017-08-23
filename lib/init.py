@@ -10,6 +10,8 @@ import numpy.ctypeslib as npct
 
 
 
+float_type = "float64" #float or double
+ctypes_float_type =  ctypes.c_double
         
 
 
@@ -44,13 +46,13 @@ def mk_2d_array(x,t):
 class _CFunction(ctypes.Structure):
     """C struct collecting data that we need"""
     _fields_ = [ ("dim",c_int),
-        ("Gdim", c_int),
+                 ("Gdim", c_int),
                 ("Sdim", c_int),
                 ("NumCells", c_int),
                 ("CellToNode",c_void_p),
                 ("NodeToCoords", c_void_p),
                 ("NodeToPoint", c_void_p),
-                ("Coords", POINTER(c_float))] 
+                ("Coords", POINTER(ctypes_float_type))] 
 
 
 def organizeData(f):
@@ -61,7 +63,7 @@ def organizeData(f):
     cellToNode = mesh.coordinates.cell_node_map().values
     nodeToPoint = mesh.coordinates.dat.data
     nodeToCoords = space.cell_node_map().values
-    coords = numpy.asfarray(f.dat.data,dtype="float32")
+    coords = numpy.asfarray(f.dat.data,dtype=float_type)
     gdim = len(cellToNode[0]) 
     sdim = len(nodeToCoords[0])
     
@@ -73,8 +75,8 @@ def organizeData(f):
     c_data.NumCells = len(cellToNode)
     c_data.CellToNode = mk_2d_array(cellToNode,c_int)
     c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype="float32"),c_int) 
-    c_data.Coords =  coords.ctypes.data_as(POINTER(as_ctypes(c_float)))
+    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int) 
+    c_data.Coords =  coords.ctypes.data_as(POINTER(ctypes_float_type))
     return(c_data) #pass this back
     
     
@@ -101,7 +103,7 @@ def basic_d2s_sample(name,f, resU, resV, stepSize, type):
 
 def mesh_d2s_single(name, f, res):
     #init_file = '/home/teodoro/gitcode/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
-    init_file = '/Users/chariseechiw/fire/firedrake/src/firedrake/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
+    init_file = '/home/teodoro/gitcode/diderot_fem/programs/mesh_d2s_single/mesh_d2s_single_init.so'
     _call = ctypes.CDLL(init_file)
     type = 1
     data = organizeData(f)
@@ -142,7 +144,7 @@ def mesh_step(name, f, res, stepSize):
 
 #visualize images
 def quantize(namenrrd,namepng):
-    os.system('unu quantize -b 8 -i ' +namenrrd+ ' -o '+ namepng)
+    os.system('unu quantize -b 16 -i ' +namenrrd+ ' -o '+ namepng )
     os.system('open ' + namepng)
 
 
