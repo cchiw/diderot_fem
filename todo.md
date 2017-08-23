@@ -3,6 +3,18 @@ High priority items are marked with a "&#x1F525;" symbol.
 
 Charisee is working on items with a &#127801; symbol.
 
+
+#These weeks goals:
+* Testing
+** Values (pretty much done)
+** Visual testing
+* Fem Examples (Charisee)
+* Inside (Charisee)
+* Differentiation (Teo)
+* Optimization (Teo)
+
+
+
 ##Compiler Development
 * differentiation &#x1F525;
 * inside test  &#x1F525;
@@ -21,7 +33,13 @@ Charisee is working on items with a &#127801; symbol.
 * merge
 	- backend in sync &#127801;
 	- flux with chiw branch 
-	
+* Do some benchmarks 
+* Optimizations:
+** Parallelization -> look at generated code examples- > Charisee setups an 
+** tracking by cell
+** trying to predict the next cell
+** asking firedrake for a nice numbering system
+** liobspatial index
 
 ##Examples
 ### self-contained  and demonstrative 
@@ -36,7 +54,7 @@ Charisee is working on items with a &#127801; symbol.
 * higher order vs. lower order
 * Demonstrate need by showing improvement on examples that paraview cannot visualize well.
 ** Teo has a question about plotting things and is putting this here for memory.
-
+** When is higher degree but smaller mesh cheaper? 
 ### benchmarks 
 * timing between fem and femprime branch
 
