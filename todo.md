@@ -1,19 +1,17 @@
-# Fem Prime
-High priority items are marked with a "&#x1F525;" symbol.
-
-Charisee is working on items with a &#127801; symbol.
-
-
-#These weeks goals:
+#On Stack:
 * Testing
-** Values (pretty much done)
-** Visual testing
+	- Values (pretty much done)
+	- Visual testing
 * Fem Examples (Charisee)
 * Inside (Charisee)
 * Differentiation (Teo)
 * Optimization (Teo)
 
 
+# Long-term goals
+High priority items are marked with a "&#x1F525;" symbol.
+
+Charisee is working on items with a &#127801; symbol.
 
 ##Compiler Development
 * differentiation &#x1F525;
