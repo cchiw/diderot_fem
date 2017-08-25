@@ -83,7 +83,7 @@ def old_femMip(lbl, exp, res, l, k):
 
 def attempt_all(exps, res, l,k):
     start_standard = time.time()
-    tmp = "\n\nres= "+str(res)+" l="+str(l)
+    tmp = "\n\nres= "+str(res)+" l="+str(l)+" k="+str(k)
     tmp = tmp+"\nProgram \t original fem \t Make json(time,%) \t new fem(time,%)"
     for (expname, e) in exps:
         start_standardN = time.time()
@@ -124,7 +124,7 @@ res = 20
 l =2
 k = 3
 #different tests
-def atest_order():
+def test_order():
     attempt_all(exps, res, l, 3)
     attempt_all(exps, res, l, 2)
     attempt_all(exps, res, l, 1)
@@ -133,7 +133,7 @@ def atest_res():
     attempt_all(exps, res, 10, k)
     attempt_all(exps, res, 20, k)
     attempt_all(exps, res, 50, k)
-def test_discret():
+def atest_discret():
     attempt_all(exps, 10, l, k)
     attempt_all(exps, 50, l, k)
     attempt_all(exps, 100, l, k)
