@@ -6,6 +6,82 @@ import json
 import re
 import itertools
 
+search = re.compile("k\[\d+\]\*\*\d+")
+def replace_func(match):
+    string = match.group(0)
+    ints = re.findall("\d",string)
+    newstring = "*".join(["k[{0}]".format(ints[0])]*int(ints[1]))
+    return(newstring)
+def replace_powers(string):
+    return(re.sub("k\[\d+\]\*\*\d+",replace_func,string))
+def replace_func_2(match):
+    string = match.group(0)
+    return("("+"0"+")")
+def float_point_protect(string):
+    return(re.sub("-?\d+\.\d+e-\d+",replace_func_2,string))
+
+#we are going to deal with a lot of multidimensional arrays in the future and this is the best way to deal with it
+def makeIndices(shape):
+    if len(shape)==1:
+        return([(x,) for x in range(0,shape[0])])
+    else:
+        rest = makeIndices(shape[1:]) #not tail
+        here = [(x,) for x in range(0,shape[0])]
+        return([a+b for a in here for b in rest])
+
+#take a symp expression and turn it into a string that we care about
+def stringFunc(x):
+    return(float_point_protect(replace_powers(str((sp.expand(x))))))
+
+
+#take a symp expression and turn it into a string that we care about
+def stringFunc(x):
+    return(float_point_protect(replace_powers(str((sp.expand(x))))))
+
+#This must take a nparray
+def applyStringFunc(array):
+    shape = array.shape
+    idx = makeIndices(shape)
+    new = np.empty(shape,dtype=object)
+    for x in idx:
+        a = stringFunc(array[x])
+        new[x] = a
+    return(new)
+
+
+def arrayIndexToPartial(idx,dim):
+    cc = map(lambda x: len(filter(lambda y: y==x,idx)), range(dim))
+    return(tuple(cc))
+    
+    
+
+def organizeDerivatives(rf,function_space_dim,dim,n):
+    symbols = [[sp.Symbol("k[%d]" % i) for i in xrange(dim)]]
+    coords = [sp.Symbol("c[%d]" %i) for i in xrange(function_space_dim)]
+    basis = (rf.tabulate(n, np.array(symbols)))
+
+    for y in basis.keys():
+        b =  basis[y]
+        basis[y] = b.flatten().dot(coords)
+    dervs = dict()
+    for x in range(n+1)[1:]:
+        
+        shape = tuple(np.repeat(dim,x))
+        ret = np.empty(shape,dtype="object")
+        for z in np.ndindex(shape):
+            i = arrayIndexToPartial(z,dim)
+            ret[z]=stringFunc(basis[i])
+
+        dervs[x]=(ret).flatten().tolist()
+
+    return(dervs)
+        
+
+        
+            
+        
+        
+        
 
 
 def makejson(V,filename):
@@ -13,42 +89,7 @@ def makejson(V,filename):
     #Because python uses ** for float exponentiation and because numpy tries to translate this into an absurdly slow pow
     #we need to manually replace all the pow(x,int) -> x*x*x... 
     #so we bring out the regex expressions.
-    search = re.compile("k\[\d+\]\*\*\d+")
-    def replace_func(match):
-        string = match.group(0)
-        ints = re.findall("\d",string)
-        newstring = "*".join(["k[{0}]".format(ints[0])]*int(ints[1]))
-        return(newstring)
-    def replace_powers(string):
-        return(re.sub("k\[\d+\]\*\*\d+",replace_func,string))
-    def replace_func_2(match):
-        string = match.group(0)
-        return("("+string+")")
-    def float_point_protect(string):
-        return(re.sub("-?\d+\.\d+e-\d+",replace_func_2,string))
 
-    #we are going to deal with a lot of multidimensional arrays in the future and this is the best way to deal with it
-    def makeIndices(shape):
-        if len(shape)==1:
-            return([(x,) for x in range(0,shape[0])])
-        else:
-            rest = makeIndices(shape[1:]) #not tail
-            here = [(x,) for x in range(0,shape[0])]
-            return([a+b for a in here for b in rest])
-
-    #take a symp expression and turn it into a string that we care about
-    def stringFunc(x):
-        return(float_point_protect(replace_powers(str((sp.expand(x))))))
-
-        #This must take a nparray
-    def applyStringFunc(array):
-        shape = array.shape
-        idx = makeIndices(shape)
-        new = np.empty(shape,dtype=object)
-        for x in idx:
-            a = stringFunc(array[x])
-            new[x] = a
-        return(new)
             
 
     dim = len(V.mesh().coordinates.dat.data[0]) #dimension of  space
@@ -101,7 +142,8 @@ def makejson(V,filename):
     cord_element = V.ufl_element()
     rf = tsfc.fiatinterface.create_element(cord_element,vector_is_mixed=False)
     symbols = [[sp.Symbol("k[%d]" % i) for i in xrange(V.mesh().topological_dimension())]]
-    basis3 = (rf.tabulate(1, np.array(symbols)))
+    basis3 = (rf.tabulate(3, np.array(symbols)))
+    spaceBasisDervs = organizeDerivatives(rf,sdim,dim,3)
     if dim == 2:
         temp = (basis3[(0,0)])
     elif dim == 3:
@@ -114,8 +156,10 @@ def makejson(V,filename):
     elif dim == 3:
         spaceJacobian = applyStringFunc(np.hstack((basis3[(1,0,0)],basis3[(0,1,0)],basis3[(0,0,1)]))).tolist() #nnodes x dim
 
+
+
     degree = V.ufl_element().degree()
-    result =json.dumps({"dim": dim, "gdim" : gdim, "sdim" : sdim, "degree":degree, "test": test, "isAffine": isAffine, "k": centerOfRefCell, "g_basis_functions" : gemBasis, "g_basis_dervs" : {"1": geometricJacobian}, "s_basis_functions": spaceBasis, "s_basis_dervs": {"1": spaceJacobian}},sort_keys=False,indent=4)
+    result =json.dumps({"dim": dim, "gdim" : gdim, "sdim" : sdim, "degree":degree, "test": test, "isAffine": isAffine, "k": centerOfRefCell, "g_basis_functions" : gemBasis, "g_basis_dervs" : {"1": geometricJacobian}, "s_basis_functions": spaceBasis, "s_basis_dervs": {"1": spaceBasisDervs[1],"2" : spaceBasisDervs[2], "3" : spaceBasisDervs[3] }},sort_keys=False,indent=4)
 
     with open(filename,'w+') as f:
         f.write(result)

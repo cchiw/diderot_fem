@@ -66,13 +66,22 @@ def organizeData(f):
     coords = numpy.asfarray(f.dat.data,dtype=float_type)
     gdim = len(cellToNode[0]) 
     sdim = len(nodeToCoords[0])
+    nc = len(cellToNode)
+
+    opt = numpy.zeros((nc,nc))
+    r = range(nc)
+    for x in r:
+        a  = numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]
+        opt[x][0:a.shape[0]]= a
+        print(opt[x])
+            
     
     #might want to reoganizesome data
     c_data = _CFunction()
     c_data.dim = len(space.mesh().coordinates.dat.data[0])#erm... get this somewhere?
     c_data.Gdim = gdim
     c_data.Sdim  = sdim
-    c_data.NumCells = len(cellToNode)
+    c_data.NumCells = nc
     c_data.CellToNode = mk_2d_array(cellToNode,c_int)
     c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
     c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int) 
