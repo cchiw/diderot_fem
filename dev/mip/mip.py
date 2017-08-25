@@ -23,6 +23,9 @@ import time
 
 imgpath = '../data/'
 
+def quantize(namenrrd,namepng):
+    os.system('unu quantize -b 16 -i ' +namenrrd+ ' -o '+ namepng )
+
 # init diderot program
 def mip(name, f, res, rayStep):
     init_file = 'mip_init.so'
@@ -34,60 +37,105 @@ def mip(name, f, res, rayStep):
     return(result)
 
 
-
-def set_fem(lbl, exp):
-    mesh = CubeMesh(2, 2,2, 2)
-    V= FunctionSpace(mesh,"P",degree=3)
+## create fields
+def set_femMip(lbl, exp, l, k):
+    mesh = CubeMesh(l,l,l, 2)
+    V= FunctionSpace(mesh,"P",degree=k)
     f = Function(V).interpolate(Expression(exp))
     name = "mip_"+lbl
-    res = 100
     rayStep = 0.01
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
-    return (namenrrd, namepng, f, res, rayStep)
+    return (namenrrd, namepng, f, V, rayStep)
 
-#uses new femprime branches
-def new_fem(lbl, exp):
-    (namenrrd, namepng,  f, res, rayStep) = set_fem(lbl, exp)
+
+
+## talk to fem, or femprime branches
+def new_femMip2(lbl, exp, res, l, k):
+    (namenrrd, namepng,  f, V, rayStep) = set_femMip(lbl, exp, l, k)
     #makejson(V, namedata)
     #os.system('sh compile.sh') # compiles diderot program
     mip(namenrrd, f, res, rayStep)
     #visualize result
     quantize(namenrrd, namepng)
-    os.system('open ' + namepng)
+    #os.system('open ' + namepng)
 
+
+#new fem with json
+def new_femMip1(lbl, exp, res, l, k):
+    (namenrrd, namepng,  f, V, rayStep) = set_femMip(lbl, exp, l, k)
+    makejson(V, jsondata)
+    os.system('sh compile.sh') # compiles diderot program
+    mip(namenrrd, f, res, rayStep)
+    #visualize result
+    quantize(namenrrd, namepng)
+#os.system('open ' + namepng)
 
 # uses old fem branch
-def old_fem(lbl, exp):
-    (namenrrd, namepng,  f, res, rayStep) = set_fem(lbl, exp)
+def old_femMip(lbl, exp, res, l, k):
+    (namenrrd, namepng,  f, V, rayStep) = set_femMip(lbl, exp, l, k)
     vis_diderot.mip_d3s_ex1(namenrrd,f,res,res,rayStep, 1)
     quantize(namenrrd,namepng)
-    os.system('open ' + namepng)
+    #os.system('open ' + namepng)
 
-def attempt_all(name, exps, callfn):
-    i = 0
+
+
+def attempt_all(exps, res, l,k):
     start_standard = time.time()
-    for e in exps:
-        callfn(name+str(i), e)
-        i=i+1
-    end_standard = time.time()
-    tt_standard  = "\n"+name+":"+str(end_standard  - start_standard )
-    print (tt_standard )
+    tmp = "\n\nres= "+str(res)+" l="+str(l)
+    tmp = tmp+"\nProgram \t original fem \t Make json(time,%) \t new fem(time,%)"
+    for (expname, e) in exps:
+        start_standardN = time.time()
+        old_femMip("base_"+expname, e, res,l,k)
+        end_standardN = time.time()
+        oldT = end_standardN - start_standardN
+        tmp  = tmp+"\n"+expname+":\t "+str(oldT)
+    
+    
+        start_standardN = time.time()
+        new_femMip1("newbie1_"+expname, e,res,l,k)
+        end_standardN = time.time()
+        new1 = end_standardN  - start_standardN
+        perT = 100*((oldT- new1)/(oldT+ new1))
+        tmp  = tmp+",\t "+str(new1)+",\t"+ str(perT) +"%"
+        
+        start_standardN = time.time()
+        new_femMip2("newbie2_"+expname, e,res,l,k)
+        end_standardN = time.time()
+        new2 = end_standardN  - start_standardN
+        perT = 100*((oldT- new2)/(oldT+ new2))
+        tmp  = tmp+",\t "+str(new2)+",\t"+ str(perT) +"%"
+
     f = open("results.txt", 'a+')
-    f.write( tt_standard)
+    f.write(tmp)
     f.close()
 
-
 # init expression in field
-def test_ex0():
-    expA="x[0]"
-    expB="x[0]*x[0]*x[0]"
-    expC="sin(x[0])"
-    expD="x[0]*x[0]*(1-x[0])"
-    expE="0.5- (((1-x[0])*(1-x[0]))+((1-x[1])*(1-x[1]))+((1-x[2])*(1-x[2])))"
-    exps = [expA, expB, expC, expD, expE]
+expA=("linear", "x[0]")
+expB=("cube1", "x[0]*x[0]*x[0]")
+expC=("trig", "sin(x[0])")
+expD=("cube2", "x[0]*x[0]*(1-x[0])")
+expE=("circle","0.5- (((1-x[0])*(1-x[0]))+((1-x[1])*(1-x[1]))+((1-x[2])*(1-x[2])))")
+exps = [expE]
 
-
-    attempt_all("newbie", exps, new_fem)
-    attempt_all("base", exps, old_fem)
+#base line
+res = 20
+l =2
+k = 3
+#different tests
+def atest_order():
+    attempt_all(exps, res, l, 3)
+    attempt_all(exps, res, l, 2)
+    attempt_all(exps, res, l, 1)
+def atest_res():
+    attempt_all(exps, res, 2, k)
+    attempt_all(exps, res, 10, k)
+    attempt_all(exps, res, 20, k)
+    attempt_all(exps, res, 50, k)
+def test_discret():
+    attempt_all(exps, 10, l, k)
+    attempt_all(exps, 50, l, k)
+    attempt_all(exps, 100, l, k)
+    attempt_all(exps, 200, l, k)
+    attempt_all(exps, 300, l, k)
