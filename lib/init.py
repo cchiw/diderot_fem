@@ -68,12 +68,12 @@ def organizeData(f):
     sdim = len(nodeToCoords[0])
     nc = len(cellToNode)
 
-    opt = numpy.zeros((nc,nc))
+    opt = 0-numpy.ones((nc,nc))
     r = range(nc)
     for x in r:
         a  = numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]
         opt[x][0:a.shape[0]]= a
-        print(opt[x])
+
             
     
     #might want to reoganizesome data
