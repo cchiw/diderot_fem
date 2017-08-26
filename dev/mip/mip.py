@@ -40,7 +40,7 @@ def mip(name, f, res, rayStep):
 ## create fields
 def set_femMip(lbl, exp, l, k):
     mesh = CubeMesh(l,l,l, 2)
-    V= FunctionSpace(mesh,"P",degree=k)
+    V= FunctionSpace(mesh,"P",degree=2)
     f = Function(V).interpolate(Expression(exp))
     name = "mip_"+lbl
     rayStep = 0.01
@@ -124,15 +124,13 @@ res = 20
 l =2
 k = 3
 #different tests
-def test_order():
-    attempt_all(exps, res, l, 3)
-    attempt_all(exps, res, l, 2)
-    attempt_all(exps, res, l, 1)
-def atest_res():
+attempt_all(exps, res, 2, k)
+
+def test_res():
     attempt_all(exps, res, 2, k)
-    attempt_all(exps, res, 10, k)
-    attempt_all(exps, res, 20, k)
-    attempt_all(exps, res, 50, k)
+    #attempt_all(exps, res, 10, k)
+    #attempt_all(exps, res, 20, k)
+    #attempt_all(exps, res, 50, k)
 def atest_discret():
     attempt_all(exps, 10, l, k)
     attempt_all(exps, 50, l, k)
