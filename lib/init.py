@@ -73,15 +73,17 @@ def organizeData(f):
     opt = 0-numpy.ones((nc,nc),dtype="int32")
     r = range(nc)
     for x in r:
-        a  = (1+numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]).astype("int32")
+        a  = (numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]).astype("int32")
         #This is really important
         #it needs to have a uniform type or everything goes to hell
         
         opt[x][0:a.shape[0]]= a
+        opt[x][a.shape[0]] = x
+
     opt2 = numpy.empty((nc,nc),dtype=float_type)
     for x in r:
         for y in r:
-            opt2[x][y] = float(opt[x][y]+1)
+            opt2[x][y] = float(opt[x][y])
 
 
     grumble = opt2.flatten().tolist()
