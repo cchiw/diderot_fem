@@ -49,10 +49,12 @@ class _CFunction(ctypes.Structure):
                  ("Gdim", c_int),
                 ("Sdim", c_int),
                 ("NumCells", c_int),
+                 ("GetTracker", c_void_p),
                 ("CellToNode",c_void_p),
                 ("NodeToCoords", c_void_p),
                 ("NodeToPoint", c_void_p),
-                ("Coords", POINTER(ctypes_float_type))] 
+                 ("Coords", POINTER(ctypes_float_type)),
+                 ("Nbrs",c_void_p)] 
 
 
 def organizeData(f):
@@ -68,13 +70,23 @@ def organizeData(f):
     sdim = len(nodeToCoords[0])
     nc = len(cellToNode)
 
-    opt = 0-numpy.ones((nc,nc))
+    opt = 0-numpy.ones((nc,nc),dtype="int32")
     r = range(nc)
     for x in r:
-        a  = numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]
+        a  = (1+numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]).astype("int32")
+        #This is really important
+        #it needs to have a uniform type or everything goes to hell
+        
         opt[x][0:a.shape[0]]= a
+    opt2 = numpy.empty((nc,nc),dtype=float_type)
+    for x in r:
+        for y in r:
+            opt2[x][y] = float(opt[x][y]+1)
 
-            
+
+    grumble = opt2.flatten().tolist()
+    opt3 = numpy.array(grumble,dtype=float_type)
+    
     
     #might want to reoganizesome data
     c_data = _CFunction()
@@ -82,10 +94,16 @@ def organizeData(f):
     c_data.Gdim = gdim
     c_data.Sdim  = sdim
     c_data.NumCells = nc
+
+    
+    q = numpy.array([0])
+    c_data.GetTracker = ctypes.cast(mk_2d_array(q.astype("int32"),c_int),c_void_p) #mk_2d_array(numpy.asfarray(numpy.array([2]),dtype="int32"),c_int)
     c_data.CellToNode = mk_2d_array(cellToNode,c_int)
     c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
     c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int) 
     c_data.Coords =  coords.ctypes.data_as(POINTER(ctypes_float_type))
+    c_data.Nbrs = mk_2d_array(opt3,1) #ctypes.c_void_p(opt2.ctypes.data) #mk_2d_array(opt,c_int)
+
     return(c_data) #pass this back
     
     
