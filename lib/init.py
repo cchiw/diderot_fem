@@ -75,13 +75,27 @@ def organizeData(f):
     setNodes = map(set,cellToNode)
 
     ###we need to speed this up.
-    opt3 = numpy.zeros((nc,nc),dtype=float_type)
+    opt3 = numpy.ones((nc,nc),dtype="int32")
     for x in r:
+        s = 0
+        e = nc - 1
         for y in r:
             if x== y:
-                opt3[x][y]=10.0
-            elif x < y:
-                opt3[x][y] = 0.0 if setNodes[x].isdisjoint(setNodes[y]) else 10.0
+                opt3[x][s]=y
+                s+=1
+            else:
+                test = setNodes[x].isdisjoint(setNodes[y]) #make lazy as symmetric
+                if test:
+                    opt3[x][e] = y
+                    e-=1
+                else:
+                    opt3[x][s] = y
+                    s+=1
+
+    # print(opt3[0])
+
+
+                    #opt3 = np.array(np.where(opt3.flatten != 0 ),dtype=float_type)
 
         #float(len(setNodes[x].intersection(setNodes[y]))): this is more inefficient but could be use to enforce stricter locality
 
@@ -107,7 +121,7 @@ def organizeData(f):
 
 
     grumble = opt3.flatten().tolist()
-    opt3 = numpy.array(grumble,dtype=float_type)
+    opt3 = numpy.array(grumble,dtype="int32")
     
     
     #might want to reoganizesome data
@@ -124,7 +138,8 @@ def organizeData(f):
     c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
     c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int) 
     c_data.Coords =  coords.ctypes.data_as(POINTER(ctypes_float_type))
-    c_data.Nbrs = mk_2d_array(opt3,1) #ctypes.c_void_p(opt2.ctypes.data) #mk_2d_array(opt,c_int)
+    c_data.Nbrs = ctypes.cast((ctypes.c_int32 * (nc*nc))(*opt3),c_void_p) #This change prevented many a segfault.
+    #mk_2d_array(opt3,1) #ctypes.c_void_p(opt2.ctypes.data) #mk_2d_array(opt,c_int)
 
     return(c_data) #pass this back
     
