@@ -7,6 +7,7 @@ cwd = abspath(dirname(__file__))
 from ctypes import POINTER, c_int, c_double, c_void_p, c_float
 import numpy
 import numpy.ctypeslib as npct
+import time
 
 
 
@@ -69,24 +70,43 @@ def organizeData(f):
     gdim = len(cellToNode[0]) 
     sdim = len(nodeToCoords[0])
     nc = len(cellToNode)
-
-    opt = 0-numpy.ones((nc,nc),dtype="int32")
     r = range(nc)
-    for x in r:
-        a  = (numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]).astype("int32")
-        #This is really important
-        #it needs to have a uniform type or everything goes to hell
-        
-        opt[x][0:a.shape[0]]= a
-        opt[x][a.shape[0]] = x
+    import sets
+    setNodes = map(set,cellToNode)
 
-    opt2 = numpy.empty((nc,nc),dtype=float_type)
+    ###we need to speed this up.
+    opt3 = numpy.zeros((nc,nc),dtype=float_type)
     for x in r:
         for y in r:
-            opt2[x][y] = float(opt[x][y])
+            if x== y:
+                opt3[x][y]=10.0
+            elif x < y:
+                opt3[x][y] = 0.0 if setNodes[x].isdisjoint(setNodes[y]) else 10.0
+
+        #float(len(setNodes[x].intersection(setNodes[y]))): this is more inefficient but could be use to enforce stricter locality
+
+    # s = time.clock()
+    # opt = 0-numpy.ones((nc,nc),dtype="int32")
+    # r = range(nc)
+    # #THIS IS MASSIVELY INEFFICIENT: I'm workon a better one
+    # #Use sets -> different system -> cell by cell array
+    # for x in r:
+    #     #a  = (numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]).astype("int32")
+    #     a  = (numpy.where(map(lambda y: numpy.intersect1d(cellToNode[x],y).size!=0,cellToNode))[0]).astype("int32")
+    #     #This is really important
+    #     #it needs to have a uniform type or everything goes to hell
+        
+    #     opt[x][0:a.shape[0]]= a
+    #     #opt[x][a.shape[0]] = x -> a should include x
+    # e = time.clock()
+    # print("First loop time is {0}".format(e-s))
+    # opt2 = numpy.empty((nc,nc),dtype=float_type)
+    # for x in r:
+    #     for y in r:
+    #         opt2[x][y] = float(opt[x][y])
 
 
-    grumble = opt2.flatten().tolist()
+    grumble = opt3.flatten().tolist()
     opt3 = numpy.array(grumble,dtype=float_type)
     
     
@@ -136,6 +156,7 @@ def mesh_d2s_single(name, f, res):
     _call = ctypes.CDLL(init_file)
     type = 1
     data = organizeData(f)
+
     _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_float)
     result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
     return(result)
@@ -147,6 +168,16 @@ def single_mesh(name, f, res,init_file):
     _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_float)
     result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
     return(result)
+def single_mesh_step(name, f, res,step,init_file):
+    _call = ctypes.CDLL(init_file)
+    type = 1
+    data = organizeData(f)
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int,ctypes.c_float)
+    start = time.clock()    
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res,step)
+    end = time.clock()
+    total = end - start
+    return(total)
 
 def mesh_d2s_twofields(name, f, g, res):
     p_cf = f._ctypes
