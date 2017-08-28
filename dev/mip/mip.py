@@ -40,7 +40,7 @@ def mip(name, f, res, rayStep):
 ## create fields
 def set_femMip(lbl, exp, l, k):
     mesh = CubeMesh(l,l,l, 2)
-    V= FunctionSpace(mesh,"P",degree=2)
+    V= FunctionSpace(mesh,"P",degree=3)
     f = Function(V).interpolate(Expression(exp))
     name = "mip_"+lbl
     rayStep = 0.01
@@ -91,21 +91,21 @@ def attempt_all(exps, res, l,k):
         end_standardN = time.time()
         oldT = end_standardN - start_standardN
         tmp  = tmp+"\n"+expname+":\t "+str(oldT)
-    
+
     
         start_standardN = time.time()
         new_femMip1("newbie1_"+expname, e,res,l,k)
         end_standardN = time.time()
         new1 = end_standardN  - start_standardN
-        perT = 100*((oldT- new1)/(oldT+ new1))
-        tmp  = tmp+",\t "+str(new1)+",\t"+ str(perT) +"%"
+        #perT = 100*((oldT- new1)/(oldT+ new1))
+        tmp  = tmp+",\t "+str(new1)+",\t"#+ str(perT) +"%"
         
         start_standardN = time.time()
         new_femMip2("newbie2_"+expname, e,res,l,k)
         end_standardN = time.time()
         new2 = end_standardN  - start_standardN
-        perT = 100*((oldT- new2)/(oldT+ new2))
-        tmp  = tmp+",\t "+str(new2)+",\t"+ str(perT) +"%"
+        #perT = 100*((oldT- new2)/(oldT+ new2))
+        tmp  = tmp+",\t "+str(new2)+",\t"#+ str(perT) +"%"
 
     f = open("results.txt", 'a+')
     f.write(tmp)
@@ -124,16 +124,32 @@ res = 20
 l =2
 k = 3
 #different tests
-attempt_all(exps, res, 2, k)
 
-def test_res():
-    attempt_all(exps, res, 2, k)
-    #attempt_all(exps, res, 10, k)
-    #attempt_all(exps, res, 20, k)
-    #attempt_all(exps, res, 50, k)
-def atest_discret():
+
+def atest_res_20():
+    attempt_all(exps, 20, l, k)
+
+def atest_discret_10():
+    attempt_all(exps, res, 3, k)
+
+def atest_discret_5():
+    attempt_all(exps, res, 5, k)
+def atest_discret_10():
+    attempt_all(exps, res, 10, k)
+def test_higher_l20():
+    attempt_all(exps, res, 20, k)
+def atest_res_10():
     attempt_all(exps, 10, l, k)
+
+def atest_res_50():
     attempt_all(exps, 50, l, k)
+def test_higher_l50():
+    attempt_all(exps, res, 50, k)
+def test_higher_r100():
     attempt_all(exps, 100, l, k)
+
+
+def test_higher_r200():
     attempt_all(exps, 200, l, k)
+def test_higher_r300():
     attempt_all(exps, 300, l, k)
