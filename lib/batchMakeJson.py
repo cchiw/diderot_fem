@@ -8,7 +8,7 @@ meshes = [(UnitSquareMesh(1,1),"UnitSquareMesh"),(UnitCubeMesh(1,1,1),"UnitCubeM
 #The number of cells in the mesh does not matter and neither does the location in space
 #-> we only want the refrence element with the mesh, not the mesh itself.
 elements = ["Lagrange","P"]
-degrees = [1,2,3]
+degrees = [1,2,3,4,5]
 
 for m in meshes:
     for e in elements:

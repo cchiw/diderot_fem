@@ -50,14 +50,14 @@ def applyStringFunc(array):
 
 
 def arrayIndexToPartial(idx,dim):
-    cc = map(lambda x: len(filter(lambda y: y==x,idx)), range(dim))
+    cc = map(lambda x: len(list(filter(lambda y: y==x,idx))), range(dim))
     return(tuple(cc))
     
     
 
 def organizeDerivatives(rf,function_space_dim,dim,n):
-    symbols = [[sp.Symbol("k[%d]" % i) for i in xrange(dim)]]
-    coords = [sp.Symbol("c[%d]" %i) for i in xrange(function_space_dim)]
+    symbols = [[sp.Symbol("k[%d]" % i) for i in range(dim)]]
+    coords = [sp.Symbol("c[%d]" %i) for i in range(function_space_dim)]
     basis = (rf.tabulate(n, np.array(symbols)))
 
     for y in basis.keys():
@@ -105,7 +105,7 @@ def makejson(V,filename):
     #geometric basis functions:
     cord_element = V.mesh().ufl_coordinate_element()
     rf = tsfc.fiatinterface.create_element(cord_element,vector_is_mixed=False)
-    symbols = [[sp.Symbol("k[%d]" % i) for i in xrange(V.mesh().topological_dimension())]]
+    symbols = [[sp.Symbol("k[%d]" % i) for i in range(V.mesh().topological_dimension())]]
     if dim == 2: #come up with a dim agnostic solution
         basis1 = np.array(rf.tabulate(0, np.array(symbols))[(0,0)])
     elif dim == 3:
@@ -124,10 +124,10 @@ def makejson(V,filename):
     
     #that one point k that is in the "middle" of the reference element:
     vertex = np.array(rf.get_reference_element().get_vertices())
-    centerOfRefCell = map(float,np.average(vertex, axis=0).tolist())
+    centerOfRefCell = list(map(float,np.average(vertex, axis=0).tolist()))
 
     #test that we need to see if we are in the refrence element
-    point = tuple(sp.Symbol("newpos[%d]" % i) for i in xrange(dim))
+    point = tuple(sp.Symbol("newpos[%d]" % i) for i in range(dim))
     #credit to this one goes to the author of the diderot integration branch of firedrake:
     test = " && ".join("(%s)" % arg for arg in rf.get_reference_element().contains_point(point,epsilon=1e-14).args)
 
@@ -141,7 +141,7 @@ def makejson(V,filename):
     #Not to self: when creating dimension agnostic solution, deal with code reuse
     cord_element = V.ufl_element()
     rf = tsfc.fiatinterface.create_element(cord_element,vector_is_mixed=False)
-    symbols = [[sp.Symbol("k[%d]" % i) for i in xrange(V.mesh().topological_dimension())]]
+    symbols = [[sp.Symbol("k[%d]" % i) for i in range(V.mesh().topological_dimension())]]
     basis3 = (rf.tabulate(3, np.array(symbols)))
     spaceBasisDervs = organizeDerivatives(rf,sdim,dim,3)
     if dim == 2:
