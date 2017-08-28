@@ -1,0 +1,22 @@
+
+    input int imgRes = 1000;
+    input fem#1(2)[] f;
+    input real stepSize = 0.001;
+    fnspace V = FunctionSpace(UnitSquareMesh(10,10), Lagrange(), 5);
+    string path = "../../../fnspace_data/";
+    ofield#1(2)[] F = convert(f, V, path);
+    strand sample(int u0,int u1) {
+    
+    vec2 pos = [u0,u1] *stepSize;
+    output tensor[] out = inst(F,pos);
+
+
+
+
+    update {
+    stabilize;
+          }
+    }
+
+    initially [ sample(u0,u1) | u0 in 0..(imgRes-1),u1 in 0..(imgRes-1) ];
+    

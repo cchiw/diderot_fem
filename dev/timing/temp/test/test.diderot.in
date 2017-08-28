@@ -1,0 +1,19 @@
+input int imgRes = 10;
+input fem#1(2)[] f;
+fnspace V = FunctionSpace(@mesh@(2,2), @element@(), @degree@);
+string path = "../../fnspace_data/";
+ofield#1(2)[] F = convert(f, V, path); //field and function space
+
+strand sample (int ui, int vi) {
+
+       @comps@
+
+
+    update {
+    	   @prints@
+    
+             stabilize;
+    }
+}
+
+initially [ sample(ui, vi) | vi in 0..(0), ui in 0..(0) ];

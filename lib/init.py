@@ -72,25 +72,30 @@ def organizeData(f):
     nc = len(cellToNode)
     r = range(nc)
     import sets
-    setNodes = map(set,cellToNode)
+    
 
     ###we need to speed this up.
     opt3 = numpy.ones((nc,nc),dtype="int32")
-    for x in r:
-        s = 0
-        e = nc - 1
-        for y in r:
-            if x== y:
-                opt3[x][s]=y
-                s+=1
-            else:
-                test = setNodes[x].isdisjoint(setNodes[y]) #make lazy as symmetric
-                if test:
-                    opt3[x][e] = y
-                    e-=1
-                else:
-                    opt3[x][s] = y
+    opt = True
+    if opt:
+        setNodes = map(set,cellToNode)
+        for x in r:
+            s = 0
+            e = nc - 1
+            for y in r:
+                if x== y:
+                    opt3[x][s]=y
                     s+=1
+                else:
+                    test = setNodes[x].isdisjoint(setNodes[y]) #make lazy as symmetric
+                    if test:
+                        opt3[x][e] = y
+                        e-=1
+                    else:
+                        opt3[x][s] = y
+                        s+=1
+    grumble = opt3.flatten().tolist()
+    opt3 = numpy.array(grumble,dtype="int32")
 
     # print(opt3[0])
 
@@ -120,8 +125,7 @@ def organizeData(f):
     #         opt2[x][y] = float(opt[x][y])
 
 
-    grumble = opt3.flatten().tolist()
-    opt3 = numpy.array(grumble,dtype="int32")
+    
     
     
     #might want to reoganizesome data
@@ -188,11 +192,10 @@ def single_mesh_step(name, f, res,step,init_file):
     type = 1
     data = organizeData(f)
     _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int,ctypes.c_float)
-    start = time.clock()    
+   
     result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res,step)
-    end = time.clock()
-    total = end - start
-    return(total)
+   
+    return(0)
 
 def mesh_d2s_twofields(name, f, g, res):
     p_cf = f._ctypes
