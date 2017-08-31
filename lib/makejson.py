@@ -18,7 +18,13 @@ def replace_func_2(match):
     string = match.group(0)
     return("("+"0"+")")
 def float_point_protect(string):
-    return(re.sub("-?\d+\.\d+e-\d+",replace_func_2,string))
+    return(re.sub("-?\d+\.\d+e-\d\d+",replace_func_2,string))
+
+def float_point_protect_term(string):
+    #-?\d+\.\d+e-\d\d+(\*(c|k)\[\d\])+
+    #-?\d+\.\d+e-\d\d+(\*.+)(?= (\+|\-))
+    #-?\d+\.\d+e-\d\d+(\*(c|k)\[\d\])*
+    return(re.sub("-?\d+\.\d+e-\d\d+(\*(c|k)\[\d\])*",replace_func_2,string))
 
 #we are going to deal with a lot of multidimensional arrays in the future and this is the best way to deal with it
 def makeIndices(shape):
@@ -31,12 +37,12 @@ def makeIndices(shape):
 
 #take a symp expression and turn it into a string that we care about
 def stringFunc(x):
-    return(float_point_protect(replace_powers(str((sp.expand(x))))))
+    return(float_point_protect_term(replace_powers(str((sp.expand(x))))))
 
 
 #take a symp expression and turn it into a string that we care about
 def stringFunc(x):
-    return(float_point_protect(replace_powers(str((sp.expand(x))))))
+    return(float_point_protect_term(replace_powers(str((sp.expand(x)))+" + 0")))
 
 #This must take a nparray
 def applyStringFunc(array):
