@@ -48,12 +48,12 @@ class _CFunction(ctypes.Structure):
     """C struct collecting data that we need"""
     _fields_ = [ ("dim",c_int),
                  ("Gdim", c_int),
-                ("Sdim", c_int),
-                ("NumCells", c_int),
+                 ("Sdim", c_int),
+                 ("NumCells", c_int),
                  ("GetTracker", c_void_p),
-                ("CellToNode",c_void_p),
-                ("NodeToCoords", c_void_p),
-                ("NodeToPoint", c_void_p),
+                 ("CellToNode",c_void_p),
+                 ("NodeToCoords", c_void_p),
+                 ("NodeToPoint", c_void_p),
                  ("Coords", POINTER(ctypes_float_type)),
                  ("Nbrs",c_void_p)] 
 
@@ -70,6 +70,11 @@ def organizeData(f):
     gdim = len(cellToNode[0]) 
     sdim = len(nodeToCoords[0])
     nc = len(cellToNode)
+    # nodesPerCell = len(nodeToCoords[0])
+    # numberOfNodes = nc * nodesPerCell
+    # functionSpaceShape = space.shape
+    #shape = [numberOfNodes] + list(functionSpaceShape)
+    
     r = range(nc)
     import sets
     
@@ -140,8 +145,11 @@ def organizeData(f):
     c_data.GetTracker = ctypes.cast(mk_2d_array(q.astype("int32"),c_int),c_void_p) #mk_2d_array(numpy.asfarray(numpy.array([2]),dtype="int32"),c_int)
     c_data.CellToNode = mk_2d_array(cellToNode,c_int)
     c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int) 
-    c_data.Coords =  coords.ctypes.data_as(POINTER(ctypes_float_type))
+    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int)
+    functionDataCtype = reduce(lambda x,y : x*y, coords.shape, ctypes_float_type)
+    print(functionDataCtype)
+    print(coords.shape)
+    c_data.Coords =   ctypes.cast((functionDataCtype)(*coords),POINTER(ctypes_float_type)) #coords.ctypes.data_as(POINTER(ctypes_float_type))
     c_data.Nbrs = ctypes.cast((ctypes.c_int32 * (nc*nc))(*opt3),c_void_p) #This change prevented many a segfault.
     #mk_2d_array(opt3,1) #ctypes.c_void_p(opt2.ctypes.data) #mk_2d_array(opt,c_int)
 
