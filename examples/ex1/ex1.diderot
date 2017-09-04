@@ -9,17 +9,9 @@ ofield#1(2)[] F = convert(f, V, path); //field and function space
 
 strand sample (int ui, int vi) {
     vec2 pos=[ui,vi]*stepSize;
-
-    output tensor[] out= inst(F,pos);
-
-
-
+   output tensor[] out= inst(F,pos);
 
     update {
-if(pos[0]>2){
-out =6;
-}
-
              stabilize;
     }
 }

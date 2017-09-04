@@ -1,0 +1,15 @@
+c__p_o25_o6_t1_t2__l2
+
+observed data from femprime/ None
+
+correct data from pythonNone
+
+ positions[[0.93, 0.59], [0.34, 0.86], [0.64, 0.86], [0.22, 1.0], [0.19, 0.22], [0.37, 0.04], [0.03, 0.49]]
+
+Params(1)
+	0.) -setA 2 -4 0 0 -setB 0 0 0 0 -setC 0 0 0 0 -setD 0 0 0 0 -sz0 70 -sz1 70 -width 1
+norm(grad)_F_s_d2 |p_o25_o6_t1_t2__l2
+
+ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
+        double l_probe_l_4_22 = makeEval_UnitSquareMesh_Lagrange_2_1(
+               ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

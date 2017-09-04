@@ -1,0 +1,55 @@
+
+
+ input fem#4(2)[] FF0;
+ //Field:field #4(2)[] F0=2
+ fnspace VF0 = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
+ string pathF0 = "fnspace_data/";
+ ofield#4(2)[] F0 = convert(FF0,VF0,pathF0);
+
+ input fem#4(2)[2] FF1;
+ //Field:field #4(2)[2] F1=[5*y + 2, 2*y + 2]
+ fnspace VF1 = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
+ string pathF1 = "fnspace_data/";
+ ofield#4(2)[2] F1 = convert(FF1,VF1,pathF1);
+input real scale = 1;
+ofield#3(2)[2]G = (∇(F0))+(F1);
+int length =7;
+strand f(int i) {
+
+	output tensor [2] out =  [0.0,0.0];
+	    update {
+
+		tensor [2] pos=[0,0];
+		if(i==0){
+			pos = ([0.23, 0.34]);
+		}
+		else if(i==1){
+			pos = ([0.23, 0.34]);
+		}
+		else if(i==2){
+			pos = ([0.31, 0.26]);
+		}
+		else if(i==3){
+			pos = ([0.37, 0.63]);
+		}
+		else if(i==4){
+			pos = ([0.76, 0.35]);
+		}
+		else if(i==5){
+			pos = ([0.88, 0.23]);
+		}
+		else if(i==6){
+			pos = ([0.4, 0.34]);
+		}
+		else if(i==7){
+			pos = ([0.62, 0.83]);
+		}
+
+	if((insideF(pos,F0)) && (insideF(pos,F1)) && true){
+			out = inst(G, pos);
+	}
+	 else{out =  [7.2,7.2];}
+        stabilize;
+    }
+}
+initially [ f(i) | i in 0..length];

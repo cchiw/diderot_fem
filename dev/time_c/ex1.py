@@ -100,14 +100,14 @@ def core(res, l):
     end_standardN = time.time()
     new1 = end_standardN  - start_standardN
     #perT = 100*((oldT- new1)/(oldT+ new1))
-    tmp  = tmp+",\t "+str(new1)+",\t"#+ str(perT) +"%"
+    tmp  = tmp+",\t "+str(new1)+"\t"#+ str(perT) +"%"
     
     start_standardN = time.time()
     cut_step("cutnew", exp,res,l)
     end_standardN = time.time()
     new2 = end_standardN  - start_standardN
     #perT = 100*((oldT- new2)/(oldT+ new2))
-    tmp  = tmp+",\t "+str(new2)+",\t"#+ str(perT) +"%"
+    tmp  = tmp+",\t "+str(new2)+"\t"#+ str(perT) +"%"
 
 
     f = open("results.txt", 'a+')
@@ -115,23 +115,33 @@ def core(res, l):
     f.close()
 
 
-def test_ex_res20():
+def atest_ex_res20_1():
     res = 20
-    i = 20
+    i = 2
     while (i< 100):
         core(res, i)
-        i = i+20
+        i = i+2
 
-def test_ex_res50():
-    res = 50
-    i = 20
-    while (i< 100):
+def test_ex_res100_1():
+    res = 200
+    i = 2
+    while (i< 50):
         core(res, i)
-        i = i+20
+        i = i+2
 
-def test_ex_res100():
+
+
+
+def atest_ex_res20_2():
+    res = 20
+    i = 200
+    while (i< 1000):
+        core(res, i)
+        i = i+100
+
+def atest_ex_res100_2():
     res = 100
-    i = 20
-    while (i< 100):
+    i = 100
+    while (i< 1000):
         core(res, i)
-        i = i+20
+        i = i+100

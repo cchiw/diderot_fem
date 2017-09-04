@@ -84,7 +84,7 @@ def old_femMip(lbl, exp, res, l, k):
 def attempt_all(exps, res, l,k):
     start_standard = time.time()
     tmp = "\n\nres= "+str(res)+" l="+str(l)+" k="+str(k)
-    tmp = tmp+"\nProgram \t original fem \t Make json(time,%) \t new fem(time,%)"
+    tmp = tmp+"\nProgram \t original fem \t Make json   \t new fem"
     for (expname, e) in exps:
         start_standardN = time.time()
         old_femMip("base_"+expname, e, res,l,k)
@@ -98,14 +98,14 @@ def attempt_all(exps, res, l,k):
         end_standardN = time.time()
         new1 = end_standardN  - start_standardN
         #perT = 100*((oldT- new1)/(oldT+ new1))
-        tmp  = tmp+",\t "+str(new1)+",\t"#+ str(perT) +"%"
+        tmp  = tmp+",\t "+str(new1)+"\t"#+ str(perT) +"%"
         
         start_standardN = time.time()
         new_femMip2("newbie2_"+expname, e,res,l,k)
         end_standardN = time.time()
         new2 = end_standardN  - start_standardN
         #perT = 100*((oldT- new2)/(oldT+ new2))
-        tmp  = tmp+",\t "+str(new2)+",\t"#+ str(perT) +"%"
+        tmp  = tmp+",\t "+str(new2)+"\t"#+ str(perT) +"%"
 
     f = open("results.txt", 'a+')
     f.write(tmp)
@@ -127,29 +127,15 @@ k = 3
 
 
 def atest_res_20():
-    attempt_all(exps, 20, l, k)
+    res = 10
+    l = 2
+    while (l<30):
+        attempt_all(exps, res, l, k)
+        l = l+2
 
-def atest_discret_10():
-    attempt_all(exps, res, 3, k)
-
-def atest_discret_5():
-    attempt_all(exps, res, 5, k)
-def atest_discret_10():
-    attempt_all(exps, res, 10, k)
-def test_higher_l20():
-    attempt_all(exps, res, 20, k)
-def atest_res_10():
-    attempt_all(exps, 10, l, k)
-
-def atest_res_50():
-    attempt_all(exps, 50, l, k)
-def test_higher_l50():
-    attempt_all(exps, res, 50, k)
-def test_higher_r100():
-    attempt_all(exps, 100, l, k)
-
-
-def test_higher_r200():
-    attempt_all(exps, 200, l, k)
-def test_higher_r300():
-    attempt_all(exps, 300, l, k)
+def test_res_100():
+    res = 100
+    l = 2
+    while (l<30):
+        attempt_all(exps, res, l, k)
+        l = l+2

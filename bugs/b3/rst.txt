@@ -1,0 +1,13 @@
+c__p_o25_o8_t1_t7__l2
+
+observed data from femprime/ None
+
+correct data from pythonNone
+
+ positions[[0.23, 0.34], [0.31, 0.26], [0.37, 0.63], [0.76, 0.35], [0.88, 0.23], [0.4, 0.34], [0.62, 0.83]]
+
+Params(2)
+	0.) -setA 2 0 0 0 -setB 0 0 0 0 -setC 0 0 0 0 -setD 0 0 0 0 -sz0 70 -sz1 70 -width 1
+	1.) -setA1 2 5 0 0 -setB1 0 0 0 0 -setC1 0 0 0 0 -setD1 0 0 0 0 -setA2 2 2 0 0 -setB2 0 0 0 0 -setC2 0 0 0 0 -setD2 0 0 0 0 -sz0 70 -sz1 70 -width 1
+addition(grad)_F_s_d2,F_v2_d2 |p_o25_o8_t1_t7__l2
+
