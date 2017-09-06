@@ -22,18 +22,19 @@
 \newcommand{\checkname}[0]{\textit{DATm}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-List of type-error (T), compilation (C) and numerical (N) bug uncovered by \checkname{}.
- The list of type-error bugs are categorized by the number of \fontit{nested} operators needed to discover the bug,  the cause of the bug, and description.
+List of type-error (T), compilation (C) and numerical (N) bug uncovered by testing.
+ The list of type-error bugs are categorized by the number of \fontit{nested} operators needed to discover the bug,  the cause of the bug, description, and testing source.
 \newline 
-\begin{tabular}{|l|llll|}
+\begin{tabular}{|l|llll|l|}
 \hline
-Status & \# &Nested & Cause & Description\\
-\hline \hline &&&\textbf{Fem-Specific}&\\
-b1-OPEN &FC1 &2&\fontit{F}&Code generation issue when converting types\\
-b4-OPEN &FC4 &2&\fontit{F}&Multiple creation of functions with the same name \\
-&&&\textbf{Other fields issue}&\\
-b2-OPEN &FN2 &2&\fontit{O}&Numerical error + other issues\\
-b3-OPEN &FC3 &2&\fontit{O}& Can not take inner-product of fields with different continuity.\\
+Status & \# &Nested & Cause & Description & source\\
+\hline \hline &&&\textbf{Fem-Specific}&&\\
+b1-OPEN &FC1 &2&\fontit{F}&Code generation issue when converting types&\checkname{}\\
+b4-OPEN &FC4 &2&\fontit{F}&Multiple creation of functions with the same name &\checkname{}\\
+&&&\textbf{Other fields issue}&&\\
+b2-OPEN &FN2 &2&\fontit{O}&Numerical error + other issues&\checkname{}\\
+b3-OPEN &FC3 &2&\fontit{O}& Can not take inner-product of fields&\checkname{} \\
+b5-OPEN &FC5 &-&\fontit{O}& Inside error + other issues& Examples\\
 \hline
 \end{tabular}
 \input{bugs_fem.tex}

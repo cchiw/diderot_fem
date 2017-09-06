@@ -54,7 +54,6 @@ def cut_json(name, namedata, f, V, res):
 #vis helm holtz
 def test_helm_k2():
     name = "helm_n30_k1_r200"
-           
     mesh = UnitSquareMesh(10, 10)
     V = FunctionSpace(mesh, "CG", 1)
     

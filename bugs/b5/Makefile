@@ -1,0 +1,17 @@
+# Makefile for mesh_step viewer demo
+#
+# This code is part of the Diderot Project (http://diderot-language.cs.uchicago.edu)
+#
+# COPYRIGHT (c) 2015 The University of Chicago
+# All rights reserved.
+#
+
+TARGET		= ex7
+
+build:	$(TARGET)
+
+include ../../makedefs.gmk
+include ../../makerules_so.gmk
+
+override DIDEROTC_FLAGS	+= --namespace=ex7
+
