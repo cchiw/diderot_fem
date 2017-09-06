@@ -1,0 +1,28 @@
+\section{Bugs in FEMprime branch}
+
+\begin{description}
+\item{FC1} Code generation issue when converting types\\
+$|(\nabla(F0))|;$
+
+\begin{lstlisting}[mathescape=true]
+ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
+        double l_probe_l_4_22 = makeEval_UnitSquareMesh_Lagrange_2_1(
+               ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+***rtn:compile __p_o25_o6_t1_tN_tN__l2
+\end{lstlisting}
+\item{FN2}
+Numerical error  when taking the norm. Possible mistake causes from mini-merge and new operators.
+$normalize(\nabla(F0))$
+
+\item{FC3} Can not take inner-product of fields with different continuity.
+\begin{lstlisting}[mathescape=true]
+Type error (adding ofields-check typechecker)
+***rtn:compile __p_o25_o11_t1_t7_tN__l2
+***rtn:compile __p_o25_o12_t1_t7_tN__l2
+\end{lstlisting}
+\item{FC4} Multiple creation of functions with the same name (gradient of a field).
+\begin{lstlisting}[mathescape=true]
+ex1.cxx:423:17: error: redefinition of 'helpEvalBasis_UnitSquareMesh_Lagrange_2'
+inline double * helpEvalBasis_UnitSquareMesh_Lagrange_2(const double *k...
+\end{lstlisting}
+\end{description}

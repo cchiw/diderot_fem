@@ -3,7 +3,7 @@
  input fem#4(2)[] FF0;
  //Field:field #4(2)[] F0=-4*y + 2
  fnspace VF0 = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
- string pathF0 = "fnspace_data/";
+ string pathF0 = "../../fnspace_data/";
  ofield#4(2)[] F0 = convert(FF0,VF0,pathF0);
 input real scale = 1;
 ofield#3(2)[]G = |(∇(F0))|;

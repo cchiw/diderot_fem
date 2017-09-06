@@ -1,18 +1,18 @@
 
 
- input fem#4(2)[] FF0;
- //Field:field #4(2)[] F0=2
+ input fem#1(2)[] FF0;
+ //Field:field #1(2)[] F0=-5*y + 2
  fnspace VF0 = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
  string pathF0 = "../../fnspace_data/";
- ofield#4(2)[] F0 = convert(FF0,VF0,pathF0);
+ ofield#1(2)[] F0 = convert(FF0,VF0,pathF0);
 
- input fem#4(2)[2] FF1;
- //Field:field #4(2)[2] F1=[5*y + 2, 2*y + 2]
+ input fem#1(2)[2] FF1;
+ //Field:field #1(2)[2] F1=[2*y + 2, y + 2]
  fnspace VF1 = FunctionSpace(UnitSquareMesh(2,2), Lagrange(), 2);
  string pathF1 = "../../fnspace_data/";
- ofield#4(2)[2] F1 = convert(FF1,VF1,pathF1);
+ ofield#1(2)[2] F1 = convert(FF1,VF1,pathF1);
 input real scale = 1;
-ofield#3(2)[2]G = (∇(F0))+(F1);
+ofield#0(2)[2]G = (∇(F0))-(F1);
 int length =7;
 strand f(int i) {
 
@@ -21,28 +21,28 @@ strand f(int i) {
 
 		tensor [2] pos=[0,0];
 		if(i==0){
-			pos = ([0.23, 0.34]);
+			pos = ([0.09, 0.01]);
 		}
 		else if(i==1){
-			pos = ([0.23, 0.34]);
+			pos = ([0.09, 0.01]);
 		}
 		else if(i==2){
-			pos = ([0.31, 0.26]);
+			pos = ([0.19, 0.67]);
 		}
 		else if(i==3){
-			pos = ([0.37, 0.63]);
+			pos = ([0.32, 0.13]);
 		}
 		else if(i==4){
-			pos = ([0.76, 0.35]);
+			pos = ([0.77, 0.96]);
 		}
 		else if(i==5){
-			pos = ([0.88, 0.23]);
+			pos = ([0.21, 0.25]);
 		}
 		else if(i==6){
-			pos = ([0.4, 0.34]);
+			pos = ([0.4, 0.07]);
 		}
 		else if(i==7){
-			pos = ([0.62, 0.83]);
+			pos = ([0.64, 0.71]);
 		}
 
 	if((insideF(pos,F0)) && (insideF(pos,F1)) && true){

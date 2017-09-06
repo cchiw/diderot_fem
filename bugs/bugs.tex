@@ -1,0 +1,42 @@
+% ---- ETD Document Class and Useful Packages ---- %
+\documentclass{article}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{subfigure,epsfig,amsfonts}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{listings} % for code 
+\usepackage{enumitem} % for creating lists
+\usepackage{lineno, blindtext} % line numbers
+\usepackage{xstring} %support if/else inside commands
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{url}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{../defs/packs}
+%\input{../defs/dissertation_format}
+%\input{../defs/def2} %generic input
+\newcommand{\fontit}[1]{\textit{#1}}
+\newcommand{\checkname}[0]{\textit{DATm}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+List of type-error (T), compilation (C) and numerical (N) bug uncovered by \checkname{}.
+ The list of type-error bugs are categorized by the number of \fontit{nested} operators needed to discover the bug,  the cause of the bug, and description.
+\newline 
+\begin{tabular}{|l|llll|}
+\hline
+Status & \# &Nested & Cause & Description\\
+\hline \hline &&&\textbf{Fem-Specific}&\\
+b1-OPEN &FC1 &2&\fontit{F}&Code generation issue when converting types\\
+b4-OPEN &FC4 &2&\fontit{F}&Multiple creation of functions with the same name \\
+&&&\textbf{Other fields issue}&\\
+b2-OPEN &FN2 &2&\fontit{O}&Numerical error + other issues\\
+b3-OPEN &FC3 &2&\fontit{O}& Can not take inner-product of fields with different continuity.\\
+\hline
+\end{tabular}
+\input{bugs_fem.tex}
+
+\end{document}
+
