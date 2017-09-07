@@ -1,3 +1,9 @@
+
+testnew = True
+testold = False
+testpvd = False
+
+
 #name of data file must be the same in the diderot program and makejson call
 jsondata ='data.json'
 
@@ -38,84 +44,33 @@ def ex7(name, f, res, rayStep):
 
 
 
-
 ## talk to fem, or femprime branches
-def new_fem_k1(lbl, exp, res, size):
+def mkfem(lbl, exp, res, size, k):
     l = 2
-    exname = "fire_k1_s"+str(size)+"_new"
+    exname = "fire_k"+str(k)+"_s"+str(size)+"_new"
     name = lbl+"/"+exname
 
     #mesh = UnitCubeMesh(2,  2,2)
     mesh = CubeMesh(2,  2, 2, size)
-    V = FunctionSpace(mesh, "P", 1)
+    V = FunctionSpace(mesh, "P", 4)
     f = Function(V).interpolate(Expression(exp))
     datafile = imgpath+name
     namepng = datafile +'.png'
     namenrrd = datafile +'.nrrd'
     rayStep = float(size)/float(res)
     namepvd= name+'.pvd'
-    #File(datafile+'.pvd') << f
-    vis_diderot.mip_d3s_ex1(namenrrd,f, res,res,rayStep,1)
-    quantize(namenrrd, namepng)
-    os.system('open ' + namepng)
-
-    #makejson(V, jsondata)
-    #ex7(namenrrd, f, res, rayStep)
-    #visualize result
-    #quantize(namenrrd, namepng)
-    #os.system('open ' + namepng)
-
-
-def new_fem_k2(lbl, exp, res, size):
-    l = 2
-    exname = "fire_k2_s"+str(size)+"_new"
-    name = lbl+"/"+exname
-    
-    #mesh = UnitCubeMesh(2,  2,2)
-    mesh = CubeMesh(2,  2, 2, size)
-    V= FunctionSpace(mesh,"P",2)
-    f = Function(V).interpolate(Expression(exp))
-    datafile = imgpath+name
-    namepng = datafile +'.png'
-    namenrrd = datafile +'.nrrd'
-    rayStep = float(size)/float(res)
-    namepvd= name+'.pvd'
-    #File(datafile+'.pvd') << f
-    vis_diderot.mip_d3s_ex1(namenrrd,f, res,res,rayStep,1)
-    quantize(namenrrd, namepng)
-    os.system('open ' + namepng)
-
-    #makejson(V, jsondata)
-    #ex7(namenrrd, f, res, rayStep)
-    #visualize result
-    #quantize(namenrrd, namepng)
-    #os.system('open ' + namepng)
-
-def new_fem_k4(lbl, exp, res, size):
-    l = 2
-    exname = "fire_k4_s"+str(size)+"_old"
-    name = lbl+"/"+exname
-    
-    #mesh = UnitCubeMesh(2,  2,2)
-    mesh = CubeMesh(2,  2, 2, size)
-    V= FunctionSpace(mesh,"P",4)
-    f = Function(V).interpolate(Expression(exp))
-    datafile = imgpath+name
-    namepng = datafile +'.png'
-    namenrrd = datafile +'.nrrd'
-    rayStep = float(size)/float(res)
-    namepvd= name+'.pvd'
-    #File(datafile+'.pvd') << f
-    vis_diderot.mip_d3s_ex1(namenrrd,f, res,res,rayStep,1)
-    quantize(namenrrd, namepng)
-    os.system('open ' + namepng)
-
-    #makejson(V, jsondata)
-    #ex7(namenrrd, f, res, rayStep)
-    #visualize result
-    #quantize(namenrrd, namepng)
-    #os.system('open ' + namepng)
-
+    if(testpvd):
+        File(datafile+'.pvd') << f
+    if(testold):
+        vis_diderot.mip_d3s_ex1(namenrrd,f, res,res,rayStep,1)
+        quantize(namenrrd, namepng)
+        os.system('open ' + namepng)
+    if(testnew):
+        makejson(V, jsondata)
+        os.system("sh compile.sh ")
+        ex7(namenrrd, f, res, rayStep)
+        quantize(namenrrd, namepng)
+        os.system('open ' + namepng)
 
 sphere = "0.5- (((1-x[0])*(1-x[0]))+((1-x[1])*(1-x[1]))+((1-x[2])*(1-x[2])))"
 # ret = x^2 + y^2 + z^2 - x^4 - y^4 - z^4; which_gquartic.png
@@ -124,32 +79,32 @@ gquartic = "(x[0]*x[0])+(x[1]*x[1])+(x[2]*x[2])-(x[0]*x[0]*x[0]*x[0])-(x[1]*x[1]
 ccubic = "-((x[0]*x[0])+(x[1]*x[1])-(x[2]*x[0]*x[0])+(x[2]*x[1]*x[1])+(x[2]*x[2]) -1)"
 
 res  = 120
-size = 10
-def test_0():
+size = 5
+def atest_0():
     exp = gquartic
-    new_fem_k1("gquartic", exp,res, size)
+    mkfem("gquartic", exp,res, size, 1)
 
     
-def test_1():
+def atest_1():
     exp = ccubic
-    new_fem_k1("ccubic",  exp,res, size)
+    mkfem("ccubic",  exp,res, size, 1)
 
 
-def test_2():
+def atest_2():
     exp = gquartic
-    new_fem_k2("gquartic", exp,res, size)
+    mkfem("gquartic", exp,res, size, 2)
 
 
-def test_3():
+def atest_3():
     exp = ccubic
-    new_fem_k2("ccubic", exp,res, size)
+    mkfem("ccubic", exp,res, size, 2)
 
 
 def test_4():
     exp = gquartic
-    new_fem_k4("gquartic", exp,res, size)
+    mkfem("gquartic", exp,res, size,4)
 
 
 def test_5():
     exp = ccubic
-    new_fem_k4("ccubic",  exp,res, size)
+    mkfem("ccubic",  exp,res, size,4)
