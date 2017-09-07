@@ -4,6 +4,7 @@ We use the femprime branch of diderot and provide examples and tests in this dir
 
 #organization
 * examples: finished self-contained simple examples that demonstate how to visualize firedrake programs with Diderot. 
+* bugs : list of bugs
 * dev: programs under development.
 * ? : test programs
 

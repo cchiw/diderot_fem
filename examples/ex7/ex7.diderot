@@ -42,7 +42,9 @@ strand raycast(real rayU, real rayV) {
 
     update { // how to compute one sample of a MIP
         vec3 pos = rayOrig + rayN*rayVec;  // pos = ray sample position
-        if (insideF(pos,F) && (!inSphere || |pos-camAt| < 1)) {
+        //if (insideF(pos,F) && (!inSphere || |pos-camAt| < 1)) {
+        if (insideF(pos,F)) {
+
             out = max(out, inst(F, pos));  // update output based on last sample
         }
         if (rayN > camFarVsp) {  // ray hit the far clipping plane
