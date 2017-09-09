@@ -12,8 +12,9 @@ ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
 \end{lstlisting}
 \item{FN2}
 Numerical error  when taking the norm. Possible mistake causes from mini-merge and new operators.
-$normalize(\nabla(F0))$
+$normalize(\nabla(F0))$ also   norm(hessian)\\
 
+ 
 \item{FC3} Can not take inner-product of fields with different continuity.
 \begin{lstlisting}[mathescape=true]
 Type error (adding ofields-check typechecker)
@@ -34,4 +35,56 @@ uncaught exception Bind [nonexhaustive binding failure]
   raised at high-to-mid/high-to-mid.sml:203.105-203.107
   raised at high-to-mid/buil
   \end{lstlisting}
+  
+\item{FC6}
+
+
+
+ python pde.py 4 24 1 2 2
+\begin{lstlisting}[mathescape=true]
+3HighToMid.expandEINAPP: error converting out051A = λ(F0[3],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0)_1[2]∇_{i0,i1}),T3)> (FF004AB, VF004AE, pathF004B1, pos0421)
+uncaught exception Subscript [subscript out of bounds]
+  raised at common/phase-timer.sml:78.57-78.59
+  raised at high-to-mid/high-to-mid.sml:216.7-216.9
+  raised at Basis/Implementation/list.sml:78.35-78.44
+make: *** [ex1.o] Error 1
+cp: ex1.cxx: No such file or directory
+cp: ex1.cxx: No such file or directory
+***rtn:compile __p_o24_o1_t2_t2__l2
+	 -: trace(hessian)
+	-_F_s_d3 |p_o24_o1_t2_t2__l2
+	rtn:compile 
+	  \end{lstlisting}
+\item{FC7}  
+	  next error
+\begin{lstlisting}[mathescape=true]
+	  ex1.cxx:870:6: error: no type named 'tensor_ref_3_3' in namespace 'ex1'
+ex1::tensor_ref_3_3 s_makeEval_UnitCubeMesh_P_4_2(NodeTy nodes, newposTy b, coordTy c,int cell,MappTy nM, FloatMapTy pM){
+~~~~~^
+ex1.cxx:876:14: error:
+\end{lstlisting}
+\item{FC8}
+Unhandled cases when using constant indices
+-Differential indices are constants
+- Constant indices in field components
+\begin{lstlisting}[mathescape=true]
+	λ(F0[2],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0_{'0'})_1[2]),T3)>
+	det(concat2) |22_3- 
+	\end{lstlisting}
+	
+	\item[FC9]
+	\begin{lstlisting}[mathescape=true]
+                ^
+ex1.cxx:850:20: error: subscripted value is not an array, pointer, or vector
+        H[0][0][0] = H0[0][0];
+                     ~~~~~^~
+ex1.cxx:851:20: error: subscripted value is not an array, pointer, or vector
+        H[0][1][0] = H0[1][0];
+        	\end{lstlisting}
+	\item[FT10] 
+	Issue unknown       	
+   	\begin{lstlisting}[mathescape=true]     	-p_o8_o24_t12_t2__l2 hessian(addition)| F_s_d3,F_s_d3| 
+		Rst: Z-3 RD  max diff: 51.5896 sumdiff: 13.9962 67.4956% c:24.8443995169280 o:76.43399
+    	\end{lstlisting}
+
 \end{description}

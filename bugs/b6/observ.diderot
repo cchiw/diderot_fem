@@ -3,7 +3,7 @@
  input fem#4(3)[] FF0;
  //Field:field #4(3)[] F0=x**3*(-4*y**3 - 3*y**2 - 5*y + 3) + 2*x**2*y - 4*x**2 + 2*x*y + 2*x + y**3*(2*x**2 - 3*x - 3) + y**2*(5*x**2 - 5*x) - 4*y + z**2*(x**3*(-5*y**3 + y**2 + 3) + 4*x**2*y + 4*x**2 - 3*x*y - x + y**3*(x**2 - 5*x + 2) + y**2*(5*x**2 + x - 4) - 5*y) + z*(x**3*(4*y**2 + 5*y) + 2*x**2*y - x**2 - 5*x*y + 2*x + y**3*(-x**2 - 5*x + 3) + y**2*(-2*x**2 - 4*x + 4) - 3*y + 5) - 5
  fnspace VF0 = FunctionSpace(UnitCubeMesh(3,3,3), P(), 4);
- string pathF0 = "fnspace_data/";
+ string pathF0 = "../../fnspace_data/";
  ofield#4(3)[] F0 = convert(FF0,VF0,pathF0);
 
 ofield#2(3)[]G = trace(∇⊗∇(F0));
