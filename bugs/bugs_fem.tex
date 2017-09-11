@@ -85,11 +85,9 @@ ex1.cxx:851:20: error: subscripted value is not an array, pointer, or vector
 	Issue unknown       	
    	\begin{lstlisting}[mathescape=true]     	-p_o8_o24_t12_t2__l2 hessian(addition)| F_s_d3,F_s_d3| 
 		Rst: Z-3 RD  max diff: 51.5896 sumdiff: 13.9962 67.4956% c:24.8443995169280 o:76.43399
-	
     	\end{lstlisting}
-    		\item[F11]
-    		Error when creating a vector fields in python. Syntax probably wrong.
-	\item[F12]
+    	
+	\item[FC11]
 		\begin{lstlisting}[mathescape=true]
 uncaught exception Fail [Fail: unknown type]
   raised at common/phase-timer.sml:78.57-78.59
@@ -104,5 +102,19 @@ cp: ex1.cxx: No such file or directory
 	 -: slicev0(grad)
 	-_F_s_d3 |p_o23_o29_t2_tN_tN__l2
 	rtn:compile 
+	\end{lstlisting}
+	    		\item[F12]
+	    				\begin{lstlisting}[mathescape=true]
+    		Error when creating a vector fields in python. Syntax probably wrong.
+    		
+    		python(24510,0x7fff796c2300) malloc: *** error for object 0x7ff48bbf7800: pointer being freed was not allocated
+*** set a breakpoint in malloc_error_break to debug
+[Charisees-MacBook-Air:24510] *** Process received signal ***
+[Charisees-MacBook-Air:24510] Signal: Abort trap: 6 (6)
+[Charisees-MacBook-Air:24510] Signal code:  (0)
+[Charisees-MacBook-Air:24510] [ 0] 0   libsystem_platform.dylib            0x00007fff88cd3f1a _sigtramp + 26
+[Charisees-MacBook-Air:24510] [ 1] 0   ???                                 0x0000000000000000 0x0 + 0
+[Charisees-MacBook-Air:24510] [ 2] 0   libsystem_c.dylib                   0x00007fff88d439a3 abort + 129
+[Charisees-MacBook-Air:24510] [ 3] 0   libsystem_malloc.dylib              0x00007fff8d8941cb free + 428
 	\end{lstlisting}
 \end{description}

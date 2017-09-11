@@ -81,9 +81,14 @@ def init4(name, f, g, h, i, target):
 
 ##############################################
 #general declarations
+
+#compiles program
+os.system("make clean ")
+os.system("make obsev.o ")
+os.system("make observ_init.o ")
+os.system("make observ_init.so ")
 #init field
 # call to init
-
 name = "cat"
 target ="observ"
 namenrrd = name+'.nrrd'
