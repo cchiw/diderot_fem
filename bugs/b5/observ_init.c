@@ -12,15 +12,15 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "ex7.h"
+#include "observ.h"
 
-void fail (const char *msg, ex7_world_t *wrld)
+void fail (const char *msg, observ_world_t *wrld)
 {
-    if ((wrld == 0) || !ex7_any_errors(wrld)) {
+    if ((wrld == 0) || !observ_any_errors(wrld)) {
         fprintf(stderr, "Error: %s\n", msg);
     }
     else {
-        fprintf(stderr, "Error: %s\n%s\n", msg, ex7_get_errors(wrld));
+        fprintf(stderr, "Error: %s\n%s\n", msg, observ_get_errors(wrld));
     }
     exit (1);
 }
@@ -36,35 +36,35 @@ struct Function {
   float * Coords;
 };
 
-void callDiderot_ex7(char *Outfile, int type, void *valM, int imgRes,  float rayStep){
+void callDiderot_observ(char *Outfile, int type, void *valM, int imgRes,  float rayStep){
   
-    ex7_world_t *wrld = ex7_new_world ();
+    observ_world_t *wrld = observ_new_world ();
     if (wrld == 0) {
       fail ("unable to create world",0);
     }
 
-    if (ex7_init_world(wrld)){
+    if (observ_init_world(wrld)){
       fail ("unable to init world",wrld);
     }
 
-    if (ex7_input_set_imgResU (wrld, imgRes)) {
+    if (observ_input_set_imgResU (wrld, imgRes)) {
         fail ("unable to initialize imgRes", wrld);
     }
-    if (ex7_input_set_imgResV (wrld, imgRes)) {
+    if (observ_input_set_imgResV (wrld, imgRes)) {
         fail ("unable to initialize imgRes", wrld);
     }
-    if (ex7_input_set_rayStep (wrld,  rayStep)) {
+    if (observ_input_set_rayStep (wrld,  rayStep)) {
         fail ("unable to initialize  rayStep", wrld);
     }
-    if (ex7_input_set_f (wrld, valM)) {
+    if (observ_input_set_f (wrld, valM)) {
         fail ("unable to initialize imgRed", wrld);
     }
 
-    if (ex7_create_strands (wrld)) {
+    if (observ_create_strands (wrld)) {
         fail ("unable to create initial strands", wrld);
     }
     
-    uint32_t nsteps = ex7_run (wrld, 0);
+    uint32_t nsteps = observ_run (wrld, 0);
     if (nsteps == 0) {
         fail ("no steps taken", wrld);
     }
@@ -73,7 +73,7 @@ void callDiderot_ex7(char *Outfile, int type, void *valM, int imgRes,  float ray
     if (nData == 0) {
         fail ("unable to allocate nrrd for output", 0);
     }
-    if (ex7_output_get_out (wrld, nData)) {
+    if (observ_output_get_out (wrld, nData)) {
         fail ("problem getting output", wrld);
     }
     if (nrrdSave(Outfile, nData, 0)) {
@@ -84,6 +84,6 @@ void callDiderot_ex7(char *Outfile, int type, void *valM, int imgRes,  float ray
     }
     
     nrrdNuke (nData);
-    ex7_shutdown (wrld);
+    observ_shutdown (wrld);
     
 }

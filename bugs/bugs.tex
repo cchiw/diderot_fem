@@ -26,19 +26,22 @@ List of type-error (T), compilation (C) and numerical (N) bug uncovered by testi
  The list of type-error bugs are categorized by the number of \fontit{nested} operators needed to discover the bug,  the cause of the bug, description, and testing source.
  Code generation issue for FEM code (CG), issue with other field structure (OF), translation between other field and code generation (TF),
 \newline 
-\begin{tabular}{|l|llll|l|}
+\begin{tabular}{|ll|llll|l|}
 \hline
-Status & \# &Nested & Cause & Description & source\\
-b1-OPEN &FC1 &2&\fontit{CG}&Code generation issue when converting types&\checkname{}\\
-b4-OPEN &FC4 &2&\fontit{CG}&Multiple creation of functions with the same name &\checkname{}\\
-b2-OPEN &FN2 &2&\fontit{OF}&Numerical error + other issues&\checkname{}\\
-b3-OPEN &FC3 &2&\fontit{OF}& Can not take inner-product of fields&\checkname{} \\
-b5-OPEN &FC5 &-&\fontit{OF}& Inside error + other issues& Examples\\
-b6-Closed &FC6 &2&\fontit{TF} &  Summation in a single term not handled correctly & \checkname{}\\
-b6-OPEN &FC7 &2& \fontit{CG}& conversion of types done incorrectly & \checkname{}\\
-b7-OPEN &FC8 &2&  \fontit{TF}&Differential indices are constants& \checkname{}\\
-b8-OPEN &FC9 &2&  \fontit{CG}&-- indexing tensors& \checkname{}\\
-b10-OPEN &FC10 &2&  &Numerical incorrect& \checkname{}\\
+Status & Folder&\# &Nested & Cause & Description & source\\
+Closed& b1 & FC1 &2&\fontit{CG}&Code generation issue when converting types&\checkname{}\\
+Closed &b2- & FN2 &2&\fontit{OF}&Numerical error + other issues&\checkname{}\\
+Closed&b3  & FC3 &2&\fontit{OF}& Can not take inner-product of fields&\checkname{} \\
+Closed&b4  & FC4 &2&\fontit{CG}&Multiple creation of functions with the same name &\checkname{}\\
+OPEN&b5 &FC5 &-&\fontit{OF}& Inside error + other issues& Examples\\
+Closed &b6 &FC6 &2&\fontit{TF} &  Summation in a single term not handled correctly & \checkname{}\\
+OPEN& b6\& b7 &FC7 &2& \fontit{CG}& conversion of types done incorrectly & \checkname{}\\
+Closed &b8 &FC8 &2&  \fontit{TF}&Differential indices are constants& \checkname{}\\
+OPEN&b9 &FC9 &2&  \fontit{CG}&-- indexing tensors& \checkname{}\\
+Check &b10 &FN10 &2&  &Numerical incorrect& \checkname{}\\
+OPEN & b3 \& b4 & FC11 & -& &" got an unexpected keyword argument 'dim'"& \checkname{}\\
+OPEN & b11 & FC12 &-& &slicing of gradient compile Error\\
+OPEN & b12 & FC13 &-& &Differentiation of vector field\\
 \hline
 \end{tabular}
 \input{bugs_fem.tex}
