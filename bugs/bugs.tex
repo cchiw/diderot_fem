@@ -22,6 +22,11 @@
 \newcommand{\checkname}[0]{\textit{DATm}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+Issue in DATm?
+ python pde.py 4  8 8 48 0 
+
+
+
 List of type-error (T), compilation (C) and numerical (N) bug uncovered by testing.
  The list of type-error bugs are categorized by the number of \fontit{nested} operators needed to discover the bug,  the cause of the bug, description, and testing source.
  Code generation issue for FEM code (CG), issue with other field structure (OF), translation between other field and code generation (TF),
@@ -40,8 +45,10 @@ Closed &b8 &FC8 &2&  \fontit{TF}&Differential indices are constants& \checkname{
 OPEN&b9 &FC9 &2&  \fontit{CG}&-- indexing tensors& \checkname{}\\
 Check &b10 &FN10 &2&  &Numerical incorrect& \checkname{}\\
 OPEN & b3 \& b4 &  & -& &" got an unexpected keyword argument 'dim'"& \checkname{}\\
-Closed & b11 & FC11 &-& &slicing of gradient compile Error\\
-OPEN & b12 \& b11 & FC12 &-& &Manipulation of vector fields, weird error\\
+Closed & b11 & FC11 &-& &slicing of gradient compile Error.\\
+OPEN & b12 \& b11 & FT12 &Run time erro& &Manipulation of vector fields, weird error\\
+OPEN & b14 &FC14& &CG&Multiple creation of functions with the same name\\
+OPEN & b15 &FC15& &T& Missing support for op\\
 \hline
 \end{tabular}
 \input{bugs_fem.tex}

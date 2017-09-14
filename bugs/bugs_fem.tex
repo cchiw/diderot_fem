@@ -103,7 +103,8 @@ cp: ex1.cxx: No such file or directory
 	-_F_s_d3 |p_o23_o29_t2_tN_tN__l2
 	rtn:compile 
 	\end{lstlisting}
-	    		\item[F12]
+\item[FT12]
+Weird allocation error\
 	    				\begin{lstlisting}[mathescape=true]
     		Error when creating a vector fields in python. Syntax probably wrong.
     		
@@ -117,4 +118,14 @@ cp: ex1.cxx: No such file or directory
 [Charisees-MacBook-Air:24510] [ 2] 0   libsystem_c.dylib                   0x00007fff88d439a3 abort + 129
 [Charisees-MacBook-Air:24510] [ 3] 0   libsystem_malloc.dylib              0x00007fff8d8941cb free + 428
 	\end{lstlisting}
+
+	    		\item[CF14]
+\begin{lstlisting}[mathescape=true]
+	0_tensor[2] compositionl,ex1.cxx:777:15: error: redefinition of 's_makeEval_UnitCubeMesh_Lagrange_4_'
+inline double s_makeEval_UnitCubeMesh_Lagrange_4_(NodeTy nodes, newposT...
+              ^
+	\end{lstlisting}
+	
+		\item[CF15]
+		error supporting inner product and outer product.
 \end{description}
