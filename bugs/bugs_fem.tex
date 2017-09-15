@@ -128,4 +128,7 @@ inline double s_makeEval_UnitCubeMesh_Lagrange_4_(NodeTy nodes, newposT...
 	
 		\item[CF15]
 		error supporting inner product and outer product.
+              \item[FCN16] Sampling at the point [0,9.45187e+06] led to a find cell error, which was handled correctly, but the derivative code did not handle this case and segfaulted. The reason it sampled to far away was a mistake in FATm. 
 \end{description}
+
+
