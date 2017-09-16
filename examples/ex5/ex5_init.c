@@ -83,7 +83,7 @@ void callDiderot_ex5(char *Outfile, int type, void *valM, int imgRes,  float ray
         exit (1);
     }
     
-    nrrdNuke (nData);
+    //nrrdNuke (nData);
     ex5_shutdown (wrld);
     
 }
