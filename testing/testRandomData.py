@@ -23,6 +23,7 @@ from connect import *
 
 
 def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
+    
     r = random.uniform(0,1)
     dirname = "test"+str(r)
     os.system("cp -R test "+dirname)
@@ -142,8 +143,23 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     os.system("rm -rf " + dirname)
     if errors==[]:
         print("No errors occured!") #later choose one
+        e = ": Passes"
+        f = open("results_final.txt", 'a+')
+        f.write(e)
+        f.close()
         return(errors)
     else:
+        e = ": Fails"
+        f = open("results_final.txt", 'a+')
+        f.write(e)
+        f.close()
+        
+        title = "\n-- mesh_"+meshname + "_elem_"+element +"_dim_"+str(dim)+"_degree_"+str(degree)
+        e = title+"\n\t Fail"
+        f = open("results_terrible.txt", 'a+')
+        f.write(e)
+        f.close()
+        
         print("Error occured")
         return(errors)
     
@@ -164,15 +180,25 @@ errors = []
 #e = run_test(UnitSquareMesh(2,2),"UnitSquareMesh","P",2,[(0,1),(0,1)],2,10)
 
 #print(e)
+cnt = 0
 
 for m in meshs:
     for e in elements:
+        title = "\n------ mesh_"+m[1] +"_dim_"+str(m[2])+ "_elem_"+e
+        f = open("results_final.txt", 'a+')
+        f.write(title)
+        f.close()
+        
         for d in degrees:
+            title = "\n-- "+str(cnt)+".) degree_"+str(d)
+            f = open("results_final.txt", 'a+')
+            f.write(title)
+            f.close()
             print(m,e,d)
             t = run_test(m[0],m[1],e,m[2],m[3],d,100)
                          #mesh,meshname,element,dim,bounds, degree,npoints
             errors.append(t)
-
+            cnt+=1
 
 print(sum(map(len,errors)))
 print(errors)
