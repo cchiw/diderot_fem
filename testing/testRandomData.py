@@ -182,6 +182,15 @@ errors = []
 #print(e)
 cnt = 0
 
+title = "\n\n\n------ testing for revision:5364  "
+f = open("results_final.txt", 'a+')
+f.write(title)
+f.close()
+f = open("results_terrible.txt", 'a+')
+f.write(title)
+f.close()
+
+
 for m in meshs:
     for e in elements:
         title = "\n------ mesh_"+m[1] +"_dim_"+str(m[2])+ "_elem_"+e
