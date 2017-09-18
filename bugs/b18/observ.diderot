@@ -1,0 +1,57 @@
+
+
+ input fem#4(2)[] FF0;
+ //Field:field #4(2)[] F0=5*x**2*y - 4*x**2 - 3*x + y**2*(5*x**2 + 2*x - 5) + 1
+ fnspace VF0 = FunctionSpace(UnitSquareMesh(4,4), P(), 4)
+;
+ string pathF0 = "../../fnspace_data/";
+ ofield#4(2)[] F0 = convert(FF0,VF0,pathF0);
+
+ input fem#4(2)[] FF1;
+ //Field:field #4(2)[] F1=2*x**2*y + x**2 + x*y - 3*x + y**2*(-x**2 + 5*x + 3) - 4*y + 3
+ fnspace VF1 = FunctionSpace(UnitSquareMesh(4,4), Lagrange(), 4)
+;
+ string pathF1 = "../../fnspace_data/";
+ ofield#4(2)[] F1 = convert(FF1,VF1,pathF1);
+
+ofield#2(2)[2, 2]G = ∇⊗∇((F0)+(F1));
+int length =7;
+strand f(int i) {
+
+	output tensor [2, 2] out =  [ [0.0,0.0], [0.0,0.0]];
+	    update {
+
+		tensor [2] pos=[0,0];
+		if(i==0){
+			pos = ([0.55, 0.71]);
+		}
+		else if(i==1){
+			pos = ([0.55, 0.71]);
+		}
+		else if(i==2){
+			pos = ([0.59, 0.84]);
+		}
+		else if(i==3){
+			pos = ([0.35, 0.24]);
+		}
+		else if(i==4){
+			pos = ([0.77, 0.79]);
+		}
+		else if(i==5){
+			pos = ([0.58, 0.2]);
+		}
+		else if(i==6){
+			pos = ([0.83, 0.79]);
+		}
+		else if(i==7){
+			pos = ([0.84, 0.28]);
+		}
+
+	if((insideF(pos,F0)) && (insideF(pos,F1)) && true){
+			out = inst(G, pos);
+	}
+	 else{out =  [ [7.2,7.2], [7.2,7.2]];}
+        stabilize;
+    }
+}
+initially [ f(i) | i in 0..length];
