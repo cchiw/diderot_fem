@@ -18,41 +18,78 @@
 %\input{../defs/packs}
 %\input{../defs/dissertation_format}
 %\input{../defs/def2} %generic input
+\newcommand{\mynote}[3]{\textcolor{#3}{\small\textbf{\textsf{{#1}: {#2}}}}}
+\newcommand{\CC}[1]{\mynote{cc}{#1}{magenta}}
+
+
 \newcommand{\fontit}[1]{\textit{#1}}
 \newcommand{\checkname}[0]{\textit{DATm}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \newcommand{\testA}[0]{$\textit{Test}_{differential}$}
+ \newcommand{\testB}[0]{$\textit{Test}_{equality}$}
+ \newcommand{\testC}[0]{$\textit{Test}_{property}$}
+  \newcommand{\testD}[0]{$\textit{Test}_{vis}$}
+  \newcommand{\DFEM}[0]{\textbf{Diderot-Fire}}
+    \newcommand{\DNrrd}[0]{\textbf{Diderot-Nrrd}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-Issue in DATm?
- python pde.py 4  8 8 48 0 
-
-
-
-List of type-error (T), compilation (C) and numerical (N) bug uncovered by testing.
- The list of type-error bugs are categorized by the number of \fontit{nested} operators needed to discover the bug,  the cause of the bug, description, and testing source.
- Code generation issue for FEM code (CG), issue with other field structure (OF), translation between other field and code generation (TF),
+Quick table to describe bugs, location and status.\\
+Bug type: compilation (C) and numerical (N) bug.\\
 \newline 
-\begin{tabular}{|ll|llll|l|}
+\begin{tabular}{|l|ll|lll|}
 \hline
-Status & Folder&\# &Nested & Cause & Description & source\\
-Closed& b1 & FC1 &2&\fontit{CG}&Code generation issue when converting types&\checkname{}\\
-Closed &b2- & FN2 &2&\fontit{OF}&Numerical error + other issues&\checkname{}\\
-Closed&b3  & FC3 &2&\fontit{OF}& Can not take inner-product of fields&\checkname{} \\
-Closed&b4  & FC4 &2&\fontit{CG}&Multiple creation of functions with the same name &\checkname{}\\
-OPEN&b5 &FC5 &-&\fontit{OF}& Inside error + other issues& Examples\\
-Closed &b6 &FC6 &2&\fontit{TF} &  Summation in a single term not handled correctly & \checkname{}\\
-OPEN& b6\& b7 &FC7 &2& \fontit{CG}& conversion of types done incorrectly & \checkname{}\\
-Closed &b8 &FC8 &2&  \fontit{TF}&Differential indices are constants& \checkname{}\\
-OPEN&b9 &FC9 &2&  \fontit{CG}&-- indexing tensors& \checkname{}\\
-Check &b10 &FN10 &2&  &Numerical incorrect& \checkname{}\\
-OPEN & b3 \& b4 &  & -& &" got an unexpected keyword argument 'dim'"& \checkname{}\\
-Closed & b11 & FC11 &-& &slicing of gradient compile Error.\\
-OPEN & b12 \& b11 & FT12 &Run time erro& &Manipulation of vector fields, weird error\\
-OPEN & b14 &FC14& &CG&Multiple creation of functions with the same name\\
-OPEN & b15 &FC15& &T& Missing support for op\\
-CLOSED & b16 & FCN16 & & CG & sampling outside mesh and derivative find cell  & DATm or FATm\\
+\# & Status & Folder&Type & Cause & Description \\
+\hline
+&&&&\textbf{T}& Missing support for operators on FE fields\\
+ F3 &Closed&b3  & C &\fontit{T}& Inner/cross product  \\\
+  F12 &Closed & b11 & C &T & Tensor slicing\\
+   F5 &OPEN&b5 &C && Inside test\\
+&&&&\textbf{E}& EIN rep of FE fields\\
+ F6 &Closed &b6 &C &\fontit{E} & Summation not handled \\
+  F8 &Closed &b8 &C &  \fontit{E}&Differential indices are constants\\
+&&&&\textbf{CG}& Issue in generated code  to do point-wise eval\\
+ F1 &Closed& b1 & C &\fontit{CG}& Converting types\\
+F7 &Closed& b6  &C & \fontit{CG}& Converting types\\
+ F4 &Closed&b4  & C &\fontit{CG}&Multiple creation of functions with the same name \\
+F14 &OPEN & b14 &C& CG&Multiple creation of functions with the same name\\
+   F9 &OPEN&b9 &C &  \fontit{CG}& Weird indexing tensors\\
+ F15 &OPEN&b5 &C & CG & Type error for helper function\\
+  F16 &CLOSED & b16 & N  & CG & sampling outside mesh and derivative find cell  \\
+&&&&\textbf{DATm}& issue in DATm results in a false positive\\
+ F10 &REDO &b10 &N &&  Hessian of addition (wrong number of polynomials)?\\
+&&&&\textbf{Unknown}& Not sure what the issue is\\
+ F2 &Closed &b2 & N & &\\
+  F13 &OPEN & b12 \& b11 &  C&  &weird issue at run-time\\
+
+
 \hline
 \end{tabular}
+\\
+
+
+\section{Questions}
+\begin{itemize}[noitemsep]
+\item Is F1 the same as F7?
+\item  Is F4 the same as F14?  
+\item How to describe F9 (weird indexing tensors) issue?
+\item How to describe F13 (weird run-time) issue?
+\item Should F16 be a code generation error or a logic error? Was there an issue translating the tree ir to generated code or something else?
+\end{itemize}
+
+
+
+\section{Comparisons}
+Can the bug be found with different approaches?\\
+\begin{tabular}{|l|llll|}
+\hline
+\# & \testA{} & \testB{} & \testC{} & \testD{}\\
+\hline
+\end{tabular}
+
+
+
 \input{bugs_fem.tex}
+
 
 \end{document}
 

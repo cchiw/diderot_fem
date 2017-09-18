@@ -1,33 +1,73 @@
 \section{Bugs in FEMprime branch}
 
-\begin{description}
-\item{FC1} Code generation issue when converting types\\
-$|(\nabla(F0))|;$
+\begin{description}[noitemsep]
+\item[issue]- top level description
+\item[computation]- operators and arguments
+\item[output]-terminal output (if helpful)
+\item[solution]- how was it solved 
+\item[details]- of problem
+\item[versions] svn version  scope (error-solved)
+\end{description}
 
+Sections with * indicates the bug still needs to be better understood.
+\subsection{F1*}
+\begin{description}[noitemsep]
+\item[issue]- Code generation issue when converting types
+\item[computation]-$|(\nabla(F0))|;$\
+\item[output].\\
 \begin{lstlisting}[mathescape=true]
 ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
         double l_probe_l_4_22 = makeEval_UnitSquareMesh_Lagrange_2_1(
                ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ***rtn:compile __p_o25_o6_t1_tN_tN__l2
 \end{lstlisting}
-\item{FN2}
-Numerical error  when taking the norm. Possible mistake causes from mini-merge and new operators.
-$normalize(\nabla(F0))$ also   norm(hessian)\\
+\item[solution]-?
+\item[details]
+\end{description}
+
+
+\subsection{F2*}
+\begin{description}[noitemsep]
+\item[issue] Numerical error  when taking the norm.
+\item[computation] $normalize(\nabla(F0))$
+\item[output]
+\item[solution]
+\item[details]
+\end{description}
 
  
-\item{FC3} Can not take inner-product of fields with different continuity.
-\begin{lstlisting}[mathescape=true]
-Type error (adding ofields-check typechecker)
-***rtn:compile __p_o25_o11_t1_t7_tN__l2
-***rtn:compile __p_o25_o12_t1_t7_tN__l2
-\end{lstlisting}
-\item{FC4} Multiple creation of functions with the same name (gradient of a field).
+\subsection{F3} 
+\begin{description}[noitemsep]
+\item[issue] Missing support for inner/cross product on ofields
+\item[computation]
+\item[output]
+\item[solution] Add ofields (inner product) to typechecker
+\item[details] Can not take inner-product of ofields 
+\end{description}
+
+
+
+\subsection{F4} 
+\begin{description}[noitemsep]
+\item[issue] Multiple creation of functions with the same name
+\item[computation] gradient of a field
+\item[output] terminal\\
 \begin{lstlisting}[mathescape=true]
 ex1.cxx:423:17: error: redefinition of 'helpEvalBasis_UnitSquareMesh_Lagrange_2'
 inline double * helpEvalBasis_UnitSquareMesh_Lagrange_2(const double *k...
 \end{lstlisting}
+\item[solution]
+\item[details]
+\end{description}
 
-\item{FC5}
+
+
+
+\subsection{F5*}
+\begin{description}[noitemsep]
+\item[issue]
+\item[computation]
+\item[output] terminal.\\
 \begin{lstlisting}[mathescape=true]
 3pow TIλ(T0[])<(T0)^2>HighToMid.expandOp: error converting InsideFEM<3>
 uncaught exception Bind [nonexhaustive binding failure]
@@ -35,12 +75,17 @@ uncaught exception Bind [nonexhaustive binding failure]
   raised at high-to-mid/high-to-mid.sml:203.105-203.107
   raised at high-to-mid/buil
   \end{lstlisting}
+\item[solution]
+\item[details] Inside Error
+\end{description}
+
+
   
-\item{FC6}
-
-
-
- python pde.py 4 24 1 2 2
+\subsection{F6}
+\begin{description}[noitemsep]
+\item[issue] Translation in compiler EIN IR for Summation not handled
+\item[computation]
+\item[output] terminal.\\
 \begin{lstlisting}[mathescape=true]
 3HighToMid.expandEINAPP: error converting out051A = λ(F0[3],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0)_1[2]∇_{i0,i1}),T3)> (FF004AB, VF004AE, pathF004B1, pos0421)
 uncaught exception Subscript [subscript out of bounds]
@@ -55,39 +100,77 @@ cp: ex1.cxx: No such file or directory
 	-_F_s_d3 |p_o24_o1_t2_t2__l2
 	rtn:compile 
 	  \end{lstlisting}
-\item{FC7}  
-	  next error
+\item[solution]
+\item[details]
+Summation in a single term not handled correctly
+\end{description}
+
+
+\subsection{F7*} 
+\begin{description}[noitemsep]
+\item[issue]conversion of types done incorrectly 
+\item[computation]
+\item[output] terminal.\\
 \begin{lstlisting}[mathescape=true]
 	  ex1.cxx:870:6: error: no type named 'tensor_ref_3_3' in namespace 'ex1'
 ex1::tensor_ref_3_3 s_makeEval_UnitCubeMesh_P_4_2(NodeTy nodes, newposTy b, coordTy c,int cell,MappTy nM, FloatMapTy pM){
 ~~~~~^
 ex1.cxx:876:14: error:
 \end{lstlisting}
-\item{FC8}
-Unhandled cases when using constant indices
--Differential indices are constants
-- Constant indices in field components
+\item[solution]
+\item[details]
+\end{description}
+\subsection{F8}
+\begin{description}[noitemsep]
+\item[issue]Differential indices are constants
+\item[computation]det(concat2)
+\item[output] terminal.
 \begin{lstlisting}[mathescape=true]
-	λ(F0[2],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0_{'0'})_1[2]),T3)>
-	det(concat2) |22_3- 
-	\end{lstlisting}
-	
-	\item[FC9]
-	\begin{lstlisting}[mathescape=true]
-                ^
+λ(F0[2],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0_{'0'})_1[2]),T3)>
+\end{lstlisting}
+\item[details] Unhandled cases when using constant indices.Constant indices in field components
+\item[solution]
+\end{description}
+
+\subsection{F9*}
+\begin{description}[noitemsep]
+\item[issue] Weird indexing tensors
+\item[computation]
+\item[output] terminal.\\
+\begin{lstlisting}[mathescape=true]
 ex1.cxx:850:20: error: subscripted value is not an array, pointer, or vector
         H[0][0][0] = H0[0][0];
                      ~~~~~^~
 ex1.cxx:851:20: error: subscripted value is not an array, pointer, or vector
         H[0][1][0] = H0[1][0];
-        	\end{lstlisting}
-	\item[FT10] 
-	Issue unknown       	
-   	\begin{lstlisting}[mathescape=true]     	-p_o8_o24_t12_t2__l2 hessian(addition)| F_s_d3,F_s_d3| 
-		Rst: Z-3 RD  max diff: 51.5896 sumdiff: 13.9962 67.4956% c:24.8443995169280 o:76.43399
+\end{lstlisting}
+\item[solution]
+\item[details]
+\end{description}
+
+\subsection{F10}
+\begin{description}[noitemsep]
+\item[issue]	Issue unknown 
+\item[computation]
+\item[output] terminal.\\
+\begin{lstlisting}[mathescape=true]     	
+-p_o8_o24_t12_t2__l2 hessian(addition)| F_s_d3,F_s_d3| 
+Rst: Z-3 RD  max diff: 51.5896 sumdiff: 13.9962 67.4956% c:24.8443995169280 o:76.43399
     	\end{lstlisting}
+\item[solution]
+\item[details]
+\end{description}
+
+	\subsection{F11*}
     	
-	\item[FC11]
+	\subsection{F12}
+	\begin{description}[noitemsep]
+\item[issue]
+\item[computation]
+\item[output]
+\item[solution]
+\item[details]
+\end{description}
 		\begin{lstlisting}[mathescape=true]
 uncaught exception Fail [Fail: unknown type]
   raised at common/phase-timer.sml:78.57-78.59
@@ -103,12 +186,14 @@ cp: ex1.cxx: No such file or directory
 	-_F_s_d3 |p_o23_o29_t2_tN_tN__l2
 	rtn:compile 
 	\end{lstlisting}
-\item[FT12]
-Weird allocation error\
-	    				\begin{lstlisting}[mathescape=true]
-    		Error when creating a vector fields in python. Syntax probably wrong.
-    		
-    		python(24510,0x7fff796c2300) malloc: *** error for object 0x7ff48bbf7800: pointer being freed was not allocated
+\subsection{F13}
+\begin{description}[noitemsep]
+\item[issue] Unknown
+\item[computation]
+\item[output]
+Weird allocation error\\
+\begin{lstlisting}[mathescape=true]
+python(24510,0x7fff796c2300) malloc: *** error for object 0x7ff48bbf7800: pointer being freed was not allocated
 *** set a breakpoint in malloc_error_break to debug
 [Charisees-MacBook-Air:24510] *** Process received signal ***
 [Charisees-MacBook-Air:24510] Signal: Abort trap: 6 (6)
@@ -118,17 +203,53 @@ Weird allocation error\
 [Charisees-MacBook-Air:24510] [ 2] 0   libsystem_c.dylib                   0x00007fff88d439a3 abort + 129
 [Charisees-MacBook-Air:24510] [ 3] 0   libsystem_malloc.dylib              0x00007fff8d8941cb free + 428
 	\end{lstlisting}
+\item[solution]
+\item[details]
+Error when creating a vector fields in python
+\end{description}
 
-	    		\item[CF14]
+\subsection{F14}
+\begin{description}[noitemsep]
+\item[issue]Multiple creation of functions with the same name
+\item[computation]
+\item[output]
 \begin{lstlisting}[mathescape=true]
 	0_tensor[2] compositionl,ex1.cxx:777:15: error: redefinition of 's_makeEval_UnitCubeMesh_Lagrange_4_'
 inline double s_makeEval_UnitCubeMesh_Lagrange_4_(NodeTy nodes, newposT...
-              ^
+Makefile
 	\end{lstlisting}
-	
-		\item[CF15]
-		error supporting inner product and outer product.
-              \item[FCN16] Sampling at the point [0,9.45187e+06] led to a find cell error, which was handled correctly, but the derivative code did not handle this case and segfaulted. The reason it sampled to far away was a mistake in FATm. 
+\item[solution]
+\item[details]
 \end{description}
+	
+\subsection{F15}
+\begin{description}[noitemsep]
+\item[issue]
+\item[computation]
+\item[output]teriminal\\.
+\begin{lstlisting}[mathescape=true]
+observ.cxx:919:2: error: no matching function for call to
+      'jIs_UnitSquareMesh_P_2'
+        jIs_UnitSquareMesh_P_2(J,nM,pM,cell);
+        ^~~~~~~~~~~~~~~~~~~~~~
+observ.cxx:831:14: note: candidate function not viable: no known conversion from
+      'double [2][2]' to 'double (*)[3]' for 1st argument
+inline void *jIs_UnitSquareMesh_P_2(double J[3][3],MappTy nM, FloatMapT...
+	\end{lstlisting}
+\item[solution]
+\item[details]
+
+\end{description}
+
+
+\subsection{F16}
+\begin{description}[noitemsep]
+\item[issue]
+\item[computation]
+\item[output]
+\item[solution]
+\item[details] Sampling at the point [0,9.45187e+06] led to a find cell error, which was handled correctly, but the derivative code did not handle this case and segfaulted. The reason it sampled to far away was a mistake in FATm. 
+\end{description}
+
 
 
