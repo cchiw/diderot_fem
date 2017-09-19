@@ -19,7 +19,7 @@ from connect import *
 #Step 3: compile diderot file
 #Step 4: run and import results
 #Step 5: check results
-
+rev =  5381
 
 
 def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
@@ -117,52 +117,69 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
                 out += os.read(pipe_out, 1024)
 
         return out
-    #run
-    single_mesh("../data/out.nrrd",f,npoints,dirname+"/mesh_d2s_single_init.so")
-    #os.dup2(stdout, myStdOut)
-    os.dup2(stdout, 1)
-    didStringResults = read_pipe()
-    def g(x):
-        print(x)
-        u = re.findall(r"[-+]?\d*\.\d+|\d+",x)[0]
-        return(float(u))
-        # print(x,u)
-        # if x[0]=="-":
-        #     return(0-float(x[1:]))
-        # else:
-        #     return(float(x))
-        
-    didResults =  map(g ,didStringResults.split("\n")[0:-1])
-    fResults = map(lambda x: f.at(x),zipPoints)
-    errors = []
-    for x in range(0,npoints):
-        e = abs(didResults[x]-fResults[x])
-        if e >= 10e-4: #this is because currently print in diderot only goes to 5sf so this is what we should expect
-            errors.append("At test {0}, using values {1} on {3}, the error was {2}".format(x,zipPoints[x],e,(meshname,element,degree)))
+    ss = dirname+"/mesh_d2s_single_init.so"
+    if(os.path.exists(ss)):
+       # keep going
+        #run
+        single_mesh("../data/out.nrrd",f,npoints,dirname+"/mesh_d2s_single_init.so")
+        #os.dup2(stdout, myStdOut)
+        os.dup2(stdout, 1)
+        didStringResults = read_pipe()
+        def g(x):
+            print(x)
+            u = re.findall(r"[-+]?\d*\.\d+|\d+",x)[0]
+            return(float(u))
+            # print(x,u)
+            # if x[0]=="-":
+            #     return(0-float(x[1:]))
+            # else:
+            #     return(float(x))
+            
+        didResults =  map(g ,didStringResults.split("\n")[0:-1])
+        fResults = map(lambda x: f.at(x),zipPoints)
+        errors = []
+        for x in range(0,npoints):
+            e = abs(didResults[x]-fResults[x])
+            if e >= 10e-4: #this is because currently print in diderot only goes to 5sf so this is what we should expect
+                errors.append("At test {0}, using values {1} on {3}, the error was {2}".format(x,zipPoints[x],e,(meshname,element,degree)))
 
-    os.system("rm -rf " + dirname)
-    if errors==[]:
-        print("No errors occured!") #later choose one
-        e = ": Passes"
-        f = open("results_final.txt", 'a+')
-        f.write(e)
-        f.close()
-        return(errors)
+        os.system("rm -rf " + dirname)
+        if errors==[]:
+            print("No errors occured!") #later choose one
+            e = ": Passes"
+            f = open("results_final.txt", 'a+')
+            f.write(e)
+            f.close()
+            return(errors)
+        else:
+            e = ": Fails"
+            f = open("results_final.txt", 'a+')
+            f.write(e)
+            f.close()
+            
+            title = "\n-- mesh_"+meshname + "_elem_"+element +"_dim_"+str(dim)+"_degree_"+str(degree)
+            e = title+"\n\t Fail"
+            f = open("results_terrible.txt", 'a+')
+            f.write(e)
+            f.close()
+            
+            print("Error occured")
+            return(errors)
     else:
-        e = ": Fails"
-        f = open("results_final.txt", 'a+')
-        f.write(e)
-        f.close()
-        
-        title = "\n-- mesh_"+meshname + "_elem_"+element +"_dim_"+str(dim)+"_degree_"+str(degree)
-        e = title+"\n\t Fail"
-        f = open("results_terrible.txt", 'a+')
-        f.write(e)
-        f.close()
-        
-        print("Error occured")
-        return(errors)
-    
+       print "look here"
+       e = ": did not compile"
+       f = open("results_final.txt", 'a+')
+       f.write(e)
+       f.close()
+       
+       title = "\n-- mesh_"+meshname + "_elem_"+element +"_dim_"+str(dim)+"_degree_"+str(degree)
+       e = title+"\n\t did not compile"
+       f = open("results_terrible.txt", 'a+')
+       f.write(e)
+       f.close()
+       
+       errors = []
+       return(errors)
 
     
 
@@ -174,15 +191,13 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh(2,2)",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh(3,2)",2,[(0,1),(0,1)]),(UnitCubeMesh(2,2,2),"UnitCubeMesh(2,2,2)",3,[(0,1),(0,1),(0,1)])]
 elements = ["Lagrange","P"]
 degrees = [2,3,4,5]
-
+#degrees = [2,3,4]
 errors = []
 
-#e = run_test(UnitSquareMesh(2,2),"UnitSquareMesh","P",2,[(0,1),(0,1)],2,10)
-
-#print(e)
 cnt = 0
 
-title = "\n\n\n------ testing for revision:5364  "
+npoints =  3 # was 100
+title = "\n\n\n------ testing for revision:"+str(rev)+"  npoints:"+str(npoints)
 f = open("results_final.txt", 'a+')
 f.write(title)
 f.close()
@@ -193,18 +208,19 @@ f.close()
 
 for m in meshs:
     for e in elements:
-        title = "\n------ mesh_"+m[1] +"_dim_"+str(m[2])+ "_elem_"+e
+        titleH = "mesh_"+m[1] +"_dim_"+str(m[2])+ "_elem_"+e
         f = open("results_final.txt", 'a+')
-        f.write(title)
+        f.write("\n------"+titleH)
         f.close()
         
         for d in degrees:
-            title = "\n-- "+str(cnt)+".) degree_"+str(d)
+            title =  str(cnt)+".) degree_"+str(d)
             f = open("results_final.txt", 'a+')
-            f.write(title)
+            f.write( "\n-- "+title)
             f.close()
             print(m,e,d)
-            t = run_test(m[0],m[1],e,m[2],m[3],d,100)
+            print "cnt:"+str(cnt)+titleH+title
+            t = run_test(m[0],m[1],e,m[2],m[3],d,npoints)
                          #mesh,meshname,element,dim,bounds, degree,npoints
             errors.append(t)
             cnt+=1

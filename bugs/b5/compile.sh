@@ -1,4 +1,4 @@
 make clean
-make ex7.o
-make ex7_init.o
-make ex7_init.so
+make observ.o
+make observ_init.o
+make observ_init.so

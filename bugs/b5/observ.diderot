@@ -89,9 +89,9 @@ strand raycast(int ui, int vi /* real rayU, real rayV */) {
          stabilize;
       }
       vec3 pos = rayOrig + rayN*rayVec;  // pos is ray sample position
-      if (!insideF(pos,F)) {              // If not inside field domain,
-         continue;                       // then move onto next iteration
-      }
+      //if (!insideF(pos,F)) {              // If not inside field domain,
+      //   continue;                       // then move onto next iteration
+      //}
       // compute fog contribution
       real aa = fog[3];
       if (aa > 0) {

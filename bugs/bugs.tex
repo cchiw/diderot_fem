@@ -44,23 +44,26 @@ Bug type: compilation (C) and numerical (N) bug.\\
  F3 &Closed&b3  & C &\fontit{T}& Inner/cross product  \\\
   F12 &Closed & b11 & C &T & Tensor slicing\\
    F5 &OPEN&b5 &C && Inside test\\
+F17 &OPEN &  & C &T & Division (r,v)\\
+  F20 &OPEN & b20 & C &T & Double dot product\\
 &&&&\textbf{E}& EIN rep of FE fields\\
  F6 &Closed &b6 &C &\fontit{E} & Summation not handled \\
   F8 &Closed &b8 &C &  \fontit{E}&Differential indices are constants\\
+    F8 &Closed &b8 &C &  \fontit{E}&components ndices are constants\\
 &&&&\textbf{CG}& Issue in generated code  to do point-wise eval\\
  F1 &Closed& b1 & C &\fontit{CG}& Converting types\\
 F7 &Closed& b6  &C & \fontit{CG}& Converting types\\
  F4 &Closed&b4  & C &\fontit{CG}&Multiple creation of functions with the same name \\
 F14 &OPEN & b14 &C& CG&Multiple creation of functions with the same name\\
+F19 &OPEN & b19 &C& CG&Multiple creation of functions with the same name\\
    F9 &OPEN&b9 &C &  \fontit{CG}& Weird indexing tensors\\
  F15 &OPEN&b5 &C & CG & Type error for helper function\\
   F16 &CLOSED & b16 & N  & CG & sampling outside mesh and derivative find cell  \\
 &&&&\textbf{DATm}& issue in DATm results in a false positive\\
- F10 &REDO &b10 &N &&  Hessian of addition (wrong number of polynomials)?\\
 &&&&\textbf{Unknown}& Not sure what the issue is\\
  F2 &Closed &b2 & N & &\\
   F13 &OPEN & b12 \& b11 &  C&  &weird issue at run-time\\
-
+ F10 &OPEN &b10 &N &&  Hessian of addition (unknown)?\\
 
 \hline
 \end{tabular}
@@ -74,6 +77,7 @@ F14 &OPEN & b14 &C& CG&Multiple creation of functions with the same name\\
 \item How to describe F9 (weird indexing tensors) issue?
 \item How to describe F13 (weird run-time) issue?
 \item Should F16 be a code generation error or a logic error? Was there an issue translating the tree ir to generated code or something else?
+\item Hessian of addition still fails even when we kill polynomial order (k) value.
 \end{itemize}
 
 

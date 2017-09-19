@@ -1,0 +1,11 @@
+c__p_o30_o10_t6_t16__l2
+
+observed data from femprime/ None
+
+correct data from pythonNone
+
+ positions[[0.08, 0.47], [0.45, 0.62], [0.99, 0.12], [0.9, 0.24], [0.5, 0.86], [0.69, 0.01], [0.83, 0.73]]
+
+Params(2)
+subtraction(zeros_outer)_F_v2_d2,F_m2x2_d2 |p_o30_o10_t6_t16__l2
+
