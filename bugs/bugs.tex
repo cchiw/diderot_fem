@@ -35,35 +35,90 @@
 \begin{document}
 Quick table to describe bugs, location and status.\\
 Bug type: compilation (C) and numerical (N) bug.\\
-\newline 
+
+
+\begin{figure}
+\begin{tabular}{|l|l|} 
+\hline
+\multicolumn{2}{|l|}{\textbf{results not correct}}\\
+\hline
+\# &Description \\
+\hline
+ F2   & magnitude of a field\\
+ F10   &  Hessian of addition \\
+   F16    & sampling outside mesh  \\
+\hline
+\hline
+\multicolumn{2}{|l|}{Compilation issue \textbf{ Missing support for operators on FE fields}}\\
+\hline
+\# & Description \\
+\hline
+ F3 & Inner/cross product \\
+F12 & Tensor slicing\\
+   F5 &Inside test\\
+F17  &   Division (r,v)\\
+  F20  & Double dot product\\
+\hline  
+\hline
+\multicolumn{2}{|l|}{ compilation issue \textbf{ Internal representation of FE fields}}\\
+\hline
+\# & Description \\
+\hline
+ F6   & Summation not handled \\
+  F8  & Differential indices are constants\\
+    F8  &components indices are constants\\
+\hline    
+\hline
+\multicolumn{2}{|l|}{compilation issue \textbf{Generated code for point-wise eval}}\\
+\hline
+\# & Description \\
+\hline
+ F1 &Converting types\\
+F7  & Converting types\\
+ F4   &Multiple creation of functions  \\
+F14   & ``\\
+F19   & ``\\
+   F9  &   Weird indexing tensors\\
+ F15  &  Type error for helper function\\
+\hline  
+\hline
+\multicolumn{2}{|l|}{\textbf{Other}}\\
+\hline
+\# & Description \\
+\hline
+  F1   &run-time\\
+\hline
+\end{tabular}
+\caption{Organization of bugs}
+\label{bugs}
+\end{figure}
+
+
+
+
 \begin{tabular}{|l|ll|lll|}
 \hline
-\# & Status & Folder&Type & Cause & Description \\
+\# & Status & Folder & Description \\
 \hline
-&&&&\textbf{T}& Missing support for operators on FE fields\\
- F3 &Closed&b3  & C &\fontit{T}& Inner/cross product  \\\
-  F12 &Closed & b11 & C &T & Tensor slicing\\
-   F5 &OPEN&b5 &C && Inside test\\
-F17 &OPEN &  & C &T & Division (r,v)\\
-  F20 &OPEN & b20 & C &T & Double dot product\\
-&&&&\textbf{E}& EIN rep of FE fields\\
- F6 &Closed &b6 &C &\fontit{E} & Summation not handled \\
-  F8 &Closed &b8 &C &  \fontit{E}&Differential indices are constants\\
-    F8 &Closed &b8 &C &  \fontit{E}&components ndices are constants\\
-&&&&\textbf{CG}& Issue in generated code  to do point-wise eval\\
- F1 &Closed& b1 & C &\fontit{CG}& Converting types\\
-F7 &Closed& b6  &C & \fontit{CG}& Converting types\\
- F4 &Closed&b4  & C &\fontit{CG}&Multiple creation of functions with the same name \\
-F14 &OPEN & b14 &C& CG&Multiple creation of functions with the same name\\
-F19 &OPEN & b19 &C& CG&Multiple creation of functions with the same name\\
-   F9 &OPEN&b9 &C &  \fontit{CG}& Weird indexing tensors\\
- F15 &OPEN&b5 &C & CG & Type error for helper function\\
-  F16 &CLOSED & b16 & N  & CG & sampling outside mesh and derivative find cell  \\
-&&&&\textbf{DATm}& issue in DATm results in a false positive\\
-&&&&\textbf{Unknown}& Not sure what the issue is\\
- F2 &Closed &b2 & N & &\\
-  F13 &OPEN & b12 \& b11 &  C&  &weird issue at run-time\\
- F10 &OPEN &b10 &N &&  Hessian of addition (unknown)?\\
+ F3 &Closed&b3  & Inner/cross product  \\\
+  F12 &Closed & b11 & Tensor slicing\\
+   F5 &OPEN&b5& Inside test\\
+F17 &OPEN &   & Division (r,v)\\
+  F20 &OPEN & b20  & Double dot product\\
+ F6 &Closed &b6  & Summation not handled \\
+  F8 &Closed &b8 &Differential indices are constants\\
+    F8 &Closed &b8 &components ndices are constants\\
+ F1 &Closed& b1& Converting types\\
+F7 &Closed& b6  & Converting types\\
+ F4 &Closed&b4 &Multiple creation of functions with the same name \\
+F14 &OPEN & b14 &Multiple creation of functions with the same name\\
+F19 &OPEN & b19 &Multiple creation of functions with the same name\\
+   F9 &OPEN&b9 & Weird indexing tensors\\
+ F15 &OPEN&b5 & Type error for helper function\\
+  F16 &CLOSED & b16  & sampling outside mesh and derivative find cell  \\
+ F2 &Closed &b2  &\\
+  F13 &OPEN & b12 \& b11  &weird issue at run-time\\
+ F10 &OPEN &b10 &  Hessian of addition (unknown)?\\
 
 \hline
 \end{tabular}
