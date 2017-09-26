@@ -1,0 +1,51 @@
+
+
+ input fem#4(2)[2, 2] FF0;
+ //Field:field #4(2)[2, 2] F0=[[4*x - 1, x*y - 4*x + 5*y + 2], [-3*x - 4*y - 4, -4*x*y - 4*x + 3*y + 2]]
+ fnspace VF0 = TensorFunctionSpace(UnitSquareMesh(4,4), P(), 2,{2,2});
+ string pathF0 = "fnspace_data/";
+ ofield#4(2)[2, 2] F0 = convert(FF0,VF0,pathF0);
+
+ofield#4(2)[2, 2]G = inv((F0));
+int length =7;
+strand f(int i) {
+
+	output tensor [2, 2] out =  [ [0.0,0.0], [0.0,0.0]];
+	    update {
+
+		tensor [2] pos=[0,0];
+		if(i==0){
+			pos = ([0.03, 0.83]);
+		}
+		else if(i==1){
+			pos = ([0.03, 0.83]);
+		}
+		else if(i==2){
+			pos = ([0.39, 0.13]);
+		}
+		else if(i==3){
+			pos = ([0.89, 0.17]);
+		}
+		else if(i==4){
+			pos = ([0.67, 0.26]);
+		}
+		else if(i==5){
+			pos = ([0.35, 0.19]);
+		}
+		else if(i==6){
+			pos = ([0.08, 0.38]);
+		}
+		else if(i==7){
+			pos = ([0.18, 0.03]);
+		}
+
+	if((insideF(pos,F0)) && true){
+		if(((det(inst((F0), pos))>0.01) || (det(inst((F0), pos))< -0.01)))
+			{	out = inst(G, pos);}
+		else{out =  [ [7.2,7.2], [7.2,7.2]];}
+	}
+	 else{out =  [ [7.2,7.2], [7.2,7.2]];}
+        stabilize;
+    }
+}
+initially [ f(i) | i in 0..length];

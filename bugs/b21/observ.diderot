@@ -1,0 +1,49 @@
+
+
+ input fem#4(2)[2, 2] FF0;
+ //Field:field #4(2)[2, 2] F0=[[-5*x*y - 4*x - 4, 5*x*y - 3*x - y - 5], [-x + 2*y + 2, -4*x*y + 3*x + 3*y - 4]]
+ fnspace VF0 = TensorFunctionSpace(UnitSquareMesh(4,4), Lagrange(), 2,{2,2});
+ string pathF0 = "fnspace_data/";
+ ofield#4(2)[2, 2] F0 = convert(FF0,VF0,pathF0);
+
+ofield#4(2)[]G = trace((F0));
+int length =7;
+strand f(int i) {
+
+	output tensor [] out = 0.0;
+	    update {
+
+		tensor [2] pos=[0,0];
+		if(i==0){
+			pos = ([0.32, 0.22]);
+		}
+		else if(i==1){
+			pos = ([0.32, 0.22]);
+		}
+		else if(i==2){
+			pos = ([0.68, 0.48]);
+		}
+		else if(i==3){
+			pos = ([0.47, 0.83]);
+		}
+		else if(i==4){
+			pos = ([0.96, 0.85]);
+		}
+		else if(i==5){
+			pos = ([0.97, 0.72]);
+		}
+		else if(i==6){
+			pos = ([0.11, 0.32]);
+		}
+		else if(i==7){
+			pos = ([0.75, 0.74]);
+		}
+
+	if((insideF(pos,F0)) && true){
+			out = inst(G, pos);
+	}
+	 else{out = 7.2;}
+        stabilize;
+    }
+}
+initially [ f(i) | i in 0..length];

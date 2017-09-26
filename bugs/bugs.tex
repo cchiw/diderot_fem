@@ -67,6 +67,7 @@ F17  &   Division (r,v)\\
  F6   & Summation not handled \\
   F8  & Differential indices are constants\\
     F8  &components indices are constants\\
+F21  &Summation with indices in field component\\
 \hline    
 \hline
 \multicolumn{2}{|l|}{compilation issue \textbf{Generated code for point-wise eval}}\\
@@ -119,7 +120,10 @@ F19 &OPEN & b19 &Multiple creation of functions with the same name\\
  F2 &Closed &b2  &\\
   F13 &OPEN & b12 \& b11  &weird issue at run-time\\
  F10 &OPEN &b10 &  Hessian of addition (unknown)?\\
-
+ F21  &CLOSED&b21 &Summation with indices in field component\\
+  F22  &CLOSED& & det() indices needed reshifting\\
+  F23  &OPEN& b23& codegen issue with type mismatch\\
+F24  &OPEN& b24& Numerically incorrect\\
 \hline
 \end{tabular}
 \\
@@ -134,16 +138,6 @@ F19 &OPEN & b19 &Multiple creation of functions with the same name\\
 \item Should F16 be a code generation error or a logic error? Was there an issue translating the tree ir to generated code or something else?
 \item Hessian of addition still fails even when we kill polynomial order (k) value.
 \end{itemize}
-
-
-
-\section{Comparisons}
-Can the bug be found with different approaches?\\
-\begin{tabular}{|l|llll|}
-\hline
-\# & \testA{} & \testB{} & \testC{} & \testD{}\\
-\hline
-\end{tabular}
 
 
 

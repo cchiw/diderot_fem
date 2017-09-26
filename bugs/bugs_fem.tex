@@ -251,5 +251,48 @@ inline void *jIs_UnitSquareMesh_P_2(double J[3][3],MappTy nM, FloatMapT...
 \item[details] Sampling at the point [0,9.45187e+06] led to a find cell error, which was handled correctly, but the derivative code did not handle this case and segfaulted. The reason it sampled to far away was a mistake in FATm. 
 \end{description}
 
+\subsection{F21}
+\begin{description}[noitemsep]
+\item[issue] Numerical error. 
+\item[computation] Trace
+\item[output] terminal\\
+\begin{lstlisting}[mathescape=true]
+***rtn:terrible__p_o0_o6_t16_tN_tN__l2
+	 -: trace(none)
+	-
+-p_o0_o6_t16_tN_tN__l2 trace(none)| F_m2x2_d2| 
+		Rst: Z-3 RD  max diff: 7.486 sumdiff: 4.3919 172.2781% c:-3.14070000000000 o:4.3453002
+	rtn:terrible
+	\end{lstlisting}
+\item[solution] splitting summation of probe. then creating own operator. shifting upper bound +1.
+\item[details] Summation with indices in field component
+\end{description}
 
+\subsection{F22}
+\begin{lstlisting}[mathescape=true]
+-p_o0_o7_t16_tN__l2 det(none)| F_m2x2_d2| Rst: V-0 RA
+	\end{lstlisting}
+Field component has two constant indices.
+cutting function in float was not organizing indices correctly.
 
+ python fem.py 3 0 7 23  (again with -3d case)
+ 
+
+\subsection{F23}
+\begin{lstlisting}[mathescape=true]
+le __p_o0_o8_t16_tN__l2
+	 -: inverse(none)
+	 
+1ex1.cxx:838:41: error: no matching function for call to 's_2_2makeEval_UnitSquareMesh_P_2_'
+        tensor_ref_2_2 l_probe_l_4_24 = s_2_2makeEval_UnitSquareMesh_P_2_(l_node_23, l_newpos_22, l_coordinates_14);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ex1.cxx:655:21: note: candidate function not viable: no known conversion from 'ex1::tensor_ref_2' to 'newposTy'
+      (aka 'double *') for 2nd argument
+ex1::tensor_ref_2_2 s_2_2makeEval_UnitSquareMesh_P_2_(NodeTy nodes, newposTy b, coordTy c ){
+                    ^
+ex1.cxx:853:43: error: use of undeclared identifier 's_2makeEval_UnitSquareMesh_P_2_'; did you mean
+      's_2_2makeEval_UnitSquareMesh_P_2_'?
+            tensor_ref_2 l_probe_l_4_33 = s_2makeEval_UnitSquareMesh_P_2_(l_node_23, l_newpos_22, l_coordinates_14);
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                          s_2_2makeEval_UnitSquareMesh_P_2_
+	\end{lstlisting}
