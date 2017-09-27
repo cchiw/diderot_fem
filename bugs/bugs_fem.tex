@@ -50,13 +50,13 @@ ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
 \subsection{F4} 
 \begin{description}[noitemsep]
 \item[issue] Multiple creation of functions with the same name
-\item[computation] gradient of a field
+\item[computation] gradient of a field minus another field
 \item[output] terminal\\
 \begin{lstlisting}[mathescape=true]
 ex1.cxx:423:17: error: redefinition of 'helpEvalBasis_UnitSquareMesh_Lagrange_2'
 inline double * helpEvalBasis_UnitSquareMesh_Lagrange_2(const double *k...
 \end{lstlisting}
-\item[solution]
+\item[solution] Fixed in r5413: the solution was to realize that the gradient of a field and a field incorrectly both generated common functions and stop this.
 \item[details]
 \end{description}
 
@@ -244,10 +244,10 @@ inline void *jIs_UnitSquareMesh_P_2(double J[3][3],MappTy nM, FloatMapT...
 
 \subsection{F16}
 \begin{description}[noitemsep]
-\item[issue]
-\item[computation]
-\item[output]
-\item[solution]
+\item[issue] Accidental sampling outside of a cell leads to a segfault in derivative code
+\item[computation] Any level of differentiation and a sampling outside of the mesh will cause this error. 
+\item[output] MPI reads out a segfault. 
+\item[solution] Add check in the derivative code for outside of the mesh sampling
 \item[details] Sampling at the point [0,9.45187e+06] led to a find cell error, which was handled correctly, but the derivative code did not handle this case and segfaulted. The reason it sampled to far away was a mistake in FATm. 
 \end{description}
 
@@ -296,3 +296,14 @@ ex1.cxx:853:43: error: use of undeclared identifier 's_2makeEval_UnitSquareMesh_
                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                           s_2_2makeEval_UnitSquareMesh_P_2_
 	\end{lstlisting}
+
+\subsection{F24}
+
+\begin{description}
+\item[Issue] Code gen error
+\item[Computation] Derivative of a tensor field i.e if you pass a tensor field from Firedrake and takes its derivative in Diderot
+\item[Output]  It crashes warning of a double free. I don't have this on hand. Try the commit r5403 to see it. I forget the commit that fixed it
+.\item[solution] Stopped any functions from delete memory allocated for newpos.
+\item[details] Evaluation functions assumed that they were the last ones to get a bit of memory (the memory for the new position; allocated in the translate coordinates process) and so they delete it too soon.
+
+\end{description}
