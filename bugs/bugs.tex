@@ -34,66 +34,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 Quick table to describe bugs, location and status.\\
-Bug type: compilation (C) and numerical (N) bug.\\
-
-
-\begin{figure}
-\begin{tabular}{|l|l|} 
-\hline
-\multicolumn{2}{|l|}{\textbf{results not correct}}\\
-\hline
-\# &Description \\
-\hline
- F2   & magnitude of a field\\
- F10   &  Hessian of addition \\
-   F16    & sampling outside mesh  \\
-\hline
-\hline
-\multicolumn{2}{|l|}{Compilation issue \textbf{ Missing support for operators on FE fields}}\\
-\hline
-\# & Description \\
-\hline
- F3 & Inner/cross product \\
-F12 & Tensor slicing\\
-   F5 &Inside test\\
-F17  &   Division (r,v)\\
-  F20  & Double dot product\\
-\hline  
-\hline
-\multicolumn{2}{|l|}{ compilation issue \textbf{ Internal representation of FE fields}}\\
-\hline
-\# & Description \\
-\hline
- F6   & Summation not handled \\
-  F8  & Differential indices are constants\\
-    F8  &components indices are constants\\
-F21  &Summation with indices in field component\\
-\hline    
-\hline
-\multicolumn{2}{|l|}{compilation issue \textbf{Generated code for point-wise eval}}\\
-\hline
-\# & Description \\
-\hline
- F1 &Converting types\\
-F7  & Converting types\\
- F4   &Multiple creation of functions  \\
-F14   & ``\\
-F19   & ``\\
-   F9  &   Weird indexing tensors\\
- F15  &  Type error for helper function\\
-\hline  
-\hline
-\multicolumn{2}{|l|}{\textbf{Other}}\\
-\hline
-\# & Description \\
-\hline
-  F1   &run-time\\
-\hline
-\end{tabular}
-\caption{Organization of bugs}
-\label{bugs}
-\end{figure}
-
+Bug type:  compilation (C), run-time issue(R), and numerical (N) bug.\\
 
 
 
@@ -101,43 +42,54 @@ F19   & ``\\
 \hline
 \# & Status & Folder & Description \\
 \hline
- F3 &Closed&b3  & Inner/cross product  \\\
+\hline
+&&& \textbf{Compilation issue(C)-Type checker}\\
+\hline
+ F3 &Closed&b3  & Inner/cross product  \\
+ F5 &OPEN&b5& Inside test\\
   F12 &Closed & b11 & Tensor slicing\\
-   F5 &OPEN&b5& Inside test\\
 F17 &OPEN &   & Division (r,v)\\
   F20 &OPEN & b20  & Double dot product\\
- F6 &Closed &b6  & Summation not handled \\
-  F8 &Closed &b8 &Differential indices are constants\\
-    F8 &Closed &b8 &components ndices are constants\\
+  \hline
+  \hline
+   &&& \textbf{Compilation issue(C)-internal rep}\\
+     \hline
+   F6 &Closed &b6  & Summation not handled (trace hessian) \\
+     F8 &Closed &b8 &Differential indices are constants(det concat)\\
+  \hline
+  \hline 
+ &&& \textbf{Compilation issue(C)-generated code}\\
+ \hline
  F1 &Closed& b1& Converting types\\
-F7 &Closed& b6  & Converting types\\
- F4 &Closed&b4 &Multiple creation of functions with the same name \\
+  F4 &Closed&b4 & gradient of a field and  field gen same name\\
+  F7 &Closed& b6  & Converting types\\
+F9 &OPEN&b9 & Weird indexing tensors\\
 F14 &OPEN & b14 &Multiple creation of functions with the same name\\
-F19 &OPEN & b19 &Multiple creation of functions with the same name\\
-   F9 &OPEN&b9 & Weird indexing tensors\\
  F15 &OPEN&b5 & Type error for helper function\\
-  F16 &CLOSED & b16  & sampling outside mesh and derivative find cell  \\
- F2 &Closed &b2  &\\
-  F13 &OPEN & b12 \& b11  &weird issue at run-time\\
- F10 &OPEN &b10 &  Hessian of addition (unknown)?\\
- F21  &CLOSED&b21 &Summation with indices in field component\\
-  F22  &CLOSED& & det() indices needed reshifting\\
+ F19 &OPEN & b19 &Multiple creation of functions with the same name\\
   F23  &OPEN& b23& codegen issue with type mismatch\\
-F24  &OPEN& b24& Numerically incorrect\\
-\hline
+   \hline
+  \hline
+ &&& \textbf{Run-time issue(R)}\\
+ \hline
+  F13 &OPEN & b12 \& b11  &pointer free error\\
+    F16 &CLOSED & b16  & sampling outside mesh and derivative find cell  \\
+  \hline
+  \hline
+ &&& \textbf{Numerically incorrect(N)}\\
+ \hline 
+  F2 &Closed &b2  & normalize op. error left from merge\\
+  F10 &OPEN &b10 &  Hessian of addition (unknown)?\\
+   F21  &CLOSED&b21 &Summation components not accounted for (trace)\\
+     F22  &CLOSED& & det() indices needed reshifting\\
+     F24  &OPEN& b24& subtraction args are switched \\
+  \hline
+  \hline
+ &&& \textbf{unsorted}\\
+ \hline
 \end{tabular}
 \\
 
-
-\section{Questions}
-\begin{itemize}[noitemsep]
-\item Is F1 the same as F7?
-\item  Is F4 the same as F14?  
-\item How to describe F9 (weird indexing tensors) issue?
-\item How to describe F13 (weird run-time) issue?
-\item Should F16 be a code generation error or a logic error? Was there an issue translating the tree ir to generated code or something else?
-\item Hessian of addition still fails even when we kill polynomial order (k) value.
-\end{itemize}
 
 
 
