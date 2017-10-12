@@ -6,11 +6,11 @@ import pytest
 import os
 from os import path
 cwd = abspath(dirname(__file__))
-sys.path.insert(0, '../../lib/')
+sys.path.insert(0, 'fem/')
 
 from init import *
 #from connect import *
-#from makejson import *
+from makejson import *
 
 import ctypes
 from ctypes import POINTER, c_int, c_double, c_void_p, c_float
@@ -87,7 +87,8 @@ def init4(name, f, g, h, i, target):
 name = "cat"
 target ="ex1"
 namenrrd = name+'.nrrd'
-expf0 = ("0+(5*1)+(3*x[1])+(4*x[0]*x[1])+(-1*x[0])+(-4*x[1]*x[1])+(-1*x[0]*x[0]*x[1]*x[1])+(5*x[0]*x[0]*x[1])+(-5*x[0]*x[0])+(3*x[1]*x[1]*x[1])+(2*x[1]*x[1]*x[1]*x[0])+(-2*x[0]*x[0]*x[1]*x[1]*x[1])+(1*x[0]*x[0]*x[0]*x[1]*x[1]*x[1])+(-5*x[0]*x[0]*x[0]*x[1]*x[1])+(4*x[0]*x[0]*x[0])","0+(2*1)+(-2*x[1])+(4*x[0]*x[1])+(-1*x[1]*x[1])+(1*x[0]*x[0]*x[1]*x[1])+(2*x[0]*x[0]*x[1])+(4*x[0]*x[0])+(-2*x[1]*x[1]*x[1])+(-4*x[1]*x[1]*x[1]*x[0])+(-2*x[0]*x[0]*x[1]*x[1]*x[1])+(1*x[0]*x[0]*x[0]*x[1]*x[1]*x[1])+(4*x[0]*x[0]*x[0]*x[1]*x[1])+(2*x[0]*x[0]*x[0]*x[1])+(4*x[0]*x[0]*x[0])","0+(1*1)+(1*x[1])+(1*x[0]*x[1])+(-3*x[0])+(5*x[1]*x[1])+(-2*x[1]*x[1]*x[0])+(1*x[0]*x[0]*x[1]*x[1])+(-3*x[0]*x[0]*x[1])+(4*x[0]*x[0])+(-1*x[1]*x[1]*x[1])+(3*x[1]*x[1]*x[1]*x[0])+(4*x[0]*x[0]*x[1]*x[1]*x[1])+(-1*x[0]*x[0]*x[0]*x[1]*x[1]*x[1])+(-3*x[0]*x[0]*x[0]*x[1]*x[1])+(-2*x[0]*x[0]*x[0])","0+(-4*1)+(1*x[1])+(1*x[0]*x[1])+(4*x[0])+(-5*x[1]*x[1])+(4*x[1]*x[1]*x[0])+(5*x[0]*x[0]*x[1]*x[1])+(2*x[0]*x[0]*x[1])+(-2*x[0]*x[0])+(3*x[1]*x[1]*x[1]*x[0])+(-2*x[0]*x[0]*x[1]*x[1]*x[1])+(-2*x[0]*x[0]*x[0]*x[1]*x[1]*x[1])+(4*x[0]*x[0]*x[0]*x[1]*x[1])+(-4*x[0]*x[0]*x[0]*x[1])+(1*x[0]*x[0]*x[0])")
-V= VectorFunctionSpace(UnitSquareMesh(4,4),"P",degree=4, dim=4)
+expf0 = (("0+(-2*1)+(2*x[1])+(-5*x[0]*x[1])+(-2*x[0])","0+(-2*x[1])+(1*x[0]*x[1])"),("0+(4*1)+(5*x[1])+(5*x[0]*x[1])+(-5*x[0])","0+(3*1)+(-4*x[1])+(-5*x[0]*x[1])+(-5*x[0])"))
+V= TensorFunctionSpace(UnitSquareMesh(4,4),"Lagrange",degree=2, shape =(2,2))
+
 f0 = Function(V).interpolate(Expression(expf0))
 init1(namenrrd, f0,  target)

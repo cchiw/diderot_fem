@@ -36,27 +36,31 @@ struct Function {
   float * Coords;
 };
 
-void callDiderot_observ(char *Outfile, int type, void *valM, int imgRes,  float rayStep){
+void callDiderot_observ(char *Outfile, int type, void *valF, int imgRes,  float rayStep){
   
     observ_world_t *wrld = observ_new_world ();
     if (wrld == 0) {
       fail ("unable to create world",0);
     }
 
+
+    
     if (observ_init_world(wrld)){
       fail ("unable to init world",wrld);
     }
-
-    if (observ_input_set_imgResU (wrld, imgRes)) {
-        fail ("unable to initialize imgRes", wrld);
+    
+    if (observ_input_set_iresU(wrld, imgRes)) {
+        fail ("unable to initialize imgRed", wrld);
     }
-    if (observ_input_set_imgResV (wrld, imgRes)) {
-        fail ("unable to initialize imgRes", wrld);
+    if (observ_input_set_iresV (wrld, imgRes)) {
+        fail ("unable to initialize imgRed", wrld);
     }
-    if (observ_input_set_rayStep (wrld,  rayStep)) {
-        fail ("unable to initialize  rayStep", wrld);
+    
+    if (observ_input_set_rayStep  (wrld, rayStep )) {
+        fail ("unable to initialize rayStep ", wrld);
     }
-    if (observ_input_set_f (wrld, valM)) {
+    
+    if (observ_input_set_f (wrld, valF)) {
         fail ("unable to initialize imgRed", wrld);
     }
 
@@ -73,7 +77,7 @@ void callDiderot_observ(char *Outfile, int type, void *valM, int imgRes,  float 
     if (nData == 0) {
         fail ("unable to allocate nrrd for output", 0);
     }
-    if (observ_output_get_out (wrld, nData)) {
+    if (observ_output_get_rgba (wrld, nData)) {
         fail ("problem getting output", wrld);
     }
     if (nrrdSave(Outfile, nData, 0)) {

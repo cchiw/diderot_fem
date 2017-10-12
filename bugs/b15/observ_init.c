@@ -36,21 +36,24 @@ struct Function {
   float * Coords;
 };
 
-void callDiderot_observ(char *Outfile, int type, void *valF){
-  
+void callDiderot_observ(char *Outfile, int type, void *valF, void *valG){
+    
     observ_world_t *wrld = observ_new_world ();
     if (wrld == 0) {
-      fail ("unable to create world",0);
+        fail ("unable to create world",0);
     }
-
+    
     if (observ_init_world(wrld)){
-      fail ("unable to init world",wrld);
+        fail ("unable to init world",wrld);
     }
-
+    
     if (observ_input_set_FF0 (wrld, valF)) {
         fail ("unable to initialize imgRed", wrld);
     }
-
+    if (observ_input_set_FF1 (wrld, valG)) {
+        fail ("unable to initialize imgRed", wrld);
+    }
+    
     if (observ_create_strands (wrld)) {
         fail ("unable to create initial strands", wrld);
     }
@@ -78,4 +81,3 @@ void callDiderot_observ(char *Outfile, int type, void *valF){
     observ_shutdown (wrld);
     
 }
-

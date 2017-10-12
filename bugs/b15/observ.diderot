@@ -4,7 +4,7 @@ tensor [4]F0 = [-2, 4, -4, -1];
  input fem#4(2)[4] FF1;
  //Field:field #4(2)[4] F1=[x**3*(y**3 - 5*y**2 + 4) + 5*x**2*y - 5*x**2 + 4*x*y - x + y**3*(-2*x**2 + 2*x + 3) + y**2*(-x**2 - 4) + 3*y + 5, x**3*(y**3 + 4*y**2 + 2*y + 4) + 2*x**2*y + 4*x**2 + 4*x*y + y**3*(-2*x**2 - 4*x - 2) + y**2*(x**2 - 1) - 2*y + 2, x**3*(-y**3 - 3*y**2 - 2) - 3*x**2*y + 4*x**2 + x*y - 3*x + y**3*(4*x**2 + 3*x - 1) + y**2*(x**2 - 2*x + 5) + y + 1, x**3*(-2*y**3 + 4*y**2 - 4*y + 1) + 2*x**2*y - 2*x**2 + x*y + 4*x + y**3*(-2*x**2 + 3*x) + y**2*(5*x**2 + 4*x - 5) + y - 4]
  fnspace VF1 = TensorFunctionSpace(UnitSquareMesh(4,4), P(), 4,{4});
- string pathF1 = "fnspace_data/";
+ string pathF1 = "../../fnspace_data/";
  ofield#4(2)[4] F1 = convert(FF1,VF1,pathF1);
 
 ofield#4(2)[4, 4]G = (-(F0))⊗(F1);

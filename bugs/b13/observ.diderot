@@ -3,13 +3,13 @@
  input fem#4(2)[2] FF0;
  //Field:field #4(2)[2] F0=[x**3*(-3*y**3 + 4*y**2 - 4*y + 1) - 5*x**2*y + 4*x**2 - 4*x*y + x + y**3*(x**2 + 2*x - 3) + y**2*(x**2 + 4*x - 2) - 5*y - 1, x**3*(2*y**3 + 2*y**2 + 5*y + 3) + 5*x**2*y - 4*x**2 - 3*x*y - x + y**3*(x**2 - 4) + y**2*(-5*x**2 + 2*x - 3) - 3*y + 4]
  fnspace VF0 = TensorFunctionSpace(UnitSquareMesh(4,4), Lagrange(), 4,{2});
- string pathF0 = "fnspace_data/";
+ string pathF0 = "../../fnspace_data/";
  ofield#4(2)[2] F0 = convert(FF0,VF0,pathF0);
 
  input fem#4(2)[2] FF1;
  //Field:field #4(2)[2] F1=[x**3*(5*y**3 + 2*y - 2) + 4*x**2*y - 5*x**2 - 4*x*y - 5*x + y**3*(x**2 - 5*x + 4) + y**2*(-5*x**2 + 3*x - 4) + 2*y + 3, x**3*(2*y**3 - 3*y**2 - 2*y + 4) + 2*x**2*y + x*y + 5*x + y**3*(-5*x**2 - 5) + y**2*(2*x**2 + 5*x + 5) - 2*y - 2]
  fnspace VF1 = TensorFunctionSpace(UnitSquareMesh(4,4), P(), 4,{2});
- string pathF1 = "fnspace_data/";
+ string pathF1 = "../../fnspace_data/";
  ofield#4(2)[2] F1 = convert(FF1,VF1,pathF1);
 
 ofield#4(2)[2]G = (-(F0))+(F1);
