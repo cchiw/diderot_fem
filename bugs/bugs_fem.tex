@@ -297,9 +297,33 @@ ex1.cxx:853:43: error: use of undeclared identifier 's_2makeEval_UnitSquareMesh_
                                           s_2_2makeEval_UnitSquareMesh_P_2_
 	\end{lstlisting}
 
+
 \subsection{F24}
-\CC{IS there a bug labeling mistake here?}
-\CC{This is the label for the numerical error in subtration}
+
+\begin{description}
+\item[Issue] Subtraction args are switched
+\item[Computation] Subtracting one field from another
+\item[Output]
+  \begin{lstlisting}
+    t__p_o0_o10_t14_t14__l2
+
+observed data from femprime/ [[0.1088, -3.8392, -4.5563998], [-1.4155999, -2.8296001, -5.9981999], [3.6296, -7.6163998, -2.1338], [2.5702, -4.7568002, -1.7131], [1.8088, -5.2392001, -3.1064], [1.0176001, -4.3983998, -3.6528001], [1.5876, -5.9884, -3.9828]]
+
+correct data from python[[-0.108800000000000, 3.83920000000000, 4.55640000000000], [1.41560000000000, 2.82960000000000, 5.99820000000000], [-3.62960000000000, 7.61640000000000, 2.13380000000000], [-2.57020000000000, 4.75680000000000, 1.71310000000000], [-1.80880000000000, 5.23920000000000, 3.10640000000000], [-1.01760000000000, 4.39840000000000, 3.65280000000000], [-1.58760000000000, 5.98840000000000, 3.98280000000000]]
+
+ positions[[0.46, 0.38], [0.41, 0.14], [0.82, 0.63], [0.41, 0.87], [0.56, 0.58], [0.48, 0.52], [0.72, 0.43]]
+
+Params(2)
+
+-p_o0_o10_t14_t14__l2 subtraction(none)| F_v3_d2,F_v3_d2| 
+		Rst: Z-3 RD  max diff: 15.2328 sumdiff: 6.8524 200.0% c:7.61640000000000 o:-7.6163998
+
+
+  \end{lstlisting}
+\end{description}
+
+\subsection{F25}
+
 \begin{description}
 \item[Issue] Code gen error
 \item[Computation] Derivative of a tensor field i.e if you pass a tensor field from Firedrake and takes its derivative in Diderot
@@ -307,4 +331,13 @@ ex1.cxx:853:43: error: use of undeclared identifier 's_2makeEval_UnitSquareMesh_
 .\item[solution] Stopped any functions from delete memory allocated for newpos.
 \item[details] Evaluation functions assumed that they were the last ones to get a bit of memory (the memory for the new position; allocated in the translate coordinates process) and so they delete it too soon.
 
+\end{description}
+
+\subsection{F26}
+
+\begin{description}
+\item[Issue] Code gen or floating point problem
+\item[Computation] Regular pointwise evaluation
+\item[Output] Numerically incorrect results on various combinations of points and FE data
+\item[Solution] Kick the can by using doubles
 \end{description}

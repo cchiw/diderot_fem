@@ -1,0 +1,74 @@
+
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2
+
+
+------ testing for revision:5364  
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_Lagrange
+-- 0.) degree_2: Passes
+-- 1.) degree_3: Passes
+-- 2.) degree_4: Passes
+-- 3.) degree_5: Passes
+------ mesh_UnitSquareMesh(2,2)_dim_2_elem_P
+-- 4.) degree_2: Passes
+-- 5.) degree_3: Passes
+-- 6.) degree_4: Passes
+-- 7.) degree_5: Passes
+------ mesh_UnitSquareMesh(3,2)_dim_2_elem_Lagrange
+-- 8.) degree_2: Passes
+-- 9.) degree_3: Passes
+-- 10.) degree_4: Passes
+-- 11.) degree_5: Passes
+------ mesh_UnitSquareMesh(3,2)_dim_2_elem_P
+-- 12.) degree_2: Passes
+-- 13.) degree_3: Passes
+-- 14.) degree_4: Passes
+-- 15.) degree_5: Passes
+------ mesh_UnitCubeMesh(2,2,2)_dim_3_elem_Lagrange
+-- 16.) degree_2: Passes
+-- 17.) degree_3: Fails
+-- 18.) degree_4: Fails
+-- 19.) degree_5: Fails
+------ mesh_UnitCubeMesh(2,2,2)_dim_3_elem_P
+-- 20.) degree_2: Passes
+-- 21.) degree_3: Fails
+-- 22.) degree_4: Fails
+-- 23.) degree_5: Fails
