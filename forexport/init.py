@@ -163,7 +163,7 @@ def organizeData(f):
 
 
 def sample(name,f,res):
-    init_file = cwd + "/squaremesh.so"
+    init_file = cwd + "/squaremesh_init.so"
     _call = ctypes.CDLL(init_file)
     data = organizeData(f)
     _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
