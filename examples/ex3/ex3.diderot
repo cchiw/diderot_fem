@@ -2,7 +2,7 @@ input int imgRes;
 input real stepSize;
 input fem#1(2)[] f;
 string path = "data.json";
-ofield#1(2)[] F = convert(f, path); //field and function space
+ofield#3(2)[] F = convert(f, path); //field and function space
 
 
 strand sample (int ui, int vi) {

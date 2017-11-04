@@ -1,0 +1,143 @@
+
+
+// volume dataset
+//field#4(3)[] F = bspln5 ⊛ image("facets.nrrd");
+input fem#4(3)[] f;
+fnspace V = FunctionSpace(UnitCubeMesh(2,2,2), Lagrange(), 2);
+string path = "../../fnspace_data/";
+ofield#4(3)[] F = convert(f, V, path); //field and function space
+
+
+
+ofield#3(3)[3] N = -∇F/|∇F|;
+ofield#3(3)[3,3] P = identity[3] - N⊗N;
+ofield#2(3)[3,3] G = (∇⊗N)•P;
+ofield#2(3)[] disc = sqrt(2*G:G - trace(G)*trace(G));
+ofield#2(3)[] K1 = (trace(G) + disc)/2;
+ofield#2(3)[] K2 = (trace(G) - disc)/2;
+
+function real levoy(real v, real g, real th) = clamp(0, 1, 1.2*(1 - |v/g|/th));
+
+// RGB colormap of (kappa1,kapp2)
+field#0(2)[3] RGB = tent ⊛ image("../nrrddata/2d-bow.nrrd");
+
+// set camera, image, and rendering parameters
+vec3 camEye = [3.84323, -11.4318, 12.0015];
+input bool camOrtho = false;
+vec3 camAt = [0, 0, 0];
+vec3 camUp = [0.87741, -0.0108112, 0.479619];
+real camNear = -1.85121;
+real camFar = 1.85121;
+input real camFOV = 12.5;
+input int iresU = 400;
+input int iresV = 400;
+input real rayStep = 0.2;
+input real refStep = 0.2;
+input vec3 lightVsp = [1, -2, -4];
+vec3 lightRGB = [1.0, 1.0, 1.0];
+input real phongKa = 0.3;
+input real phongKd = 0.7;
+
+input real isoThick = 0.1;
+input real crsThick = 0.1;
+input real crsStrn = 0.001;
+input real cscl = 0.1;
+input real kscl = 0.1;
+input real keps = 0.01;
+
+// boilerplate computation of camera and light info
+real camDist = |camAt - camEye|;
+real camVspNear = camNear + camDist;
+real camVspFar = camFar + camDist;
+vec3 camN = normalize(camAt - camEye);
+vec3 camU = normalize(camN × camUp);
+vec3 camV = camN × camU;
+real camVmax = tan(camFOV*π/360.0)*camDist;
+real camUmax = camVmax*real(iresU)/real(iresV);
+vec3 lightDir = normalize(lightVsp[0]*camU +
+                          lightVsp[1]*camV +
+                          lightVsp[2]*camN);
+
+// RayCast(ui,vi) computes rendered color for pixel (ui,vi)
+strand RayCast (int ui, int vi) {
+    real rayU = lerp(-camUmax, camUmax, -0.5, real(ui), real(iresU)-0.5);
+    real rayV = lerp(-camVmax, camVmax, -0.5, real(vi), real(iresV)-0.5);
+    vec3 rayVec = camN if camOrtho else (camDist*camN + rayU*camU + rayV*camV)/camDist;
+    vec3 rayEye = (rayU*camU + rayV*camV if camOrtho else [0,0,0]) + camEye;
+
+    real rayN = camVspNear;
+    real rayTransp = 1.0;
+    vec3 rayRGB = [0.0, 0.0, 0.0];
+    output vec4 outRGBA = [0.0, 0.0, 0.0, 0.0];
+
+    update {
+       vec3 pos = rayEye + rayN*rayVec;
+       if (insideF (pos,F)) {
+          real val = inst(F,pos);
+          vec3 grad = inst(-∇F, pos);
+          real alpha = levoy(val, |grad|, isoThick);
+          if (alpha > 0) {  // we have some opacity
+              real k1 = inst(K1, pos);
+              real k2 = inst(K2, pos);
+              vec3 matRGB = RGB([clamp(-1.0, 1.0, cscl*k1),
+                                 clamp(-1.0, 1.0, cscl*k2)]);
+
+              // trying to unlift these
+              tensor[3,3] gten = inst(G,pos); // already has gradient as eigenvector
+              //tensor[3,3] G2 = gten - k1*identity[3]; // also has e1 as zero evec, span is e2
+              //tensor[3,3] E2 = G2/|G2|; // projects onto e2
+              //tensor[3,3] G1 = gten - k2*identity[3]; // also has e2 as zero evec, span is e1
+              //tensor[3,3] E1 = G1/|G1|; // projects onto e1
+              tensor[3,3] E1 = normalize(gten - k2*identity[3]);
+              tensor[3,3] E2 = normalize(gten - k1*identity[3]);
+
+              vec3 gk1 = E1•inst(∇K1,pos);
+              real fdd1 = |gk1|;
+              vec3 dir = normalize(gk1);
+              real sdd1 = dir•(inst(∇⊗∇K1,pos))•dir;      // A: right way
+              //vec3 fpos = pos + keps*dir;              // B: little hacky + C: very hacky
+              //real sdd1 = (dir•inst(∇K1,fpos) - fdd1)/keps; // B: little hacky
+              //vec3 bpos = pos - keps*dir;              // C: very hacky
+              //real sdd1 = (inst(K1,bpos) - 2*k1 + inst(K1,fpos))/(keps*keps); // C: very hacky
+
+              vec3 gk2 = E2•inst(∇K2,pos);
+              real fdd2 = |gk2|;
+              dir = normalize(gk2);
+              real sdd2 = dir•(inst(∇⊗∇K2,pos))•dir;      // A: right way
+              //fpos = pos + keps*dir;                   // B: little hacky + C: very hacky
+              //real sdd2 = (dir•inst(∇K2,fpos) - fdd2)/keps; // B: little hacky
+              //bpos = pos - keps*dir;                   // C: very hacky
+              //real sdd2 = (inst(K2,bpos) - 2*k2 + inst(K2(,pos))/(keps*keps); // C: very hacky
+              matRGB = modulate(matRGB,
+                                [1,1,1] + kscl*[levoy(fdd1, sdd1, crsThick) if |sdd1| > crsStrn else 0.0,
+                                                0,
+                                                levoy(fdd2, sdd2, crsThick) if |sdd2| > crsStrn else 0.0]);
+
+              alpha = 1 - pow(1-alpha, rayStep*|rayVec|/refStep);
+              real ld = max(0.0, normalize(grad) • lightDir);
+              // Phong shading
+              vec3 pntRGB = (phongKa*matRGB
+                           + phongKd*ld*modulate(matRGB, lightRGB));
+              // composite with existing ray color and transparency
+              rayRGB += rayTransp*alpha*pntRGB;
+              rayTransp *= 1.0 - alpha;
+          }
+       }
+       if (rayTransp < 0.01) {  // early ray termination
+          rayTransp = 0.0;
+          stabilize;
+       }
+       if (rayN > camVspFar) {
+          stabilize;
+       }
+       rayN = rayN + rayStep;
+    }
+
+    stabilize {
+       outRGBA = [rayRGB[0], rayRGB[1], rayRGB[2], 1.0 - rayTransp];
+    }
+
+    /* render: output maxval */
+}
+
+initially [ RayCast(ui, vi) | vi in 0..(iresV-1), ui in 0..(iresU-1) ];

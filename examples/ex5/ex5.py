@@ -118,11 +118,11 @@ def test_1B():
 
 def test_1C():
     exp = "0.5- (((1-x[0])*(1-x[0]))+((1-x[1])*(1-x[1]))+((1-x[2])*(1-x[2])))"
-    res  = 200
+    res  = 150
     lbl = "exp1_l4"+"_r"+str(res)+"_k3"
     os.system("rm *.nrrd")
     (namenrrd, namepng,  f, V, rayStep) = set_femex5(lbl, exp)
-    name = "current"+lbl
+    name = "current150"+lbl
     namepng = name+'.png'
     namenrrd = name+'.nrrd'
     makejson(V, jsondata)
