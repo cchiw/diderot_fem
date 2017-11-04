@@ -166,6 +166,7 @@ def sample(name,f,res):
     init_file = cwd + "/squaremesh_init.so"
     _call = ctypes.CDLL(init_file)
     data = organizeData(f)
+    type = 1
     _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
     result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
     return(result)
