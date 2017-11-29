@@ -16,10 +16,10 @@ Sections with * indicates the bug still needs to be better understood.
 \item[computation]-$|(\nabla(F0))|;$\
 \item[output].\\
 \begin{lstlisting}[mathescape=true]
-ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
-        double l_probe_l_4_22 = makeEval_UnitSquareMesh_Lagrange_2_1(
+ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor\_ref\_2' to 'double'
+        double l\_probe\_l\_4\_22 = makeEval\_UnitSquareMesh\_Lagrange\_2\_1(
                ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-***rtn:compile __p_o25_o6_t1_tN_tN__l2
+***rtn:compile \_\_p\_o25\_o6\_t1\_tN\_tN\_\_l2
 \end{lstlisting}
 \item[solution]-?
 \item[details]
@@ -53,8 +53,8 @@ ex1.cxx:798:16: error: no viable conversion from 'ex1::tensor_ref_2' to 'double'
 \item[computation] gradient of a field minus another field
 \item[output] terminal\\
 \begin{lstlisting}[mathescape=true]
-ex1.cxx:423:17: error: redefinition of 'helpEvalBasis_UnitSquareMesh_Lagrange_2'
-inline double * helpEvalBasis_UnitSquareMesh_Lagrange_2(const double *k...
+ex1.cxx:423:17: error: redefinition of 'helpEvalBasis\_UnitSquareMesh\_Lagrange\_2'
+inline double * helpEvalBasis\_UnitSquareMesh\_Lagrange\_2(const double *k...
 \end{lstlisting}
 \item[solution] Fixed in r5413: the solution was to realize that the gradient of a field and a field incorrectly both generated common functions and stop this.
 \item[details]
@@ -87,7 +87,7 @@ uncaught exception Bind [nonexhaustive binding failure]
 \item[computation]
 \item[output] terminal.\\
 \begin{lstlisting}[mathescape=true]
-3HighToMid.expandEINAPP: error converting out051A = λ(F0[3],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0)_1[2]∇_{i0,i1}),T3)> (FF004AB, VF004AE, pathF004B1, pos0421)
+3HighToMid.expandEINAPP: error converting out051A = λ(F0[3],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0)\_1[2]∇\_{i0,i1}),T3)> (FF004AB, VF004AE, pathF004B1, pos0421)
 uncaught exception Subscript [subscript out of bounds]
   raised at common/phase-timer.sml:78.57-78.59
   raised at high-to-mid/high-to-mid.sml:216.7-216.9
@@ -95,9 +95,9 @@ uncaught exception Subscript [subscript out of bounds]
 make: *** [ex1.o] Error 1
 cp: ex1.cxx: No such file or directory
 cp: ex1.cxx: No such file or directory
-***rtn:compile __p_o24_o1_t2_t2__l2
+***rtn:compile \_\_p\_o24\_o1\_t2\_t2\_\_l2
 	 -: trace(hessian)
-	-_F_s_d3 |p_o24_o1_t2_t2__l2
+	-\_F\_s\_d3 |p\_o24\_o1\_t2\_t2\_\_l2
 	rtn:compile 
 	  \end{lstlisting}
 \item[solution]
@@ -112,8 +112,8 @@ Summation in a single term not handled correctly
 \item[computation]
 \item[output] terminal.\\
 \begin{lstlisting}[mathescape=true]
-	  ex1.cxx:870:6: error: no type named 'tensor_ref_3_3' in namespace 'ex1'
-ex1::tensor_ref_3_3 s_makeEval_UnitCubeMesh_P_4_2(NodeTy nodes, newposTy b, coordTy c,int cell,MappTy nM, FloatMapTy pM){
+	  ex1.cxx:870:6: error: no type named 'tensor\_ref\_3\_3' in namespace 'ex1'
+ex1::tensor\_ref\_3\_3 s\_makeEval\_UnitCubeMesh\_P\_4\_2(NodeTy nodes, newposTy b, coordTy c,int cell,MappTy nM, FloatMapTy pM){
 ~~~~~^
 ex1.cxx:876:14: error:
 \end{lstlisting}
@@ -126,7 +126,7 @@ ex1.cxx:876:14: error:
 \item[computation]det(concat2)
 \item[output] terminal.
 \begin{lstlisting}[mathescape=true]
-λ(F0[2],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0_{'0'})_1[2]),T3)>
+λ(F0[2],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0\_{'0'})\_1[2]),T3)>
 \end{lstlisting}
 \item[details] Unhandled cases when using constant indices.Constant indices in field components
 \item[solution]
@@ -154,7 +154,7 @@ ex1.cxx:851:20: error: subscripted value is not an array, pointer, or vector
 \item[computation]
 \item[output] terminal.\\
 \begin{lstlisting}[mathescape=true]     	
--p_o8_o24_t12_t2__l2 hessian(addition)| F_s_d3,F_s_d3| 
+-p\_o8\_o24\_t12\_t2\_\_l2 hessian(addition)| F\_s\_d3,F\_s\_d3| 
 Rst: Z-3 RD  max diff: 51.5896 sumdiff: 13.9962 67.4956% c:24.8443995169280 o:76.43399
     	\end{lstlisting}
 \item[solution]
@@ -181,9 +181,9 @@ cp: ex1.cxx: No such file or directory
 cp: ex1.cxx: No such file or directory
 
 
-***rtn:compile __p_o23_o29_t2_tN_tN__l2
+***rtn:compile \_\_p\_o23\_o29\_t2\_tN\_tN\_\_l2
 	 -: slicev0(grad)
-	-_F_s_d3 |p_o23_o29_t2_tN_tN__l2
+	-\_F\_s\_d3 |p\_o23\_o29\_t2\_tN\_tN\_\_l2
 	rtn:compile 
 	\end{lstlisting}
 \subsection{F13}
@@ -194,33 +194,21 @@ cp: ex1.cxx: No such file or directory
 Weird allocation error\\
 \begin{lstlisting}[mathescape=true]
 python(24510,0x7fff796c2300) malloc: *** error for object 0x7ff48bbf7800: pointer being freed was not allocated
-*** set a breakpoint in malloc_error_break to debug
+*** set a breakpoint in malloc\_error\_break to debug
 [Charisees-MacBook-Air:24510] *** Process received signal ***
 [Charisees-MacBook-Air:24510] Signal: Abort trap: 6 (6)
 [Charisees-MacBook-Air:24510] Signal code:  (0)
-[Charisees-MacBook-Air:24510] [ 0] 0   libsystem_platform.dylib            0x00007fff88cd3f1a _sigtramp + 26
+[Charisees-MacBook-Air:24510] [ 0] 0   libsystem\_platform.dylib            0x00007fff88cd3f1a \_sigtramp + 26
 [Charisees-MacBook-Air:24510] [ 1] 0   ???                                 0x0000000000000000 0x0 + 0
-[Charisees-MacBook-Air:24510] [ 2] 0   libsystem_c.dylib                   0x00007fff88d439a3 abort + 129
-[Charisees-MacBook-Air:24510] [ 3] 0   libsystem_malloc.dylib              0x00007fff8d8941cb free + 428
+[Charisees-MacBook-Air:24510] [ 2] 0   libsystem\_c.dylib                   0x00007fff88d439a3 abort + 129
+[Charisees-MacBook-Air:24510] [ 3] 0   libsystem\_malloc.dylib              0x00007fff8d8941cb free + 428
 	\end{lstlisting}
 \item[solution]
 \item[details]
 Error when creating a vector fields in python
 \end{description}
 
-\subsection{F14}
-\begin{description}[noitemsep]
-\item[issue]Multiple creation of functions with the same name
-\item[computation]
-\item[output]
-\begin{lstlisting}[mathescape=true]
-	0_tensor[2] compositionl,ex1.cxx:777:15: error: redefinition of 's_makeEval_UnitCubeMesh_Lagrange_4_'
-inline double s_makeEval_UnitCubeMesh_Lagrange_4_(NodeTy nodes, newposT...
-Makefile
-	\end{lstlisting}
-\item[solution]
-\item[details]
-\end{description}
+
 	
 \subsection{F15}
 \begin{description}[noitemsep]
@@ -228,13 +216,15 @@ Makefile
 \item[computation]
 \item[output]teriminal\\.
 \begin{lstlisting}[mathescape=true]
-observ.cxx:919:2: error: no matching function for call to
-      'jIs_UnitSquareMesh_P_2'
-        jIs_UnitSquareMesh_P_2(J,nM,pM,cell);
-        ^~~~~~~~~~~~~~~~~~~~~~
-observ.cxx:831:14: note: candidate function not viable: no known conversion from
-      'double [2][2]' to 'double (*)[3]' for 1st argument
-inline void *jIs_UnitSquareMesh_P_2(double J[3][3],MappTy nM, FloatMapT...
+[0]PETSC ERROR: ------------------------------------------------------------------------
+[0]PETSC ERROR: Caught signal number 11 SEGV: Segmentation Violation, probably memory access out of range
+[0]PETSC ERROR: Try option -start_in_debugger or -on_error_attach_debugger
+[0]PETSC ERROR: or see http://www.mcs.anl.gov/petsc/documentation/faq.html#valgrind
+[0]PETSC ERROR: or try http://valgrind.org on GNU/linux and Apple Mac OS X to find memory corruption errors
+[0]PETSC ERROR: configure using --with-debugging=yes, recompile, link, and run 
+[0]PETSC ERROR: to get more information on the crash.
+--------------------------------------------------------------------------
+
 	\end{lstlisting}
 \item[solution]
 \item[details]
@@ -257,10 +247,10 @@ inline void *jIs_UnitSquareMesh_P_2(double J[3][3],MappTy nM, FloatMapT...
 \item[computation] Trace
 \item[output] terminal\\
 \begin{lstlisting}[mathescape=true]
-***rtn:terrible__p_o0_o6_t16_tN_tN__l2
+***rtn:terrible\_\_p\_o0\_o6\_t16\_tN\_tN\_\_l2
 	 -: trace(none)
 	-
--p_o0_o6_t16_tN_tN__l2 trace(none)| F_m2x2_d2| 
+-p\_o0\_o6\_t16\_tN\_tN\_\_l2 trace(none)| F\_m2x2\_d2| 
 		Rst: Z-3 RD  max diff: 7.486 sumdiff: 4.3919 172.2781% c:-3.14070000000000 o:4.3453002
 	rtn:terrible
 	\end{lstlisting}
@@ -270,7 +260,7 @@ inline void *jIs_UnitSquareMesh_P_2(double J[3][3],MappTy nM, FloatMapT...
 
 \subsection{F22}
 \begin{lstlisting}[mathescape=true]
--p_o0_o7_t16_tN__l2 det(none)| F_m2x2_d2| Rst: V-0 RA
+-p\_o0\_o7\_t16\_tN\_\_l2 det(none)| F\_m2x2\_d2| Rst: V-0 RA
 	\end{lstlisting}
 Field component has two constant indices.
 cutting function in float was not organizing indices correctly.
@@ -280,21 +270,21 @@ cutting function in float was not organizing indices correctly.
 
 \subsection{F23}
 \begin{lstlisting}[mathescape=true]
-le __p_o0_o8_t16_tN__l2
+le \_\_p\_o0\_o8\_t16\_tN\_\_l2
 	 -: inverse(none)
 	 
-1ex1.cxx:838:41: error: no matching function for call to 's_2_2makeEval_UnitSquareMesh_P_2_'
-        tensor_ref_2_2 l_probe_l_4_24 = s_2_2makeEval_UnitSquareMesh_P_2_(l_node_23, l_newpos_22, l_coordinates_14);
+1ex1.cxx:838:41: error: no matching function for call to 's\_2\_2makeEval\_UnitSquareMesh\_P\_2\_'
+        tensor\_ref\_2\_2 l\_probe\_l\_4\_24 = s\_2\_2makeEval\_UnitSquareMesh\_P\_2\_(l\_node\_23, l\_newpos\_22, l\_coordinates\_14);
                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ex1.cxx:655:21: note: candidate function not viable: no known conversion from 'ex1::tensor_ref_2' to 'newposTy'
+ex1.cxx:655:21: note: candidate function not viable: no known conversion from 'ex1::tensor\_ref\_2' to 'newposTy'
       (aka 'double *') for 2nd argument
-ex1::tensor_ref_2_2 s_2_2makeEval_UnitSquareMesh_P_2_(NodeTy nodes, newposTy b, coordTy c ){
+ex1::tensor\_ref\_2\_2 s\_2\_2makeEval\_UnitSquareMesh\_P\_2\_(NodeTy nodes, newposTy b, coordTy c ){
                     ^
-ex1.cxx:853:43: error: use of undeclared identifier 's_2makeEval_UnitSquareMesh_P_2_'; did you mean
-      's_2_2makeEval_UnitSquareMesh_P_2_'?
-            tensor_ref_2 l_probe_l_4_33 = s_2makeEval_UnitSquareMesh_P_2_(l_node_23, l_newpos_22, l_coordinates_14);
+ex1.cxx:853:43: error: use of undeclared identifier 's\_2makeEval\_UnitSquareMesh\_P\_2\_'; did you mean
+      's\_2\_2makeEval\_UnitSquareMesh\_P\_2\_'?
+            tensor\_ref\_2 l\_probe\_l\_4\_33 = s\_2makeEval\_UnitSquareMesh\_P\_2\_(l\_node\_23, l\_newpos\_22, l\_coordinates\_14);
                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                          s_2_2makeEval_UnitSquareMesh_P_2_
+                                          s\_2\_2makeEval\_UnitSquareMesh\_P\_2\_
 	\end{lstlisting}
 
 
@@ -305,7 +295,7 @@ ex1.cxx:853:43: error: use of undeclared identifier 's_2makeEval_UnitSquareMesh_
 \item[Computation] Subtracting one field from another
 \item[Output]
   \begin{lstlisting}
-    t__p_o0_o10_t14_t14__l2
+    t\_\_p\_o0\_o10\_t14\_t14\_\_l2
 
 observed data from femprime/ [[0.1088, -3.8392, -4.5563998], [-1.4155999, -2.8296001, -5.9981999], [3.6296, -7.6163998, -2.1338], [2.5702, -4.7568002, -1.7131], [1.8088, -5.2392001, -3.1064], [1.0176001, -4.3983998, -3.6528001], [1.5876, -5.9884, -3.9828]]
 
@@ -315,7 +305,7 @@ correct data from python[[-0.108800000000000, 3.83920000000000, 4.55640000000000
 
 Params(2)
 
--p_o0_o10_t14_t14__l2 subtraction(none)| F_v3_d2,F_v3_d2| 
+-p\_o0\_o10\_t14\_t14\_\_l2 subtraction(none)| F\_v3\_d2,F\_v3\_d2| 
 		Rst: Z-3 RD  max diff: 15.2328 sumdiff: 6.8524 200.0% c:7.61640000000000 o:-7.6163998
 
 
@@ -340,4 +330,42 @@ Params(2)
 \item[Computation] Regular pointwise evaluation
 \item[Output] Numerically incorrect results on various combinations of points and FE data
 \item[Solution] Kick the can by using doubles
+\end{description}
+
+
+\begin{description}
+
+\item[F27]
+ 11/11/17
+- double dot product missing between field and matrix \\
+ python2 fem.py 4 1 15 17  5\\
+compile issue\
+
+[ex1.diderot:10.18-30] Error: type error for arguments of binary \\ operator ":"
+  found: (OField\#4(2)[3,3] * mat3)
+\item [F28]
+- error with generated code names.
+different sizes created same methods \\
+for scalar field.
+\item[F29]
+11/26/17
+- error with generated code names\\
+differet names for affine (depends on space) for scalar and shape (even though no differences), but because it is derived when main constructor is different (isScalar)\\
+affineDerv\_UnitSquareMesh\_P\_4\_1\_p
+***rtn:compile \_\_p\_o12\_o35\_t39\_tN\_tN\_\_l2
+	 -: jacob(division)
+	-\_F\_v2\_d2,F\_s\_d2 |p\_o12\_o35\_t39\_tN\_tN\_\_l2
+	rtn:compile 
+\item[F30] 
+11/27/17
+- error with generated code -missing types\\
+erorr:slice a tensor field [n]. missing n type declaration. 
+fix:when we see evalShape(shape) then we addTy (Ty.TensorRefTy shape);
+********** type difference
+***rtn:compile \_\_p\_o32\_o1\_t7\_tN\_tN\_\_l2
+	 -: neg(slicev1)
+	-\_F\_v3\_d2 |p\_o32\_o1\_t7\_tN\_tN\_\_l2ex1.cxx:573:14: error: no member named 'tensor\_ref\_3' in namespace 'ex1'
+        return(ex1::tensor\_ref\_3((double*) H));
+
+	rtn:compile 
 \end{description}

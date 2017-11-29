@@ -46,10 +46,10 @@ Bug type:  compilation (C), run-time issue(R), and numerical (N) bug.\\
 &&& \textbf{Compilation issue(C)-Type checker}\\
 \hline
  F3 &Closed&b3  & Inner/cross product  \\
- F5 &OPEN&b5& Inside test\\
-  F12 &Closed & b11 & Tensor slicing\\
+ F5 &Closed&b5& Inside test\\
+  F12 &OPEN & b11 & Tensor slicing\\
 F17 &OPEN &   & Division (r,v)\\
-  F20 &OPEN & b20  & Double dot product\\
+  F20,F27 &Closed &  b20 & Double dot product missing between field and matrix\\
 - &  Closed & b15 & Outer product between vector and field \\
   \hline
   \hline
@@ -64,17 +64,17 @@ F17 &OPEN &   & Division (r,v)\\
  F1 &Closed& b1& Converting types\\
   F4 &Closed&b4 & gradient of a field and  field gen same name\\
   F7 &Closed& b6  & Converting types\\
-F9 &OPEN&b9 & Weird indexing tensors\\
-F14 &OPEN & b14 &Multiple creation of functions with the same name\\
- F15 &OPEN&b5 & Type error for helper function\\
- F19 &OPEN & b19 &Multiple creation of functions with the same name\\
-  F23  &OPEN& b23& codegen issue with type mismatch\\
+F9 &Closed&b9 & Weird indexing tensors\\
+ F28 & Closed & \~ b19 & fnname:different shapes create same eval-scalar\\
+  F29 & Closed && fnname:affineDeriv created multiple\\
+    F23,F30 & Closed &b23& missing reference types\\
    \hline
   \hline
  &&& \textbf{Run-time issue(R)}\\
  \hline
   F13 &OPEN & b12 \& b11  &pointer free error\\
     F16 &CLOSED & b16  & sampling outside mesh and derivative find cell  \\
+   F15 &OPEN&b5,b14 &Segmentation Violation\\
   \hline
   \hline
  &&& \textbf{Numerically incorrect(N)}\\
@@ -93,7 +93,6 @@ F14 &OPEN & b14 &Multiple creation of functions with the same name\\
 \end{tabular}
 \\
 
-unaccounted for:b13,b15
 
 
 
