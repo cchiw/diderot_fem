@@ -56,7 +56,11 @@ F17 &OPEN &   & Division (r,v)\\
    &&& \textbf{Compilation issue(C)-internal rep}\\
      \hline
    F6 &Closed &b6  & Summation not handled (trace hessian) \\
-     F8 &Closed &b8 &Differential indices are constants(det concat)\\
+     F8 &Closed &b8 &Differential indices are constants (det concat)\\
+   & Closed  & &Differentiation of Trace (similar to F6)\\
+  F31 & Closed & & recreating sliced term. indices aren't correct\\
+   F32 & Closed & & second index is  constant. (case not handled)\\
+   F33 & Closed && composition of an ofield\\
   \hline
   \hline 
  &&& \textbf{Compilation issue(C)-generated code}\\
@@ -68,6 +72,7 @@ F9 &Closed&b9 & Weird indexing tensors\\
  F28 & Closed & \~ b19 & fnname:different shapes create same eval-scalar\\
   F29 & Closed && fnname:affineDeriv created multiple\\
     F23,F30 & Closed &b23& missing reference types\\
+    - & Closed & - & missing reference type (does not represent shape post differentiation)\\
    \hline
   \hline
  &&& \textbf{Run-time issue(R)}\\

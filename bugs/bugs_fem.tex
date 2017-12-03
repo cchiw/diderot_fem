@@ -368,4 +368,18 @@ fix:when we see evalShape(shape) then we addTy (Ty.TensorRefTy shape);
         return(ex1::tensor\_ref\_3((double*) H));
 
 	rtn:compile 
+	\item[F31]
+	-p\_o29\_o38\_t7 curl(slicem0)| F\_m3x3\_d3| \\
+	rtn:terrible\\
+λ(F0[3 3],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0\_{'1',i0})\_1[2]∇\_{i1}),T3)>\_{3 3}\\
+λ(F0[3 3],FNCSPACE1,FNCSPACE2,T3[3])<Probe(BuildFEM(T0\_{i2,i1})\_1[2]∇\_{i2}),T3)>\_{3 3 3}\\
+
+shifting isn’t done correctly when there is a cut.
+\item[F32]
+F\_[0c] del\_1. Jacob M1.\\
+constant is second index. missing case.\\
+\item[F33]
+compose(inverse)\\
+-\_F\_m2x2\_d3,F\_v3\_d3 |p\_o8\_o36\_t6\_t20\_tN\_\_l2
+Missing case for summation of a probe with composition in float. \\
 \end{description}

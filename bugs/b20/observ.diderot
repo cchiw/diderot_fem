@@ -3,7 +3,7 @@
  input fem#4(2)[2, 2] FF0;
  //Field:field #4(2)[2, 2] F0=[[-5*x*y - 2*x + 2*y - 2, x*y - 2*y], [5*x*y - 5*x + 5*y + 4, -5*x*y - 5*x - 4*y + 3]]
  fnspace VF0 = TensorFunctionSpace(UnitSquareMesh(4,4), Lagrange(), 2,{2,2});
- string pathF0 = "fnspace_data/";
+ string pathF0 = "../../fnspace_data/";
  ofield#4(2)[2, 2] F0 = convert(FF0,VF0,pathF0);
 
 ofield#4(2)[]G = trace((F0));
