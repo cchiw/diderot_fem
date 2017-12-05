@@ -382,4 +382,18 @@ constant is second index. missing case.\\
 compose(inverse)\\
 -\_F\_m2x2\_d3,F\_v3\_d3 |p\_o8\_o36\_t6\_t20\_tN\_\_l2
 Missing case for summation of a probe with composition in float. \\
+\item[F34]
+***rtn:compile \_\_p\_o17\_o37\_t57
+$ΣΣ(i1)<(F0_{i1,i0}\_dx\_{i1})>Σ(i1)$
+\item[F36]
+ low opt uncaught exception Subscript [subscript out of bounds]
+***rtn:compile $\_p\_o31\_o23\_t9$
+	 -: grad(slicev0)
+	-$F\_v2\_d3 |$
+		rtn:compile 
+\item [F37]
+ $\nabla \otimes \nabla (compose(F0,(F1*0.1)));$\\
+ need to add case to derivative file to get dimension\\
+ \item [F38]
+ Add case to rewrite inner term for composition. Inner term is a build fem.
 \end{description}
