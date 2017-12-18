@@ -3,13 +3,13 @@
  input fem#4(2)[2] FF0;
  //Field:field #4(2)[2] F0=[x*y - 2*x + y, 4*x + y + 5]
  fnspace VF0 = TensorFunctionSpace(UnitSquareMesh(4,4), P(), 2,{2});
- string pathF0 = "fnspace_data/";
+ string pathF0 = "../../fnspace_data/";
  ofield#4(2)[2] F0 = convert(FF0,VF0,pathF0);
 
  input fem#4(2)[2, 2] FF1;
  //Field:field #4(2)[2, 2] F1=[[x*y - 5*x - y - 4, -2*x*y + 2*x + 2*y - 1], [x*y + 5*x + 4*y - 1, 2*x*y - 2*x - 4*y - 5]]
  fnspace VF1 = TensorFunctionSpace(UnitSquareMesh(4,4), P(), 2,{2,2});
- string pathF1 = "fnspace_data/";
+ string pathF1 = "../../fnspace_data/";
  ofield#4(2)[2, 2] F1 = convert(FF1,VF1,pathF1);
 
 ofield#4(2)[2, 2]G = ((zeros[2]⊗(F0)))-(F1);
