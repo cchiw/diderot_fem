@@ -3,6 +3,7 @@ import time
 import random
 import sys
 from dolfin import *
+from mshr import *
 import numpy as np
 from os.path import abspath, dirname
 
@@ -37,6 +38,7 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     norm = 1.0
     data = np.random.uniform(low=lowBound/norm,high=upBound/norm,size=numCords)
     f.vector().set_local(data) #Function(V,val=data)
+    #f.set_allow_extrapolation(True) DONT TURN THIS ON!
 
 
     preZipPoints = []
@@ -52,8 +54,29 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
     #prepare evals and print statements
     evals = []
     printStms = []
+    nc = len(mesh.cells())
+    newZipPoints = []
     for x in range(0,npoints):
         z = zipPoints[x]
+        test = mesh.bounding_box_tree().compute_first_collision(Point(np.array(z)))
+        print(test,z)
+        try:
+            f(z)
+            if not(test >= nc):
+                newZipPoints.append(z)
+        except:
+            pass
+            
+        
+
+        
+
+    zipPoints = newZipPoints #zipPoints[marks]
+    npoints = len(zipPoints)
+    print("ZipPints:",zipPoints)
+    for x in range(0,npoints):
+        z = zipPoints[x]
+
         printStms.append("\tprint(out{0},\"\\n\");\n".format(x))
         if dim == 2:
             evals.append("\tvec2 pos{0} = [{1},{2}];tensor[] out{0} = inst(F,pos{0});\n".format(x,z[0],z[1]))
@@ -84,12 +107,19 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 
     initially [ sample(ui, vi) | vi in 0..(0), ui in 0..(0) ];
     """% {"mesh" : meshname, "elem" : element, "d" : str(degree), "ev" : "".join(evals), "ps" : "".join(printStms) }
-    os.system("rm test/mesh_d2s_single.diderot; rm test/mesh_d2s_single_init.so; rm test/mesh_d2s_single.cxx; rm test/mesh_d2s_single.o; rm test/mesh_d2s_single_init.o")
-    with open(dirname+"/mesh_d2s_single.diderot",'w+') as fi:
-        fi.write(didFile)
+    try:
+        with open(dirname+"/mesh_d2s_single.diderot",'w+') as fi:
+            fi.write(didFile)
+    except IOError:
+        import shutil
+        shutil.copytree("test",dirname)
+        #os.system("cp -R test "+dirname)
+        time.sleep(10)
+        with open(dirname+"/mesh_d2s_single.diderot",'w+') as fi:
+            fi.write(didFile)
 
     
-
+    os.system("rm test/mesh_d2s_single.diderot; rm test/mesh_d2s_single_init.so; rm test/mesh_d2s_single.cxx; rm test/mesh_d2s_single.o; rm test/mesh_d2s_single_init.o")
 
     #Compile this -> hope it works
     os.system("cd "+ dirname +"; ./run.sh")
@@ -187,8 +217,21 @@ def run_test(mesh,meshname,element,dim,bounds, degree,npoints):
 # meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh",[(0,1),(0,1)],2),(UnitSquareMesh(4,2),"UnitSquareMesh",[(0,1),(0,1)],2)]
 # elements = ["Lagrange","P"]
 # degrees = [1,2,3]
+domain =  Circle(dolfin.Point(0.0, 0.0),1.0,9)
 
-meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh(2,2)",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh(3,2)",2,[(0,1),(0,1)]),(UnitCubeMesh(2,2,2),"UnitCubeMesh(2,2,2)",3,[(0,1),(0,1),(0,1)])]
+mesh1   = generate_mesh(domain, 1)
+mesh2 = Mesh("squaremesh.xml")
+#mesh = UnitSquareMesh(2,2)
+# plotmesh=refine(mesh)
+# plotmesh=refine(plotmesh)
+# plotmesh=refine(plotmesh)
+# plotmesh=refine(plotmesh)
+# plotmesh=refine(plotmesh)
+
+#init_d issues
+#meshs = [(UnitSquareMesh(2,2),"UnitSquareMesh(2,2)",2,[(0,1),(0,1)]),(mesh1,"UnitSquareMesh(20,20)",2,[(0,1),(0,1)]),(UnitSquareMesh(3,2),"UnitSquareMesh(3,2)",2,[(0,1),(0,1)]),(UnitCubeMesh(2,2,2),"UnitCubeMesh(2,2,2)",3,[(0,1),(0,1),(0,1)])]
+meshs = [(mesh1,"UnitSquareMesh(20,20)",2,[(0,1),(0,1)]),(mesh2,"UnitSquareMesh(30,30)",2,[(0,1),(0,1)]),(UnitCubeMesh(3,3,3),"UnitCubeMesh(2,2,2)",3,[(0,1),(0,1),(0,1)])]
+#
 elements = ["Lagrange","P"]
 degrees = [2,3,4,5]
 #degrees = [2,3,4]
@@ -196,7 +239,10 @@ errors = []
 
 cnt = 0
 
-npoints =  5 # was 3
+npoints =  5
+# was 3 -> setting to really high numbers seems to cause segfaults for reasons that I've not figured out yet.
+#if you want to debug this, try gdb -> valgrind and fenics don't seem to play nicely togeather.
+
 title = "\n\n\n------ testing for revision:"+str(rev)+"  npoints:"+str(npoints)
 f = open("results_final.txt", 'a+')
 f.write(title)
@@ -207,6 +253,7 @@ f.close()
 
 
 for m in meshs:
+
     for e in elements:
         titleH = "mesh_"+m[1] +"_dim_"+str(m[2])+ "_elem_"+e
         f = open("results_final.txt", 'a+')

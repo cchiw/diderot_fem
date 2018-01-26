@@ -58,7 +58,7 @@ class _CFunction(ctypes.Structure):
                  ("Nbrs",c_void_p)] 
 
 
-def organizeData(f):
+def organizeData(f, rdim = 1):
     func = f
     space = f.function_space()
     mesh = space.mesh()
@@ -68,23 +68,31 @@ def organizeData(f):
     r = range(nc)
     nodeToPoint = mesh.coordinates()
     tempFunc = lambda x: space.dofmap().cell_dofs(x)
-    nodeToCoords = numpy.array(list(map(lambda x: tempFunc(x), r)))
     coords = numpy.asfarray(f.vector().array(),dtype=float_type)
+
+    nodeToCoords = numpy.array(list(map(lambda x: tempFunc(x), r)),dtype="int32")
+    nodeToCoords= list(numpy.append(numpy.array([],dtype="int32"),list(map(lambda x: tempFunc(x), r))))
     gdim = len(cellToNode[0]) 
-    sdim = len(nodeToCoords[0])
+    sdim = len(tempFunc(0))/rdim #update for tensors?
+    dim = len(space.mesh().coordinates()[0])#erm... get this somewhere?
+
+    #sdim = len(nodeToCoords[0])
 
     
     import sets
 
     ###we need to speed this up.
-    opt3 = numpy.ones((nc,nc),dtype="int32")
-    grumble = opt3.flatten().tolist()
-    opt3 = numpy.array(grumble,dtype="int32")
+    #opt3 = numpy.ones((nc,nc),dtype="int32")
+    #grumble = opt3.flatten().tolist()
+    opt3 = numpy.array([],dtype="int32")
     
     
     #might want to reoganizesome data
+
+
+
     c_data = _CFunction()
-    c_data.dim = len(space.mesh().coordinates()[0])#erm... get this somewhere?
+    c_data.dim = dim
     c_data.Gdim = gdim
     c_data.Sdim  = sdim
     c_data.NumCells = nc
@@ -93,9 +101,11 @@ def organizeData(f):
     q = numpy.array([0])
     c_data.GetTracker = ctypes.cast(mk_2d_array(q.astype("int32"),c_int),c_void_p) #mk_2d_array(numpy.asfarray(numpy.array([2]),dtype="int32"),c_int)
     c_data.CellToNode = mk_2d_array(cellToNode,c_int)
-    c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
-    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int)
+    #c_data.NodeToCoords =  mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
+    c_data.NodeToCoords =  ctypes.cast((ctypes.c_int * len(nodeToCoords))(*nodeToCoords),ctypes.c_void_p) #mk_2d_array(nodeToCoords,c_int) #nodeToPoint.ctypes.data_as(POINTER(POINTER(as_ctypes(c_int))))
 
+    c_data.NodeToPoint = mk_2d_array(numpy.asfarray(nodeToPoint,dtype=float_type),c_int)
+    
     
     functionDataCtype = reduce(lambda x,y : x*y, coords.shape, ctypes_float_type)
     functionDataSize = reduce(lambda x,y : x*y, coords.shape, 1)
@@ -189,6 +199,88 @@ def quantize(namenrrd,namepng):
 
 def sample(name,f,res):
     init_file = cwd + "/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def s2dcp(name,f,res):
+    init_file = cwd + "/2D-driven-cavity-p/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def s2dcvp(name,f,res):
+    init_file = cwd + "/2D-driven-cavity-vpartial/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def s2dcv(name,f1,f2,res):
+    init_file = cwd + "/2D-driven-cavity-v/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data1 = organizeData(f1)
+    data2 = organizeData(f2)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data1),ctypes.c_void_p),ctypes.cast(ctypes.pointer(data2),ctypes.c_void_p), res)
+    return(result)
+def s2dcp(name,f,res):
+    init_file = cwd + "/2D-driven-cavity-p/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def inside2d3(name,f,res):
+    init_file = cwd + "/inside2d3/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def inside3d1(name,f,res):
+    init_file = cwd + "/inside3d1/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+
+def s3dcv(name,f,res):
+    init_file = cwd + "/3D-driven-cavity-v/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f,rdim=3)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def s3dcvp(name,f,res):
+    init_file = cwd + "/3D-driven-cavity-partialv/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def s3dcp(name,f,res):
+    init_file = cwd + "/3D-driven-cavity-p/squaremesh_init.so"
+    _call = ctypes.CDLL(init_file)
+    data = organizeData(f)
+    type = 1
+    _call.callDiderot.argtypes = (ctypes.c_char_p,ctypes.c_int,ctypes.c_void_p,ctypes.c_int)
+    result = _call.callDiderot(ctypes.c_char_p(name), type,ctypes.cast(ctypes.pointer(data),ctypes.c_void_p), res)
+    return(result)
+def ridgn(name,f,res,n=1):
+    init_file = cwd + "/ridg{0}/squaremesh_init.so".format(n)
     _call = ctypes.CDLL(init_file)
     data = organizeData(f)
     type = 1
